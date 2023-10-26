@@ -2,16 +2,17 @@ from flask import current_app
 from api.models import User
 import jwt
 
+
 def auth_user(token):
     try:
         print(token)
-        token_data = jwt.decode(token, current_app.config['SECRET_KEY'])
+        token_data = jwt.decode(token, current_app.config["SECRET_KEY"])
     except:
         print("[AUTH ERROR] 1")
         return None
 
-    name = token_data.get('name')
-    password = token_data.get('password')
+    name = token_data.get("name")
+    password = token_data.get("password")
     if name is None or password is None:
         print("[AUTH ERROR] 2")
         return None

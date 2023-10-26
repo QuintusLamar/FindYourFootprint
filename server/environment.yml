@@ -1,0 +1,9 @@
+name: find-your-footprint
+
+dependencies:
+  - python=3.11
+  - pip:
+    - Flask
+    - Flask_Bcrypt
+    - Flask_SQLAlchemy
+    - PyJWT
