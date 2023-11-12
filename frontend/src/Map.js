@@ -1,19 +1,22 @@
-import React, { useRef } from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import React from 'react';
+import { MapContainer, TileLayer } from 'react-leaflet';
 
-function Map() {
-  const mapRef = useRef(null);
-  const latitude = 33.708;
-  const longitude = -84.3861;
-
-  return ( 
-    // Make sure you set the height and width of the map container otherwise the map won't show
-    <MapContainer center={[latitude, longitude]} zoom={13} ref={mapRef} style={{height: "100vh", width: "100vw"}}>
+function Map({ children }) {
+  return (
+    <MapContainer
+        // center={[37.7749, -122.4194]}  // Cali testing
+        center={[33.7708, -84.3861]}   // Atlanta coord
+        zoom={12}
+        style={{ height: '500px', width: '100%' }}
+    >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        url="https://api.mapbox.com/styles/v1/quintus-lamar/cloui2cuk00jx01qofx3w1x1k/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicXVpbnR1cy1sYW1hciIsImEiOiJjbG91ZDJwYzMwaHc5MmtvOW82cm9uZGhnIn0.VL3TfnwBOoiek2f8bxw4RQ"
+        attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+        id="mapbox/streets-v11"
+        tileSize={512}
+        zoomOffset={-1}
       />
+      {children}
     </MapContainer>
   );
 };

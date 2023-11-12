@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-// import 'leaflet/dist/leaflet.css';
-// import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
-import { createControlComponent } from "@react-leaflet/core";
 
 function RoutingExample() {
   const [startLatitude, setStartLatitude] = useState('');
@@ -17,13 +16,22 @@ function RoutingExample() {
 
   // This gives and issue, a different way of mapping needs to be done
   const createRoutineMachineLayer = (startPoint, endPoint) => {
+    console.log("start point: ", startPoint)
+    console.log("end point: ", endPoint)
     const instance = L.Routing.control({
       waypoints: [
-        L.latLng(startPoint),
-        L.latLng(endPoint)
+        // L.latLng(startPoint),
+        // L.latLng(endPoint)
+        {lat: 51.5007, lng: -0.1246},
+        {lat: 51.5014, lng: -0.1419}
+        // 51.5014° N, 0.1419
       ],
+      // router: L.Routing.mapbox('pk.eyJ1IjoicXVpbnR1cy1sYW1hciIsImEiOiJjbG91ZDJwYzMwaHc5MmtvOW82cm9uZGhnIn0.VL3TfnwBOoiek2f8bxw4RQ')
+      router: L.Routing.mapbox('pk.eyJ1IjoicXVpbnR1cy1sYW1hciIsImEiOiJjbG91Y3czdWswZjMxMmpuejNmdTNzN3VqIn0.SPEoFoq__U-LbPFbam0FaQ')
     });
-  
+    // .addTo(mapRef);
+    
+    console.log(instance)
     return instance;
   };
 
