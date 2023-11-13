@@ -2,6 +2,7 @@ import React from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 
 function Map({ children }) {
+
   return (
     <MapContainer
         // center={[37.7749, -122.4194]}  // Cali testing
