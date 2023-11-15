@@ -1,4 +1,5 @@
-// Route.js
+// This file is unneeded, it just creates a straight line that doesn't consider roads or routes in any way
+
 import React from 'react';
 import { Polyline } from 'react-leaflet';
 

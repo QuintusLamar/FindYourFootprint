@@ -1,9 +1,10 @@
-// Route.js
+// This file is likely unnecessary, one idea I had was to show several lines between each pair of points, but for some reason 
+// it doesn't work in the following code
+
 import React from 'react';
 import { Polyline } from 'react-leaflet';
 
 function Routes ({ waypoints }) {
-  // console.log("Waypoints: ", waypoints)
 
   return (
     <div>
@@ -21,12 +22,6 @@ function Routes ({ waypoints }) {
       })
     }
     </div>
-    // <Polyline
-      // positions={routeCoordinates}
-      // color="#3388ff"
-      // weight={5}
-      // opacity={0.7}
-    // />
   );
 };
 

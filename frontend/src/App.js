@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import Map from './Map';
-import Route from './Route';
-import Routes from './Routes';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import './App.css';
 
+// Sample coordinates below
+
+// Pencil building
+// Address: 600 W Peachtree St NW, Atlanta, GA 30308
+// Lat/Lng: 33.7707, -84.3866
+
+// Coca Cola building
+// Address: 1 Coca Cola Plz NW, Atlanta, GA 30313
+// Lat/Lng: 33.7628 -84.3928
+
 function App () {
-  const [startAddr, setStartAddr] = useState("");
-  const [endAddr, setEndAddr] = useState("");
-  const [isRoute, setIsRoute] = useState(false);
-  const [route, setRoute] = useState([]);
+  const [startAddr, setStartAddr] = useState("600 W Peachtree St NW, Atlanta, GA 30308");
+  const [endAddr, setEndAddr] = useState("1 Coca Cola Plz NW, Atlanta, GA 30313");
 
   const api_key = "48fbefd89de548768e248393b9881b79"
 
@@ -30,6 +36,12 @@ function App () {
       .catch(error => console.log("Error: ", error))
   }
 
+  function getRoute(startCoord, endCoord, mode) {
+    let final_url = `https://api.geoapify.com/v1/routing?waypoints=${startCoord.join(',')}|${endCoord.join(',')}&mode=${mode}&details=instruction_details&apiKey=${api_key}`;
+    return fetch(final_url)
+      .then(res => res.json())
+  }
+
   function getAve(features) {
     let finalCoord =[0, 0];
     features.forEach(feature => {
@@ -42,50 +54,39 @@ function App () {
     return finalCoord;
   }
 
-  async function submitRoute() {
+  async function submitRoute(e) {
+    e.preventDefault();
     if (startAddr != "" && endAddr != "") {
       let startAddrStr = addressToString(startAddr);
       let startUrl = "https://api.geoapify.com/v1/geocode/search?text=" + startAddrStr + "&apiKey=" + api_key;
       let endAddrStr = addressToString(endAddr);
       let endUrl = "https://api.geoapify.com/v1/geocode/search?text=" + endAddrStr + "&apiKey=" + api_key;
 
-      let startResult = await getPoints(startUrl)
-      let endResult = await getPoints(endUrl)
+      let startResult = await getPoints(startUrl);
+      let endResult = await getPoints(endUrl);
 
       let startCoord = getAve(startResult.features);
       let endCoord = getAve(endResult.features);
 
-      let final_url = `https://api.geoapify.com/v1/routing?waypoints=${startCoord.join(',')}|${endCoord.join(',')}&mode=drive&details=instruction_details&apiKey=${api_key}`;
+      let driveRoute = await getRoute(startCoord, endCoord, "drive");
+      let transitRoute = await getRoute(startCoord, endCoord, "transit");
+      let bicycleRoute = await getRoute(startCoord, endCoord, "bicycle");
+      let walkRoute = await getRoute(startCoord, endCoord, "walk");
 
-      fetch(final_url)
-        .then(res => res.json())
-        .then(result => {
-          setRoute(result.features[0].geometry.coordinates)
-          setIsRoute(true);
-        })
+      let drivePoints = driveRoute.features[0].geometry.coordinates[0];
+      let transitPoints = transitRoute.features[0].geometry.coordinates[0];
+      let bicyclePoints = bicycleRoute.features[0].geometry.coordinates[0];
+      let walkPoints = walkRoute.features[0].geometry.coordinates[0];
+      
+      console.log("Drive route: ", drivePoints);
+      console.log("Transit route: ", transitPoints);
+      console.log("Bicycle route: ", bicyclePoints);
+      console.log("Walk route: ", walkPoints);
     }
     else {
-      console.log("Starting address or ending address not entered")
+      console.log("Starting address or ending address not entered");
     }
   }
-
-  const routeCoordinates = [
-    [37.7749, -122.4194],
-    [37.5475, -122.3897],
-  ];
-
-  // 38 Upper Montagu Street, Westminster W1H 1LJ, United Kingdom
-
-  // Pencil building address
-  // 600 W Peachtree St NW, Atlanta, GA 30308
-  // Pencil building Lat/Lng
-  // 33.7707, -84.3866
-
-  // Coke building address
-  // 1 Coca Cola Plz NW, Atlanta, GA 30313
-  // Coke building Lat/Lng
-  // 33.7628 -84.3928
-  
 
     return (
       <div>
@@ -96,25 +97,6 @@ function App () {
 
           </div>
 
-          {/* <div className="InputBars">
-            <input
-              className="ChildInput"
-              type="text"
-              value={startAddr}
-              onChange={(e) => setStartAddr(e.target.value)}
-            />
-
-            <input
-              className="ChildInput"
-              type="text"
-              value={endAddr}
-              onChange={(e) => setEndAddr(e.target.value)}
-            />
-
-            <button onClick={submitRoute}> Submit Route </button> */}
-
-            
-          {/* </div> */}
           <div className="inputBars">
             <form>
               <input
@@ -145,8 +127,6 @@ function App () {
 
         </div>
         <Map>
-          {/* <Route routeCoordinates={routeCoordinates} /> */}
-          <Routes waypoints={route}/>
         </Map>
       </div>
     );
