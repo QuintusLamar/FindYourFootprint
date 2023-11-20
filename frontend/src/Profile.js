@@ -6,6 +6,7 @@ function Profile() {
       {/* Main profile here? */}
       {/* Sidebar component? */}
       {/* Navbar here? */}
+      Profile here
     </div>
   );
 }
