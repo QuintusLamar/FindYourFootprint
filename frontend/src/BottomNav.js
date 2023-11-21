@@ -17,9 +17,10 @@ function BottomNav() {
         console.log("Hey: ", newValue)
         setValue(newValue)
       }}
+      sx={{position: "absolute", bottom: 0, width: "100%"}}
     >
       <BottomNavigationAction onClick={() => navigate("/Profile")} value="Profile" label="Profile" icon={<AccountCircleIcon />} />
-      <BottomNavigationAction onClick={() => navigate("/Home")} value="Home" label="Home" icon={<HomeIcon />} />
+      <BottomNavigationAction onClick={() => navigate("/")} value="Home" label="Home" icon={<HomeIcon />} />
       <BottomNavigationAction onClick={() => navigate("/Leaderboard")} value="Leaderboard" label="Leaderboard" icon={<GroupsIcon />} />
     </BottomNavigation>
   )
