@@ -9,7 +9,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import './App.css';
+import '../App.css';
 
 // Defines the style for changing color of every other row in table
 const StyledTableRow = styled(TableRow)(({}) => ({
@@ -23,11 +23,6 @@ const StyledTableRow = styled(TableRow)(({}) => ({
 
 
 function UserTable({rows}) {
-  // Don't implement this yet
-  // useEffect(() => {
-  //   // Pretty sure I want to change data (aka rows) if either the title or users gets changed
-
-  // }, [title, users]);
 
   return (
     <div className="Leaderboard">

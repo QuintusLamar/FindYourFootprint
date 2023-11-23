@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import './App.css';
-import UserTable from './UserTable'
-import UserTypeSelector from './UserTypeSelector'
-import TimeRangeSelector from './TimeRangeSelector';
+import '../App.css';
+import UserTable from '../Components/UserTable'
+import UserTypeSelector from '../Components/UserTypeSelector'
+import TimeRangeSelector from '../Components/TimeRangeSelector';
 
 
 function createData(rank, name, output, prev_rank) {
@@ -13,6 +13,12 @@ function createData(rank, name, output, prev_rank) {
 function Leaderboard() {
   const [userType, setUserType] = useState("Friends");
   const [title, setTitle] = useState("Leaders in Carbon Output All Time");
+
+  // Don't implement this yet
+  // useEffect(() => {
+  //   // Pretty sure I want to change data (aka rows) if either the title or users gets changed
+
+  // }, [title, users]);
 
   const rows = [
     createData(1, "Tom Brady", 0.5, 5),
@@ -41,7 +47,7 @@ function Leaderboard() {
     <div className="Leaderboard">
       <TimeRangeSelector 
         changeTime={changeTime}
-      
+
       />
       <UserTypeSelector 
         changeUsers={changeUsers}
@@ -50,6 +56,7 @@ function Leaderboard() {
       <UserTable 
         rows = {rows}
       />
+      
     </div>
   );
 }

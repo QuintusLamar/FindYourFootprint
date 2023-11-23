@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Map from './Map';
+import Map from '../Components/Map';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
-import './App.css';
+import '../App.css';
 
 // Sample coordinates below
 
@@ -14,7 +14,7 @@ import './App.css';
 // Address: 1 Coca Cola Plz NW, Atlanta, GA 30313
 // Lat/Lng: 33.7628 -84.3928
 
-function SearchMap () {
+function NavPage () {
   const [startAddr, setStartAddr] = useState("600 W Peachtree St NW, Atlanta, GA 30308");
   const [endAddr, setEndAddr] = useState("1 Coca Cola Plz NW, Atlanta, GA 30313");
 
@@ -132,4 +132,4 @@ function SearchMap () {
     );
 };
 
-export default SearchMap;
+export default NavPage;
