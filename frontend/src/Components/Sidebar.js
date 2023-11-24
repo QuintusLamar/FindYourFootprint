@@ -8,6 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import Typography from '@mui/material/Typography';
+import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -21,21 +22,24 @@ function Sidebar() {
   const navigate = useNavigate();
 
   const sideBarItems = [
-    {"text": "Edit Profile", "element": <EditOutlinedIcon></EditOutlinedIcon>},
-    {"text": "Notification", "element": <NotificationsNoneOutlinedIcon></NotificationsNoneOutlinedIcon>},
-    {"text": "Security", "element": <LockOutlinedIcon></LockOutlinedIcon>},
-    {"text": "Appearance", "element": <SettingsOutlinedIcon></SettingsOutlinedIcon>},
-    {"text": "Help", "element": <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>}
+    {"text": "View Profile", "navigation": "ViewProfile", "element": <AccountBoxOutlinedIcon></AccountBoxOutlinedIcon>},
+    {"text": "Edit Profile", "navigation": "EditProfile", "element": <EditOutlinedIcon></EditOutlinedIcon>},
+    {"text": "Notification", "navigation": "Notification", "element": <NotificationsNoneOutlinedIcon></NotificationsNoneOutlinedIcon>},
+    {"text": "Security", "navigation": "Security", "element": <LockOutlinedIcon></LockOutlinedIcon>},
+    {"text": "Appearance", "navigation": "Appearance", "element": <SettingsOutlinedIcon></SettingsOutlinedIcon>},
+    {"text": "Help", "navigation": "Help", "element": <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>}
   ]
 
   function clicked(event) {
-    setTitle(event.target.outerText)
-    
-    if (event.target.outerText != "Edit Profile") {
-      navigate("/Profile/" + event.target.outerText);
+    const text = event.target.outerText;
+    const replacedText = text.replace(/\s/g, '');
+
+    if (replacedText === "ViewProfile") {
+      navigate("/Profile")
     }
     else {
-      navigate("/Profile/EditProfile");
+      setTitle(text);
+      navigate("/Profile/" + replacedText);
     }
   }
 
@@ -61,6 +65,11 @@ function Sidebar() {
             <ListItem key={key.text} disablePadding>
               {/* Something about this needs to be updated, the state takes too long to set */}
               <ListItemButton onClick={clicked} selected={key.text === title}>
+              {/* <ListItemButton onClick={(event) => {
+                  console.log("Key: ", event)
+                }}
+                selected={key.text===title}
+              > */}
                 {key.element}
               <ListItemText primary={key.text} />
               </ListItemButton>
