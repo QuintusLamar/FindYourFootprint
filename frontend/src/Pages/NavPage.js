@@ -76,16 +76,24 @@ function NavPage() {
       let bicycleRoute = await getRoute(startCoord, endCoord, "bicycle");
       let walkRoute = await getRoute(startCoord, endCoord, "walk");
 
-      let drivePoints = driveRoute.features[0].geometry.coordinates[0];
-      setDrivePoints(drivePoints);
-      let transitPoints = transitRoute.features[0].geometry.coordinates[0];
-      let bicyclePoints = bicycleRoute.features[0].geometry.coordinates[0];
-      let walkPoints = walkRoute.features[0].geometry.coordinates[0];
 
-      console.log("Drive route: ", drivePoints);
-      console.log("Transit route: ", transitPoints);
-      console.log("Bicycle route: ", bicyclePoints);
-      console.log("Walk route: ", walkPoints);
+      try {
+        let drivePoints = driveRoute.features[0].geometry.coordinates[0];
+        setDrivePoints(drivePoints);
+        let transitPoints = transitRoute.features[0].geometry.coordinates[0];
+        let bicyclePoints = bicycleRoute.features[0].geometry.coordinates[0];
+        let walkPoints = walkRoute.features[0].geometry.coordinates[0];
+
+        console.log("Drive route: ", drivePoints);
+        console.log("Transit route: ", transitPoints);
+        console.log("Bicycle route: ", bicyclePoints);
+        console.log("Walk route: ", walkPoints);
+      }
+      catch (error) {
+        //catches when there's the limbo stage between a null vlaue for route
+        console.log(error)
+      }
+
     }
     else {
       console.log("Starting address or ending address not entered");

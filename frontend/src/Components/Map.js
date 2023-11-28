@@ -6,8 +6,9 @@ function Map({ drivePoints }) {
   // const [isTest, setisTest] = useState(false);
 
 
-  let testRoute = <></>;
-  if (drivePoints != null) {
+  // let testRoute = <Polyline />;
+  let testRoute;
+  if (drivePoints) {
     const flippedPoints = drivePoints.map(p => [p[1], p[0]]);
     testRoute = (<Polyline
       positions={flippedPoints}
@@ -29,7 +30,7 @@ function Map({ drivePoints }) {
         tileSize={512}
         zoomOffset={-1}
       />
-      {testRoute}
+      {testRoute && testRoute}
     </MapContainer>
   );
 };
