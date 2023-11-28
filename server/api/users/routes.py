@@ -1,6 +1,6 @@
 from flask import jsonify, request, current_app, Blueprint
 from api import db, bcrypt
-from utils import get_user_id
+from api.users.utils import get_user_id
 from api.models import User, Friends
 import jwt
 import datetime
