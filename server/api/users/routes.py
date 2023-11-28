@@ -1,6 +1,6 @@
 from flask import jsonify, request, current_app, Blueprint
-from api import db, bcrypt
-from api.users.utils import get_user_id
+from api import db
+from api.users.utils import get_user_id, get_vehicle_id
 from api.models import User, Friends
 import jwt
 import datetime
@@ -11,94 +11,61 @@ users = Blueprint("users", __name__)
 session_days = 365
 
 
-@users.route("/register", methods=["POST"])
-def register():
-    name = request.json.get("name")
-    password = request.json.get("password")
+# @users.route("/register", methods=["POST"])
+# def register():
+#     name = request.json.get("name")
+#     password = request.json.get("password")
 
-    if not name or not password:
-        return jsonify(error="Missing name/password")
+#     if not name or not password:
+#         return jsonify(error="Missing name/password")
 
-    user = User.query.filter_by(name=name).first()
-    if user:
-        return jsonify(error=f"Sorry, the name {name} has been taken.")
+#     user = User.query.filter_by(name=name).first()
+#     if user:
+#         return jsonify(error=f"Sorry, the name {name} has been taken.")
 
-    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
-    user = User(name=name, password=hashed_password)
-    db.session.add(user)
-    db.session.commit()
+#     hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+#     user = User(name=name, password=hashed_password)
+#     db.session.add(user)
+#     db.session.commit()
 
-    token = jwt.encode(
-        {
-            "name": name,
-            "password": password,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=session_days),
-        },
-        current_app.config["SECRET_KEY"],
-    )
-    return jsonify(token=token.decode("utf-8"))
-
-
-@users.route("/login", methods=["POST"])
-def login():
-    name = request.json.get("name")
-    password = request.json.get("password")
-    if not name or not password:
-        return jsonify(error="Missing name/password")
-
-    user = User.query.filter_by(name=name).first()
-    if user and user.verify_password(password):
-        token = jwt.encode(
-            {
-                "name": name,
-                "password": password,
-                "exp": datetime.datetime.utcnow()
-                + datetime.timedelta(days=session_days),
-            },
-            current_app.config["SECRET_KEY"],
-        )
-        return jsonify(token=token.decode("utf-8"))
-
-    return jsonify(error="Invalid credentials")
+#     token = jwt.encode(
+#         {
+#             "name": name,
+#             "password": password,
+#             "exp": datetime.datetime.utcnow() + datetime.timedelta(days=session_days),
+#         },
+#         current_app.config["SECRET_KEY"],
+#     )
+#     return jsonify(token=token.decode("utf-8"))
 
 
-@users.route("/account", methods=["POST"])
-def account():
-    token = request.json.get("token")
-    if not token:
-        return jsonify(error="Missing token")
+# @users.route("/login", methods=["POST"])
+# def login():
+#     name = request.json.get("name")
+#     password = request.json.get("password")
+#     if not name or not password:
+#         return jsonify(error="Missing name/password")
 
-    try:
-        token_data = jwt.decode(token, current_app.config["SECRET_KEY"])
-    except:
-        return jsonify(error="Token invalid or expired")
+#     user = User.query.filter_by(name=name).first()
+#     if user and user.verify_password(password):
+#         token = jwt.encode(
+#             {
+#                 "name": name,
+#                 "password": password,
+#                 "exp": datetime.datetime.utcnow()
+#                 + datetime.timedelta(days=session_days),
+#             },
+#             current_app.config["SECRET_KEY"],
+#         )
+#         return jsonify(token=token.decode("utf-8"))
 
-    name = token_data.get("name")
-    password = token_data.get("password")
-    if name is None or password is None:
-        return jsonify(error="Missing token name/password")
-
-    user = User.query.filter_by(name=name).first()
-    if user and user.verify_password(password):
-        return jsonify(name=name)
-
-    return jsonify(error="Invalid token credentials")
+#     return jsonify(error="Invalid credentials")
 
 
 @users.route("/friends", methods=["GET"])
 def friends():
-    token = request.json.get("token")
-    if not token:
-        return jsonify(error="Missing token")
-
-    try:
-        token_data = jwt.decode(token, current_app.config["SECRET_KEY"])
-    except:
-        return jsonify(error="Token invalid or expired")
-
-    name = token_data.get("name")
-    password = token_data.get("password")
-    if name is None or password is None:
+    name = request.json.get("name")
+    if name is None:
         return jsonify(error="Missing token name/password")
     userid = request.json.get("username")
     userID = get_user_id(userid)
@@ -108,18 +75,8 @@ def friends():
 
 @users.route("/add_friend", methods=["POST"])
 def add_friend():
-    token = request.json.get("token")
-    if not token:
-        return jsonify(error="Missing token")
-
-    try:
-        token_data = jwt.decode(token, current_app.config["SECRET_KEY"])
-    except:
-        return jsonify(error="Token invalid or expired")
-
-    name = token_data.get("name")
-    password = token_data.get("password")
-    if name is None or password is None:
+    name = request.json.get("name")
+    if name is None:
         return jsonify(error="Missing token name/password")
 
     first_username = request.json.get("username1")
@@ -141,28 +98,22 @@ def add_friend():
 
     return jsonify({"status": "Success! Added friend record"})
 
+
 @users.route("/update_profile", methods=["POST"])
 def update_profile():
-    # token = request.json.get("token")
-    # if not token:
-    #     return jsonify(error="Missing token")
-
-    # try:
-    #     token_data = jwt.decode(token, current_app.config["SECRET_KEY"])
-    # except:
-    #     return jsonify(error="Token invalid or expired")
-
-    name = request.json.get("name")
-    password = request.json.get("password")
-    vehicleId = request.json.get("vehicleid")
-
-    userId = get_user_id(name)
-
-    all_users = set(User.id)
-
-    if userId not in all_users:
+    name = str(request.json.get("updateProfileFormData").get("name"))
+    password = str(request.json.get("updateProfileFormData").get("password"))
+    email = str(request.json.get("updateProfileFormData").get("email"))
+    vehicle = str(request.json.get("updateProfileFormData").get("vehicle"))
+    userId = get_user_id(email)
+    if userId is None:
         return jsonify(error="User does not exist. Please register user.")
-    
-    User.update().where((User.id == id)).values(name = name, password = password, vehicleId = vehicleId)
 
+    user = User.query.filter(User.id == userId).first()
+    vehicleID = get_vehicle_id(vehicle)
+    user.name = name
+    if password is not None:
+        user.password = password
+    user.vehicleID = vehicleID
+    db.session().commit()
     return jsonify({"status": "Success! Updated your profile!"})
