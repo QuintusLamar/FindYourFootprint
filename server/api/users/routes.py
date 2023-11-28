@@ -140,3 +140,29 @@ def add_friend():
     )
 
     return jsonify({"status": "Success! Added friend record"})
+
+@users.route("/update_profile", methods=["POST"])
+def update_profile():
+    token = request.json.get("token")
+    if not token:
+        return jsonify(error="Missing token")
+
+    try:
+        token_data = jwt.decode(token, current_app.config["SECRET_KEY"])
+    except:
+        return jsonify(error="Token invalid or expired")
+
+    name = token_data.get("name")
+    password = token_data.get("password")
+    vehicleId = request.json.get("vehicleid")
+
+    userId = get_user_id(name)
+
+    all_users = set(User.id)
+
+    if userId not in all_users:
+        return jsonify(error="User does not exist. Please register user.")
+    
+    User.update().where((User.id == id)).values(name = name, password = password, vehicleId = vehicleId)
+
+    return jsonify({"status": "Success! Updated your profile!"})
