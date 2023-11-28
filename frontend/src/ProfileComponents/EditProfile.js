@@ -31,8 +31,9 @@ function EditProfile() {
 
     const updateProfileFormData = {
       name: first,
+      email: email,
       password: password,
-      vehicleid: vehicle,
+      vehicle: vehicle,
     };
 
     try {
@@ -121,7 +122,7 @@ function EditProfile() {
           variant="outlined" 
           sx={{width:"40%", ml:"2.5%", mr:"2.5%"}}
         />
-        <TextField 
+        {/* <TextField 
           value={address}
           onChange={(event) => {
             setAddress(event.target.value)
@@ -130,9 +131,9 @@ function EditProfile() {
           placeholder="600 W Peachtree St NW"
           variant="outlined" 
           sx={{width:"85%", ml:"2.5%", mr:"2.5%", mt:"2%", mb:"2%"}}
-        />
+        /> */}
 
-        <TextField 
+        {/* <TextField 
           value={city}
           onChange={(event) => {
             setCity(event.target.value)
@@ -161,7 +162,7 @@ function EditProfile() {
           placeholder="(123) 456-7890"
           variant="outlined" 
           sx={{width:"25%", ml:"2.5%", mr:"2.5%"}}
-        />
+        /> */}
         
         <Button variant="outlined" onClick={submitForm}> Submit </Button>
 

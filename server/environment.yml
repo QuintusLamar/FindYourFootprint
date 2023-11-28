@@ -7,3 +7,4 @@ dependencies:
     - Flask_Bcrypt
     - Flask_SQLAlchemy
     - PyJWT
+    - transport-co2
