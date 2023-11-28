@@ -11,9 +11,6 @@ import Typography from '@mui/material/Typography';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import { useNavigate } from "react-router-dom";
 
 
@@ -22,12 +19,8 @@ function Sidebar() {
   const navigate = useNavigate();
 
   const sideBarItems = [
-    {"text": "View Profile", "navigation": "ViewProfile", "element": <AccountBoxOutlinedIcon></AccountBoxOutlinedIcon>},
-    {"text": "Edit Profile", "navigation": "EditProfile", "element": <EditOutlinedIcon></EditOutlinedIcon>},
-    {"text": "Notification", "navigation": "Notification", "element": <NotificationsNoneOutlinedIcon></NotificationsNoneOutlinedIcon>},
-    {"text": "Security", "navigation": "Security", "element": <LockOutlinedIcon></LockOutlinedIcon>},
-    {"text": "Appearance", "navigation": "Appearance", "element": <SettingsOutlinedIcon></SettingsOutlinedIcon>},
-    {"text": "Help", "navigation": "Help", "element": <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>}
+    { "text": "View Profile", "navigation": "ViewProfile", "element": <AccountBoxOutlinedIcon></AccountBoxOutlinedIcon> },
+    { "text": "Edit Profile", "navigation": "EditProfile", "element": <EditOutlinedIcon></EditOutlinedIcon> },
   ]
 
   function clicked(event) {
@@ -46,37 +39,37 @@ function Sidebar() {
 
   return (
     <Drawer
-        sx={{
+      sx={{
+        width: 240,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
           width: 240,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: 240,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="permanent"
-        anchor="left"
-      >
-        <Toolbar />
-        <Divider />
+          boxSizing: 'border-box',
+        },
+      }}
+      variant="permanent"
+      anchor="left"
+    >
+      <Toolbar />
+      <Divider />
 
-        <List>
-          {sideBarItems.map((key) => (
-            <ListItem key={key.text} disablePadding>
-              {/* Something about this needs to be updated, the state takes too long to set */}
-              <ListItemButton onClick={clicked} selected={key.text === title}>
+      <List>
+        {sideBarItems.map((key) => (
+          <ListItem key={key.text} disablePadding>
+            {/* Something about this needs to be updated, the state takes too long to set */}
+            <ListItemButton onClick={clicked} selected={key.text === title}>
               {/* <ListItemButton onClick={(event) => {
                   console.log("Key: ", event)
                 }}
                 selected={key.text===title}
               > */}
-                {key.element}
+              {key.element}
               <ListItemText primary={key.text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
   )
 }
 
