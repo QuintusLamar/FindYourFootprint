@@ -23,3 +23,8 @@ def auth_user(token):
 
     print("[AUTH ERROR] 3")
     return None
+
+
+def get_user_id(name):
+    user_id = User.query.filter_by(username=name).first()
+    return user_id.id
