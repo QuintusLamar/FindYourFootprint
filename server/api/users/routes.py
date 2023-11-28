@@ -95,7 +95,7 @@ def add_friend():
             {"userOneId": second, "userTwoId": first},
         ]
     )
-
+    db.session().commit()
     return jsonify({"status": "Success! Added friend record"})
 
 
