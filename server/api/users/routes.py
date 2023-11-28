@@ -143,17 +143,17 @@ def add_friend():
 
 @users.route("/update_profile", methods=["POST"])
 def update_profile():
-    token = request.json.get("token")
-    if not token:
-        return jsonify(error="Missing token")
+    # token = request.json.get("token")
+    # if not token:
+    #     return jsonify(error="Missing token")
 
-    try:
-        token_data = jwt.decode(token, current_app.config["SECRET_KEY"])
-    except:
-        return jsonify(error="Token invalid or expired")
+    # try:
+    #     token_data = jwt.decode(token, current_app.config["SECRET_KEY"])
+    # except:
+    #     return jsonify(error="Token invalid or expired")
 
-    name = token_data.get("name")
-    password = token_data.get("password")
+    name = request.json.get("name")
+    password = request.json.get("password")
     vehicleId = request.json.get("vehicleid")
 
     userId = get_user_id(name)
