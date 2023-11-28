@@ -138,7 +138,7 @@ def add_friend():
             {"userOneId": second, "userTwoId": first},
         ]
     )
-
+    db.session().commit()
     return jsonify({"status": "Success! Added friend record"})
 
 @users.route("/update_profile", methods=["POST"])
@@ -157,6 +157,8 @@ def update_profile():
     vehicleId = request.json.get("vehicleid")
 
     userId = get_user_id(name)
+    if userId == None:
+        return jsonify(error="User does not exist. Please register user.")
 
     all_users = set(User.id)
 
@@ -164,5 +166,5 @@ def update_profile():
         return jsonify(error="User does not exist. Please register user.")
     
     User.update().where((User.id == id)).values(name = name, password = password, vehicleId = vehicleId)
-
+    db.session().commit()
     return jsonify({"status": "Success! Updated your profile!"})

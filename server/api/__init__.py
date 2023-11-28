@@ -6,15 +6,12 @@ from flask_bcrypt import Bcrypt
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 
-
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(Config)
 
     db.init_app(app)
     bcrypt.init_app(app)
-    with app.app_context():
-        db.create_all()
 
     from api.users.routes import users
     from api.main.routes import main
@@ -32,4 +29,6 @@ def create_app(config_class=Config):
         ] = "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
         return response
 
-    return app
+    with app.app_context():
+        db.create_all()
+        return app

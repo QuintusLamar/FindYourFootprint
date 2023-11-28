@@ -27,4 +27,6 @@ def auth_user(token):
 
 def get_user_id(name):
     user_id = User.query.filter_by(username=name).first()
+    if user_id is None:
+        return None
     return user_id.id
