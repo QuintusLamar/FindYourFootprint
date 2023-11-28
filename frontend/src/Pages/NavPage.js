@@ -14,9 +14,11 @@ import '../App.css';
 // Address: 1 Coca Cola Plz NW, Atlanta, GA 30313
 // Lat/Lng: 33.7628 -84.3928
 
-function NavPage () {
+function NavPage() {
   const [startAddr, setStartAddr] = useState("600 W Peachtree St NW, Atlanta, GA 30308");
   const [endAddr, setEndAddr] = useState("1 Coca Cola Plz NW, Atlanta, GA 30313");
+  const [drivePoints, setDrivePoints] = useState(null);
+
 
   const api_key = "48fbefd89de548768e248393b9881b79"
 
@@ -42,8 +44,9 @@ function NavPage () {
       .then(res => res.json())
   }
 
+  //TODO LOOK INTO IF THIS AVERAGE IS CORRECT, sometimes it gives multiple routes 
   function getAve(features) {
-    let finalCoord =[0, 0];
+    let finalCoord = [0, 0];
     features.forEach(feature => {
       finalCoord[0] = finalCoord[0] + feature.geometry.coordinates[1];
       finalCoord[1] = finalCoord[1] + feature.geometry.coordinates[0];
@@ -74,10 +77,11 @@ function NavPage () {
       let walkRoute = await getRoute(startCoord, endCoord, "walk");
 
       let drivePoints = driveRoute.features[0].geometry.coordinates[0];
+      setDrivePoints(drivePoints);
       let transitPoints = transitRoute.features[0].geometry.coordinates[0];
       let bicyclePoints = bicycleRoute.features[0].geometry.coordinates[0];
       let walkPoints = walkRoute.features[0].geometry.coordinates[0];
-      
+
       console.log("Drive route: ", drivePoints);
       console.log("Transit route: ", transitPoints);
       console.log("Bicycle route: ", bicyclePoints);
@@ -88,48 +92,49 @@ function NavPage () {
     }
   }
 
-    return (
-      <div>
-        <div className="TopBar">
+  return (
+    <div>
+      <div className="TopBar">
 
-          {/* Buttons/symbols should go here? */}
-          <div className="Misc">
-
-          </div>
-
-          <div className="inputBars">
-            <form>
-              <input
-                className="ChildInput"
-                type="text"
-                placeholder="Enter starting address here"
-                value={startAddr}
-                onChange={(e) => setStartAddr(e.target.value)}
-                required={true}
-              />
-
-              <input
-                className="ChildInput"
-                type="text"
-                placeholder="Enter ending address here"
-                value={endAddr}
-                onChange={(e) => setEndAddr(e.target.value)}
-                required={true}
-              />
-              <input type="submit" value="Search" onClick={submitRoute}/>
-            </form>
-          </div>
-
-          {/* Routes and their symbols will be displayed here */}
-          <div className="Routes">
-
-          </div>
+        {/* Buttons/symbols should go here? */}
+        <div className="Misc">
 
         </div>
-        <Map>
-        </Map>
+
+        <div className="inputBars">
+          <form>
+            <input
+              className="ChildInput"
+              type="text"
+              placeholder="Enter starting address here"
+              value={startAddr}
+              onChange={(e) => setStartAddr(e.target.value)}
+              required={true}
+            />
+
+            <input
+              className="ChildInput"
+              type="text"
+              placeholder="Enter ending address here"
+              value={endAddr}
+              onChange={(e) => setEndAddr(e.target.value)}
+              required={true}
+            />
+            <input type="submit" value="Search" onClick={submitRoute} />
+          </form>
+        </div>
+
+        {/* Routes and their symbols will be displayed here */}
+        <div className="Routes">
+
+        </div>
+
       </div>
-    );
+      <Map
+        drivePoints={drivePoints}>
+      </Map>
+    </div>
+  );
 };
 
 export default NavPage;
