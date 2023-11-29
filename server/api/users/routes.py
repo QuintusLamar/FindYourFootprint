@@ -1,10 +1,10 @@
 from flask import jsonify, request, current_app, Blueprint
 from api import db
-from api.users.utils import get_user_id, get_vehicle_id, get_all_users
+from api.users.utils import get_user_id, get_vehicle_id, get_all_users, calculate_carbon_cost
 from api.models import User, Friends
 import jwt
 import datetime
-from utils import calculate_carbon_cost
+
 
 
 users = Blueprint("users", __name__)
