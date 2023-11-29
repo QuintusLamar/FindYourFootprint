@@ -39,11 +39,3 @@ def get_vehicle_id(vehicle_name):
 def get_all_users():
     users = User.query.all()
     return users
-
-
-# This distance should be in miles
-def calculate_carbon_cost(distance, vehicle):
-    if vehicle == "train":
-        return estimate_co2(mode="LIGHT_RAIL", distance_in_km=distance * 1.609)
-    else:
-        return estimate_co2(mode="")
