@@ -44,7 +44,17 @@ def get_all_users():
 
 # This distance should be in miles
 def calculate_carbon_cost(distance, vehicle):
-    if vehicle == "train":
+
+    # walking and biking does not contribute to any carbon cost
+    if vehicle == "walking" or vehicle == "biking":
+        return 0
+    elif vehicle == "SUV" or vehicle == "Truck":
+        return estimate_co2(mode="large_car", distance_in_km=distance*1.609)
+    elif vehicle == "Sedan":
+        return estimate_co2(mode="small_car", distance_in_km=distance*1.609)
+    elif vehicle == "Bus":
+        return estimate_co2(mode="transit", distance_in_km=distance*1.609)
+    elif vehicle == "Train":
         return estimate_co2(mode="LIGHT_RAIL", distance_in_km=distance * 1.609)
     else:
         return estimate_co2(mode="")
