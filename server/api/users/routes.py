@@ -1,7 +1,7 @@
 from flask import jsonify, request, current_app, Blueprint
 from api import db
 from api.users.utils import get_user_id, get_vehicle_id, get_all_users, calculate_carbon_cost
-from api.models import User, Friends
+from api.models import User, Friends, Records
 import jwt
 import datetime
 
@@ -127,11 +127,22 @@ def update_profile():
     return jsonify({"status": "Success! Updated your profile!"})
 
 
-@users.route("/calculate_carboncost", methods=["GET"])
-def calculate_carboncost():
-    routeDistance = float(request.json.get("currentRouteFormData").get("routeDistance"))
-    vehicle = str(request.json.get("currentRouteFormData").get("vehicle"))
-    carbonCost = calculate_carbon_cost(routeDistance, vehicle)
 
-    return jsonify(carbonCost)
+@users.route("/add_routerecord", methods=["POST"])
+def add_routerecord():
+    email = str(request.json.get("addRouteRecordFormData").get("email"))
+    routeId = int(request.json.get("addrouteRecordFormData").get("routeId"))
+    routeDistance = float(request.json.get("addrouteRecordFormData").get("routeDistance"))
+    vehicleId = int(request.json.get("addrouteRecordFormData").get("vehicleId"))
+    timestamp = datetime.datetime.now()
+    carbonOutput = calculate_carbon_cost(routeDistance, vehicleId)
 
+    userId = get_user_id(email)
+
+    Records.insert().values(
+        [
+            {"userID": userId, "routeID": routeId, "carbonOutput": carbonOutput, "vehicleID": vehicleId, "routeDistance": routeDistance}
+        ]
+    )
+    db.session().commit()
+    return jsonify({"status": "Success! Added route record"})

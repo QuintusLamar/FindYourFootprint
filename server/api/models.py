@@ -45,4 +45,5 @@ class Records(db.Model):
     carbonOutput = db.Column(db.Float, unique=False, nullable=False)
     timestamp = db.Column(db.DateTime, unique=False, nullable=False)
     vehicleID = db.Column(db.Integer, unique=False, nullable=False)
+    routeDistance = db.Column(db.Float, unique=False, nullable=False)
     # user = db.relationship("User", backref="records", lazy=True)
