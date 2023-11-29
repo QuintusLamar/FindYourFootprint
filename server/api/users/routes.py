@@ -4,6 +4,7 @@ from api.users.utils import get_user_id, get_vehicle_id, get_all_users
 from api.models import User, Friends
 import jwt
 import datetime
+from utils import calculate_carbon_cost
 
 
 users = Blueprint("users", __name__)
@@ -124,3 +125,13 @@ def update_profile():
     #     print(i.name)
     
     return jsonify({"status": "Success! Updated your profile!"})
+
+
+@users.route("/calculate_carboncost", methods=["GET"])
+def calculate_carboncost():
+    routeDistance = float(request.json.get("currentRouteFormData").get("routeDistance"))
+    vehicle = str(request.json.get("currentRouteFormData").get("vehicle"))
+    carbonCost = calculate_carbon_cost(routeDistance, vehicle)
+
+    return jsonify(carbonCost)
+
