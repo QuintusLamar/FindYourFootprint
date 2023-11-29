@@ -3,6 +3,13 @@ import Map from '../Components/Map';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import '../App.css';
+import { Grid, IconButton, colors } from '@mui/material';
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import DirectionsBusFilledIcon from '@mui/icons-material/DirectionsBusFilled';
+import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import { Container } from '@mui/system';
+
 
 // Sample coordinates below
 
@@ -17,7 +24,21 @@ import '../App.css';
 function NavPage() {
   const [startAddr, setStartAddr] = useState("600 W Peachtree St NW, Atlanta, GA 30308");
   const [endAddr, setEndAddr] = useState("1 Coca Cola Plz NW, Atlanta, GA 30313");
-  const [drivePoints, setDrivePoints] = useState(null);
+  const [selectedMode, setSelectedMode] = useState("drive");
+  const [routePoints, setRoutePoints] = useState(null);
+
+  useEffect(() => {
+    if (selectedMode) {
+      const event = { preventDefault: () => { } }
+      submitRoute(event)
+    }
+  }, [selectedMode]);
+
+  const handleModeSelect = (mode) => {
+    setSelectedMode(mode);
+    const event = { preventDefault: () => { } }
+    submitRoute(event) //TODO TEST IF YOU CAN REMOVE THIS AND FUNCTIONALITY STILL WORKS
+  }
 
 
   const api_key = "48fbefd89de548768e248393b9881b79"
@@ -79,15 +100,37 @@ function NavPage() {
 
       try {
         let drivePoints = driveRoute.features[0].geometry.coordinates[0];
-        setDrivePoints(drivePoints);
+        setRoutePoints(drivePoints);
         let transitPoints = transitRoute.features[0].geometry.coordinates[0];
         let bicyclePoints = bicycleRoute.features[0].geometry.coordinates[0];
         let walkPoints = walkRoute.features[0].geometry.coordinates[0];
 
-        console.log("Drive route: ", drivePoints);
-        console.log("Transit route: ", transitPoints);
-        console.log("Bicycle route: ", bicyclePoints);
-        console.log("Walk route: ", walkPoints);
+        switch (selectedMode) {
+          case "drive":
+            setRoutePoints(drivePoints)
+            console.log("Drive route: ", routePoints);
+            break;
+          case "bus":
+            setRoutePoints(transitPoints)
+            console.log("Transit route: ", routePoints);
+            break;
+          case "bike":
+            setRoutePoints(bicyclePoints)
+            console.log("Bicycle route: ", routePoints);
+            break;
+          case "walk":
+            setRoutePoints(walkPoints)
+            break;
+          default:
+            setRoutePoints(drivePoints)
+            console.log("Walk route: ", routePoints);
+            break;
+        }
+
+
+
+
+
       }
       catch (error) {
         //catches when there's the limbo stage between a null vlaue for route
@@ -101,47 +144,66 @@ function NavPage() {
   }
 
   return (
-    <div>
-      <div className="TopBar">
+    <Container sx={{ paddingTop: 5 }}>
+      <Grid container spacing={1}>
+        <Grid>
+          {/* input form  */}
+          <div className="inputBars">
+            <form>
+              <input
+                className="ChildInput"
+                type="text"
+                placeholder="Enter starting address here"
+                value={startAddr}
+                onChange={(e) => setStartAddr(e.target.value)}
+                required={true}
+              />
 
-        {/* Buttons/symbols should go here? */}
-        <div className="Misc">
+              <input
+                className="ChildInput"
+                type="text"
+                placeholder="Enter ending address here"
+                value={endAddr}
+                onChange={(e) => setEndAddr(e.target.value)}
+                required={true}
+              />
+              <input type="submit" value="Search" onClick={submitRoute} />
+            </form>
+          </div>
+        </Grid>
 
-        </div>
+        <Grid item xs={1}>
+          <IconButton>
+            <DirectionsCarIcon onClick={() =>
+              handleModeSelect("drive")
+            }></DirectionsCarIcon>
+          </IconButton>
+        </Grid>
 
-        <div className="inputBars">
-          <form>
-            <input
-              className="ChildInput"
-              type="text"
-              placeholder="Enter starting address here"
-              value={startAddr}
-              onChange={(e) => setStartAddr(e.target.value)}
-              required={true}
-            />
+        <Grid item xs={1}>
+          <IconButton>
+            <DirectionsBusFilledIcon onClick={() => handleModeSelect("bus")}></DirectionsBusFilledIcon>
+          </IconButton>
+        </Grid>
 
-            <input
-              className="ChildInput"
-              type="text"
-              placeholder="Enter ending address here"
-              value={endAddr}
-              onChange={(e) => setEndAddr(e.target.value)}
-              required={true}
-            />
-            <input type="submit" value="Search" onClick={submitRoute} />
-          </form>
-        </div>
+        <Grid item xs={1}>
+          <IconButton>
+            <DirectionsBikeIcon onClick={() => handleModeSelect("bike")}></DirectionsBikeIcon>
+          </IconButton>
+        </Grid>
 
-        {/* Routes and their symbols will be displayed here */}
-        <div className="Routes">
+        <Grid item xs={1}>
+          <IconButton>
+            <DirectionsWalkIcon onClick={() => handleModeSelect("walk")}></DirectionsWalkIcon>
+          </IconButton>
+        </Grid>
 
-        </div>
 
-      </div>
+      </Grid>
       <Map
-        drivePoints={drivePoints}>
+        routePoints={routePoints}>
       </Map>
-    </div>
+    </Container>
   );
 };
 
