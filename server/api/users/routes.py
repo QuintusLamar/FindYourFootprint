@@ -128,6 +128,7 @@ def update_profile():
 
 
 
+
 @users.route("/add_routerecord", methods=["POST"])
 def add_routerecord():
     email = str(request.json.get("addRouteRecordFormData").get("email"))
@@ -141,7 +142,7 @@ def add_routerecord():
 
     Records.insert().values(
         [
-            {"userID": userId, "routeID": routeId, "carbonOutput": carbonOutput, "vehicleID": vehicleId, "routeDistance": routeDistance}
+            {"userID": userId, "routeID": routeId, "carbonOutput": carbonOutput, "timestamp": timestamp, "vehicleID": vehicleId, "routeDistance": routeDistance}
         ]
     )
     db.session().commit()
