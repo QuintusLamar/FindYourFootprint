@@ -57,4 +57,4 @@ def calculate_carbon_cost(distance, vehicle):
     elif vehicle == "Train":
         return estimate_co2(mode="LIGHT_RAIL", distance_in_km=distance * 1.609)
     else:
-        return estimate_co2(mode="")
+        return 0

@@ -148,10 +148,15 @@ def add_routerecord():
     db.session().commit()
     return jsonify({"status": "Success! Added route record"})
 
-@users.route("/calculate_carboncost", methods=["GET"])
+@users.route("/calculate_carboncost", methods=["POST"])
 def calculate_carboncost():
     routeDistance = float(request.json.get("currentRouteFormData").get("routeDistance"))
     vehicle = str(request.json.get("currentRouteFormData").get("vehicleId"))
+
+    print(f"ROUTE DISTANCE: {routeDistance}")
+    print(f"HERE IS YOUR VEHICLE TYPE: {vehicle}")
     carbonCost = calculate_carbon_cost(routeDistance, vehicle)
+
+    print(f"HERE IS THE CALCULATED CARBON COST: {carbonCost}")
 
     return jsonify(carbonCost)

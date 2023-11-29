@@ -73,15 +73,61 @@ function NavPage () {
       let bicycleRoute = await getRoute(startCoord, endCoord, "bicycle");
       let walkRoute = await getRoute(startCoord, endCoord, "walk");
 
+
+  
       let drivePoints = driveRoute.features[0].geometry.coordinates[0];
       let transitPoints = transitRoute.features[0].geometry.coordinates[0];
       let bicyclePoints = bicycleRoute.features[0].geometry.coordinates[0];
       let walkPoints = walkRoute.features[0].geometry.coordinates[0];
+
+
+      // all the distances are in meters
+      let driveDistance = (driveRoute.features[0].properties.distance)/1000 * 1.609
+      let transitDistance = (transitRoute.features[0].properties.distance)/1000 * 1.609
+      let bicycleDistance = (bicycleRoute.features[0].properties.distance)/1000 * 1.609
+      let walkDistance = (walkRoute.features[0].properties.distance)/1000 * 1.609
+
       
       console.log("Drive route: ", drivePoints);
       console.log("Transit route: ", transitPoints);
       console.log("Bicycle route: ", bicyclePoints);
       console.log("Walk route: ", walkPoints);
+
+
+      console.log("Drive Distance in miles: ", driveDistance);
+      console.log("Transit Distance in miles: ", transitDistance);
+      console.log("Bicycle Distance in miles: ", bicycleDistance);
+      console.log("Walk Distance in miles: ", walkDistance);
+
+      const currentRouteFormData = {
+        routeDistance: driveDistance,
+        vehicleId: "SUV"
+      };
+
+      try {
+        const response = await fetch('http://127.0.0.1:5000/calculate_carboncost', {
+          method: 'POST',  // Change method to POST
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ currentRouteFormData }),
+        });
+      
+        console.log("RESPONSE:", response.text);
+      
+        if (response.ok) {
+          console.log('Calculated carbon cost successfully');
+          // Add any further actions after a successful update
+        } else {
+          console.error('Failed to calculate carbon cost successfully');
+          // Handle error cases
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle network errors or other exceptions
+      }
+    
+
     }
     else {
       console.log("Starting address or ending address not entered");
