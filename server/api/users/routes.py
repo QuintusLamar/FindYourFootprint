@@ -1,6 +1,6 @@
 from flask import jsonify, request, current_app, Blueprint
 from api import db
-from api.users.utils import get_user_id, get_vehicle_id
+from api.users.utils import get_user_id, get_vehicle_id, get_all_users
 from api.models import User, Friends
 import jwt
 import datetime
@@ -105,6 +105,8 @@ def update_profile():
     password = str(request.json.get("updateProfileFormData").get("password"))
     email = str(request.json.get("updateProfileFormData").get("email"))
     vehicle = str(request.json.get("updateProfileFormData").get("vehicle"))
+
+    # print(f"email: {email}")
     userId = get_user_id(email)
     if userId is None:
         return jsonify(error="User does not exist. Please register user.")
@@ -116,4 +118,9 @@ def update_profile():
         user.password = password
     user.vehicleID = vehicleID
     db.session().commit()
+
+    # allUsers = get_all_users()
+    # for i in allUsers:
+    #     print(i.name)
+    
     return jsonify({"status": "Success! Updated your profile!"})

@@ -21,6 +21,7 @@ def seed_database():
             highwayMPG=highway_mpg,
             vehicleID=id,
         )
+        print(vehicle_type)
         db.session.add(vehicle)
     db.session.add(
         Vehicle(
@@ -46,6 +47,7 @@ def seed_database():
     for idx in range(10):
         username = f"user_{usernames[idx]}"
         email = f"{username}@example.com"
+        print(email)
         password = "abcde123"
         name = names[idx]
         user = User(
@@ -107,6 +109,7 @@ def create_app(config_class=Config):
         return response
 
     with app.app_context():
+        db.drop_all()
         db.create_all()
-        # seed_database()
+        seed_database()
         return app
