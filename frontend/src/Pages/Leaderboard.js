@@ -3,6 +3,7 @@ import '../App.css';
 import UserTable from '../Components/UserTable'
 import UserTypeSelector from '../Components/UserTypeSelector'
 import TimeRangeSelector from '../Components/TimeRangeSelector';
+import { private_excludeVariablesFromRoot } from '@mui/material';
 
 
 function createData(rank, name, output, prev_rank) {
@@ -17,6 +18,7 @@ function Leaderboard() {
   // Don't implement this yet
   // useEffect(() => {
   //   // Pretty sure I want to change data (aka rows) if either the title or users gets changed
+  //   load_leaderboard();
 
   // }, [title, users]);
 
@@ -33,14 +35,62 @@ function Leaderboard() {
     createData(10, "CJ Stroud", 28, 6)
   ];
 
+
+  const load_leaderboard = async () => {
+    const leaderboardFormData = {
+      email: "user_5@example.com",
+      time_period: "week",
+    };
+
+    try {
+
+      const apiUrl = 'http://127.0.0.1:5000/leaderboard';
+      const parameter1 = "user_5@example.com"
+      const parameter2 = "week"
+      const urlWithParameters = `${apiUrl}?param1=${parameter1}&param2=${parameter2}`;
+      console.log("HERE 0")
+      const response = await fetch(urlWithParameters, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      console.log("HERE 1")
+
+      if (response.ok) {
+        console.log('Profile updated successfully');
+        // Add any further actions after a successful update
+
+        console.log("HERE 2")
+
+        console.log(response.json())
+
+      } else {
+        console.error('Failed to update profile');
+        // Handle error cases
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle network errors or other exceptions
+    }
+  }
+
+
   function changeUsers(target) {
     console.log("Selected user: ", target)
     setUserType(target)
+
+    // console.log(target)
+    load_leaderboard()
   }
 
   function changeTime(target) {
     console.log("Selected title: ", target)
     setTitle("Leaders in Carbon Output " + target)
+
+    // console.log(target)
+    load_leaderboard()
   }
 
   return (

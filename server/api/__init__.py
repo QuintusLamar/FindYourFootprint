@@ -81,6 +81,15 @@ def seed_database():
             )
             db.session.add(record)
             routeid += 1
+
+    # for _ in range(3):
+    #     record = Records(
+    #         userID="user_5",  # Replace with the actual range of user IDs
+    #         carbonOutput=random.uniform(1.0, 10.0),
+    #         timestamp=datetime.now(),
+    #         vehicleID=random.randint(1, 5),  # Replace with the actual range of vehicle IDs
+    #     )
+
     db.session.commit()
 
 

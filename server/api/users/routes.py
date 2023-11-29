@@ -1,9 +1,11 @@
 from flask import jsonify, request, current_app, Blueprint
 from api import db
-from api.users.utils import get_user_id, get_vehicle_id
-from api.models import User, Friends
+from api.users.utils import *
+from api.models import *
 import jwt
 import datetime
+
+from sqlalchemy import select, func
 
 
 users = Blueprint("users", __name__)
@@ -117,3 +119,99 @@ def update_profile():
     user.vehicleID = vehicleID
     db.session().commit()
     return jsonify({"status": "Success! Updated your profile!"})
+
+
+@users.route("/leaderboard", methods=["GET"])
+def leaderboard():
+    email = request.args.get('param1')
+    # userId = get_user_id(email)
+    time_period = request.args.get('param2')
+
+    if time_period == "week":
+        delta = datetime.timedelta(days=7) 
+    elif time_period == "month":
+        delta = datetime.timedelta(days=30)
+    elif time_period == "year":
+        delta = datetime.timedelta(days=365)
+    time_bound = datetime.datetime.now() - delta
+
+    print("GOT HERE")
+
+    print("\n\n", time_bound, "\n\n")
+    
+    is_friends_only = False
+    if is_friends_only:
+
+        table = select(
+            Records.userID, 
+            func.sum(Records.carbonOutput)
+        ).select_from(
+            Records
+        ).join(
+            Friends, Records.userId == Friends.userOneId
+        ).where(
+            Records.userId == "user_5"
+        ).group_by(
+            Records.userId
+        ).filter(
+            Records.timeStamp >= time_bound
+        )
+
+        return None #jsonify(table)
+    
+    else:
+
+        # userID=i,
+        # routeID=routeid,
+        # carbonOutput=random.random() * 50 + 10,
+        # timestamp=datetime.now() - timedelta(days=random.randint(1, 50)),
+        # vehicleID=random.r
+
+        all_records = Records.query.all()
+
+        # Print the results
+        for record in all_records:
+            print(f"UserID: {record.userID}, Route ID: {record.routeID}, Carbon Output: {record.carbonOutput}, Timestamp: {record.timestamp}")
+
+        # result = Records.query \
+        #     .with_entities(Records.userID, db.func.sum(Records.carbonOutput).label('total_carbon_output')) \
+        #     .filter(Records.timestamp >= time_bound) \
+        #     .group_by(Records.userID) \
+        #     .all()
+
+        # # Fetch and print the results
+        # for row in result:
+        #     print(f"UserID: {row.userID}, Total Carbon Output: {row.total_carbon_output}")
+        
+        print("FINISH")
+
+        # query = select(
+        #     Records.userID,
+        #     func.sum(Records.carbonOutput)
+        # ).select_from(
+        #     Records
+        # ).group_by(
+        #     Records.userID
+        # ).filter(
+        #     Records.timestamp >= time_bound
+        # )
+
+        
+        # result = db.engine.execute(query)
+        # for row in result.fetchall():
+        #     print(f"UserID: {row[0]}, Total Carbon Output: {row[1]}")
+
+        return None #jsonify(table)
+
+
+
+@users.route("/records", methods=["POST"])
+def add_record():
+    token = request.json.get("token")
+    if not token:
+        return jsonify(error="Missing token")
+
+    try:
+        token_data = jwt.decode(token, current_app.config["SECRET_KEY"])
+    except:
+        return jsonify(error="Token invalid or expired")
