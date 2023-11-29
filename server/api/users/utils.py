@@ -27,9 +27,6 @@ def auth_user(token):
 
 
 def get_user_id(email):
-    # for i in list(User.query.all()):
-    #     print(i.name, i.id, i.username, i.password)
-    print('INSIDE GET USER ID FUNCTION')
     user_id = User.query.filter_by(email=str(email)).first()
     return user_id.id
 
@@ -38,9 +35,11 @@ def get_vehicle_id(vehicle_name):
     vehicle_id = Vehicle.query.filter_by(vehicleType=str(vehicle_name)).first()
     return vehicle_id.vehicleID
 
+
 def get_all_users():
-    users =  User.query.all()
+    users = User.query.all()
     return users
+
 
 # This distance should be in miles
 def calculate_carbon_cost(distance, vehicle):

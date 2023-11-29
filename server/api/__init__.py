@@ -26,9 +26,25 @@ def seed_database():
     db.session.add(
         Vehicle(
             vehicleType="Marta",
+            cityMPG=100,
+            highwayMPG=200,
+            vehicleID=10,
+        )
+    )
+    db.session.add(
+        Vehicle(
+            vehicleType="Bike",
             cityMPG=-1,
             highwayMPG=-1,
-            vehicleID=10,
+            vehicleID=11,
+        )
+    )
+    db.session.add(
+        Vehicle(
+            vehicleType="Bus",
+            cityMPG=30,
+            highwayMPG=40,
+            vehicleID=12,
         )
     )
     names = [
@@ -47,7 +63,6 @@ def seed_database():
     for idx in range(10):
         username = f"user_{usernames[idx]}"
         email = f"{username}@example.com"
-        print(email)
         password = "abcde123"
         name = names[idx]
         user = User(

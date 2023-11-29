@@ -5,7 +5,7 @@ from api.models import *
 import jwt
 import datetime
 
-from sqlalchemy import select, func
+from sqlalchemy import select, func, asc
 
 
 users = Blueprint("users", __name__)
@@ -108,7 +108,6 @@ def update_profile():
     email = str(request.json.get("updateProfileFormData").get("email"))
     vehicle = str(request.json.get("updateProfileFormData").get("vehicle"))
 
-    # print(f"email: {email}")
     userId = get_user_id(email)
     if userId is None:
         return jsonify(error="User does not exist. Please register user.")
@@ -121,95 +120,67 @@ def update_profile():
     user.vehicleID = vehicleID
     db.session().commit()
 
-    # allUsers = get_all_users()
-    # for i in allUsers:
-    #     print(i.name)
-    
     return jsonify({"status": "Success! Updated your profile!"})
 
 
 @users.route("/leaderboard", methods=["GET"])
 def leaderboard():
-    email = request.args.get('param1')
-    # userId = get_user_id(email)
-    time_period = request.args.get('param2')
+    email = str(request.args.get("email"))
+    is_friends_only = str(request.args.get("is_friends_only")).lower() == "friends"
+    userId = get_user_id(email)
 
-    if time_period == "week":
-        delta = datetime.timedelta(days=7) 
-    elif time_period == "month":
+    time_period = str(request.args.get("time_period"))
+    delta = None
+    if time_period == "thisweek":
+        delta = datetime.timedelta(days=7)
+    elif time_period == "thismonth":
         delta = datetime.timedelta(days=30)
-    elif time_period == "year":
+    elif time_period == "thisyear":
         delta = datetime.timedelta(days=365)
+    elif time_period == "alltime":
+        delta = datetime.datetime.now() - datetime.datetime(1970, 1, 1)
     time_bound = datetime.datetime.now() - delta
 
-    print("GOT HERE")
-
-    print("\n\n", time_bound, "\n\n")
-    
-    is_friends_only = False
     if is_friends_only:
-
-        table = select(
-            Records.userID, 
-            func.sum(Records.carbonOutput)
-        ).select_from(
-            Records
-        ).join(
-            Friends, Records.userId == Friends.userOneId
-        ).where(
-            Records.userId == "user_5"
-        ).group_by(
-            Records.userId
-        ).filter(
-            Records.timeStamp >= time_bound
+        all_friends = Friends.query.filter(Friends.userOneID == userId).all()
+        all_friends = set([a.userTwoID for a in all_friends])
+        all_friends.add(userId)
+        query = (
+            select(
+                Records.userID,
+                User.email,
+                User.name,
+                func.sum(Records.carbonOutput).label("carbon_output"),
+            )
+            .select_from(Records)
+            .join(User, User.id == Records.userID)
+            .where(Records.userID.in_(all_friends))
+            .group_by(Records.userID)
+            .filter(Records.timestamp >= time_bound)
+            .order_by(asc("carbon_output"))
+        )
+        result = db.session.execute(query).fetchall()
+        return jsonify(
+            [(i + 1, row.name, row.carbon_output) for i, row in enumerate(result)]
         )
 
-        return None #jsonify(table)
-    
     else:
+        query = (
+            select(
+                User.name,
+                func.sum(Records.carbonOutput).label("carbon_output"),
+            )
+            .select_from(Records)
+            .join(User, User.id == Records.userID)
+            .group_by(Records.userID)
+            .filter(Records.timestamp >= time_bound)
+            .order_by(asc("carbon_output"))
+        )
 
-        # userID=i,
-        # routeID=routeid,
-        # carbonOutput=random.random() * 50 + 10,
-        # timestamp=datetime.now() - timedelta(days=random.randint(1, 50)),
-        # vehicleID=random.r
-
-        all_records = Records.query.all()
-
-        # Print the results
-        for record in all_records:
-            print(f"UserID: {record.userID}, Route ID: {record.routeID}, Carbon Output: {record.carbonOutput}, Timestamp: {record.timestamp}")
-
-        # result = Records.query \
-        #     .with_entities(Records.userID, db.func.sum(Records.carbonOutput).label('total_carbon_output')) \
-        #     .filter(Records.timestamp >= time_bound) \
-        #     .group_by(Records.userID) \
-        #     .all()
-
-        # # Fetch and print the results
-        # for row in result:
-        #     print(f"UserID: {row.userID}, Total Carbon Output: {row.total_carbon_output}")
-        
-        print("FINISH")
-
-        # query = select(
-        #     Records.userID,
-        #     func.sum(Records.carbonOutput)
-        # ).select_from(
-        #     Records
-        # ).group_by(
-        #     Records.userID
-        # ).filter(
-        #     Records.timestamp >= time_bound
-        # )
-
-        
-        # result = db.engine.execute(query)
-        # for row in result.fetchall():
-        #     print(f"UserID: {row[0]}, Total Carbon Output: {row[1]}")
-
-        return None #jsonify(table)
-
+        result = db.session.execute(query).fetchall()
+        return jsonify(
+            [(i + 1, row.name, row.carbon_output) for i, row in enumerate(result)]
+        )
 
 
 @users.route("/records", methods=["POST"])
