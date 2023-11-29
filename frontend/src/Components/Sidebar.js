@@ -10,7 +10,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Typography from '@mui/material/Typography';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import { useNavigate } from "react-router-dom";
 
 

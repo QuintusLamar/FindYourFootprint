@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { MapContainer, TileLayer, Polyline } from 'react-leaflet';
 
-function Map({ drivePoints }) {
+function Map({ routePoints }) {
   // const [testRoute, setTestRoute] = useState(<></>);
   // const [isTest, setisTest] = useState(false);
 
 
   // let testRoute = <Polyline />;
   let testRoute;
-  if (drivePoints) {
-    const flippedPoints = drivePoints.map(p => [p[1], p[0]]);
+  if (routePoints) {
+    const flippedPoints = routePoints.map(p => [p[1], p[0]]);
     testRoute = (<Polyline
       positions={flippedPoints}
     />)
