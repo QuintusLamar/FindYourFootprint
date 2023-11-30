@@ -3,7 +3,7 @@ import Map from '../Components/Map';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import '../App.css';
-import { Grid, IconButton, colors } from '@mui/material';
+import { Grid, IconButton, Typography, colors, Box } from '@mui/material';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import DirectionsBusFilledIcon from '@mui/icons-material/DirectionsBusFilled';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
@@ -177,28 +177,48 @@ function NavPage() {
           </div>
         </Grid>
 
-        <Grid item xs={1}>
-          <IconButton sx={selectedMode === "drive" ? selectedStyle : null}>
-            <DirectionsCarIcon onClick={() => handleModeSelect("drive")}></DirectionsCarIcon>
-          </IconButton>
+        <Grid item xs={1.5}>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <IconButton sx={selectedMode === "drive" ? selectedStyle : null}>
+              <DirectionsCarIcon onClick={() => handleModeSelect("drive")}></DirectionsCarIcon>
+            </IconButton>
+
+            <Typography textAlign={'center'}>3600lbs of CO2</Typography>
+            <Typography textAlign={'center'}>3600 minutes</Typography>
+          </Box>
         </Grid>
 
-        <Grid item xs={1}>
-          <IconButton sx={selectedMode === "bus" ? selectedStyle : null}>
-            <DirectionsBusFilledIcon onClick={() => handleModeSelect("bus")}></DirectionsBusFilledIcon>
-          </IconButton>
+        <Grid item xs={1.5}>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <IconButton sx={selectedMode === "bus" ? selectedStyle : null}>
+              <DirectionsBusFilledIcon onClick={() => handleModeSelect("bus")}></DirectionsBusFilledIcon>
+            </IconButton>
+
+            <Typography textAlign={'center'}>3600lbs of CO2</Typography>
+            <Typography textAlign={'center'}>3600 minutes</Typography>
+          </Box>
         </Grid>
 
-        <Grid item xs={1}>
-          <IconButton sx={selectedMode === "bike" ? selectedStyle : null}>
-            <DirectionsBikeIcon onClick={() => handleModeSelect("bike")}></DirectionsBikeIcon>
-          </IconButton>
+        <Grid item xs={1.5}>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <IconButton sx={selectedMode === "bike" ? selectedStyle : null}>
+              <DirectionsBikeIcon onClick={() => handleModeSelect("bike")}></DirectionsBikeIcon>
+            </IconButton>
+
+            <Typography textAlign={'center'}>3600lbs of CO2</Typography>
+            <Typography textAlign={'center'}>3600 minutes</Typography>
+          </Box>
         </Grid>
 
-        <Grid item xs={1}>
-          <IconButton sx={selectedMode === "walk" ? selectedStyle : null}>
-            <DirectionsWalkIcon onClick={() => handleModeSelect("walk")}></DirectionsWalkIcon>
-          </IconButton>
+        <Grid item xs={1.5}>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <IconButton sx={selectedMode === "walk" ? selectedStyle : null}>
+              <DirectionsWalkIcon onClick={() => handleModeSelect("walk")}></DirectionsWalkIcon>
+            </IconButton>
+
+            <Typography textAlign={'center'}>3600lbs of CO2</Typography>
+            <Typography textAlign={'center'}>3600 minutes</Typography>
+          </Box>
         </Grid>
 
 
