@@ -95,6 +95,7 @@ def seed_database():
                 carbonOutput=random.random() * 50 + 10,
                 timestamp=datetime.now() - timedelta(days=random.randint(1, 50)),
                 vehicleID=random.randint(0, 9),
+                routeDistance = random.random() * 100 + 10
             )
             db.session.add(record)
             routeid += 1

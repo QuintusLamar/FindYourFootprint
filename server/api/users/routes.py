@@ -2,10 +2,13 @@ from flask import jsonify, request, current_app, Blueprint
 from api import db
 from api.users.utils import *
 from api.models import *
+from api.users.utils import get_user_id, get_vehicle_id, get_all_users, calculate_carbon_cost
+from api.models import User, Friends, Records
 import jwt
 import datetime
 
 from sqlalchemy import select, func, asc
+
 
 
 users = Blueprint("users", __name__)
@@ -210,3 +213,36 @@ def add_record():
         token_data = jwt.decode(token, current_app.config["SECRET_KEY"])
     except:
         return jsonify(error="Token invalid or expired")
+
+
+@users.route("/add_routerecord", methods=["POST"])
+def add_routerecord():
+    email = str(request.json.get("addRouteRecordFormData").get("email"))
+    routeId = int(request.json.get("addrouteRecordFormData").get("routeId"))
+    routeDistance = float(request.json.get("addrouteRecordFormData").get("routeDistance"))
+    vehicleId = int(request.json.get("addrouteRecordFormData").get("vehicleId"))
+    timestamp = datetime.datetime.now()
+    carbonOutput = calculate_carbon_cost(routeDistance, vehicleId)
+
+    userId = get_user_id(email)
+
+    Records.insert().values(
+        [
+            {"userID": userId, "routeID": routeId, "carbonOutput": carbonOutput, "timestamp": timestamp, "vehicleID": vehicleId, "routeDistance": routeDistance}
+        ]
+    )
+    db.session().commit()
+    return jsonify({"status": "Success! Added route record"})
+
+@users.route("/calculate_carboncost", methods=["POST"])
+def calculate_carboncost():
+    routeDistance = float(request.json.get("currentRouteFormData").get("routeDistance"))
+    vehicle = str(request.json.get("currentRouteFormData").get("vehicleId"))
+
+    print(f"ROUTE DISTANCE: {routeDistance}")
+    print(f"HERE IS YOUR VEHICLE TYPE: {vehicle}")
+    carbonCost = calculate_carbon_cost(routeDistance, vehicle)
+
+    print(f"HERE IS THE CALCULATED CARBON COST: {carbonCost}")
+
+    return jsonify(carbonCost)
