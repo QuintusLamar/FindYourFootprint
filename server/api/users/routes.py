@@ -12,6 +12,23 @@ users = Blueprint("users", __name__)
 
 session_days = 365
 
+@users.route('/login', methods=['POST'])
+def login():
+    print("GOT HERE")
+
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    print(username)
+
+    # Implement your authentication logic here
+    # For simplicity, a basic check is done. Replace this with a secure authentication method.
+    if username == 'demo' and password == 'password':
+        return jsonify({'success': True, 'message': 'Login successful'})
+    else:
+        return jsonify({'success': False, 'message': 'Invalid credentials'})
+
 
 # @users.route("/register", methods=["POST"])
 # def register():
