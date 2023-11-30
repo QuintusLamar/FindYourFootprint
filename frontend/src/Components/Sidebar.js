@@ -17,10 +17,16 @@ function Sidebar() {
   const [title, setTitle] = useState("");
   const navigate = useNavigate();
 
+
   const sideBarItems = [
-    { "text": "View Profile", "navigation": "ViewProfile", "element": <AccountBoxOutlinedIcon></AccountBoxOutlinedIcon> },
+    { "text": "View Profile", "navigation": "ViewProfile", "element": <AccountBoxOutlinedIcon ></AccountBoxOutlinedIcon> },
     { "text": "Edit Profile", "navigation": "EditProfile", "element": <EditOutlinedIcon></EditOutlinedIcon> },
   ]
+
+  const selectedStyle = {
+    color: '#fff',
+    bgcolor: '#9dc183'
+  };
 
   function clicked(event) {
     const text = event.target.outerText;
@@ -53,22 +59,31 @@ function Sidebar() {
       <Divider />
 
       <List>
-        {sideBarItems.map((key) => (
-          <ListItem key={key.text} disablePadding>
-            {/* Something about this needs to be updated, the state takes too long to set */}
-            <ListItemButton onClick={clicked} selected={key.text === title}>
-              {/* <ListItemButton onClick={(event) => {
+        {sideBarItems.map((key) => {
+          const isSelected = key.text === title;
+          // console.log(key.text)
+          console.log(title)
+          return (
+            < ListItem key={key.text} disablePadding >
+              {/* Something about this needs to be updated, the state takes too long to set */}
+
+              <ListItemButton
+                onClick={clicked}
+
+                sx={isSelected ? selectedStyle : null} >
+                {/* <ListItemButton onClick={(event) => {
                   console.log("Key: ", event)
                 }}
                 selected={key.text===title}
               > */}
-              {key.element}
-              <ListItemText primary={key.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Drawer>
+                {key.element}
+                < ListItemText primary={key.text} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List >
+    </Drawer >
   )
 }
 

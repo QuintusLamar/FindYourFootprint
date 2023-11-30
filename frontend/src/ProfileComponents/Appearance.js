@@ -7,7 +7,7 @@ import Sidebar from '../Components/Sidebar';
 function Appearance() {
 
   return (
-    <Box sx={{ display: 'flex', bgcolor:"yellow"}}>
+    <Box sx={{ display: 'flex', bgcolor: "yellow" }}>
       <CssBaseline />
       <Sidebar />
       <Typography>

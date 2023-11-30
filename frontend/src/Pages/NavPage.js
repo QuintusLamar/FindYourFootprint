@@ -27,6 +27,11 @@ function NavPage() {
   const [selectedMode, setSelectedMode] = useState("drive");
   const [routePoints, setRoutePoints] = useState(null);
 
+  const selectedStyle = {
+    color: '#fff',
+    bgcolor: '#9dc183'
+  };
+
   useEffect(() => {
     if (selectedMode) {
       const event = { preventDefault: () => { } }
@@ -173,27 +178,25 @@ function NavPage() {
         </Grid>
 
         <Grid item xs={1}>
-          <IconButton>
-            <DirectionsCarIcon onClick={() =>
-              handleModeSelect("drive")
-            }></DirectionsCarIcon>
+          <IconButton sx={selectedMode === "drive" ? selectedStyle : null}>
+            <DirectionsCarIcon onClick={() => handleModeSelect("drive")}></DirectionsCarIcon>
           </IconButton>
         </Grid>
 
         <Grid item xs={1}>
-          <IconButton>
+          <IconButton sx={selectedMode === "bus" ? selectedStyle : null}>
             <DirectionsBusFilledIcon onClick={() => handleModeSelect("bus")}></DirectionsBusFilledIcon>
           </IconButton>
         </Grid>
 
         <Grid item xs={1}>
-          <IconButton>
+          <IconButton sx={selectedMode === "bike" ? selectedStyle : null}>
             <DirectionsBikeIcon onClick={() => handleModeSelect("bike")}></DirectionsBikeIcon>
           </IconButton>
         </Grid>
 
         <Grid item xs={1}>
-          <IconButton>
+          <IconButton sx={selectedMode === "walk" ? selectedStyle : null}>
             <DirectionsWalkIcon onClick={() => handleModeSelect("walk")}></DirectionsWalkIcon>
           </IconButton>
         </Grid>
