@@ -33,7 +33,7 @@ function UserTable({rows}) {
               <TableCell>Rank</TableCell>
               <TableCell align="center">Name</TableCell>
               <TableCell align="center">Carbon Output</TableCell>
-              <TableCell align="center">Previous Rank</TableCell>
+              {/* <TableCell align="center">Previous Rank</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -42,7 +42,7 @@ function UserTable({rows}) {
                 <TableCell>{row.rank}</TableCell>
                 <TableCell align="center">{row.name}</TableCell>
                 <TableCell align="center">{row.output}</TableCell>
-                <TableCell align="center">{row.prev_rank}</TableCell>
+                {/* <TableCell align="center">{row.prev_rank}</TableCell> */}
               </StyledTableRow>
             ))}
           </TableBody>

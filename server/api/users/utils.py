@@ -1,6 +1,7 @@
 from flask import current_app
-from api.models import User
+from api.models import User, Vehicle
 import jwt
+from transport_co2 import Mode, estimate_co2
 
 
 def auth_user(token):
@@ -23,3 +24,33 @@ def auth_user(token):
 
     print("[AUTH ERROR] 3")
     return None
+
+
+def get_user_id(email):
+    user_id = User.query.filter_by(email=str(email)).first()
+    return user_id.id
+
+
+def get_vehicle_id(vehicle_name):
+    vehicle_id = Vehicle.query.filter_by(vehicleType=str(vehicle_name)).first()
+    return vehicle_id.vehicleID
+
+
+def get_all_users():
+    users = User.query.all()
+    return users
+# This distance should be in miles
+def calculate_carbon_cost(distance, vehicle):
+    # walking and biking does not contribute to any carbon cost
+    if vehicle == "walking" or vehicle == "biking":
+        return 0
+    elif vehicle == "SUV" or vehicle == "Truck":
+        return estimate_co2(mode="large_car", distance_in_km=distance*1.609)
+    elif vehicle == "Sedan":
+        return estimate_co2(mode="small_car", distance_in_km=distance*1.609)
+    elif vehicle == "Bus":
+        return estimate_co2(mode="transit", distance_in_km=distance*1.609)
+    elif vehicle == "Train":
+        return estimate_co2(mode="LIGHT_RAIL", distance_in_km=distance * 1.609)
+    else:
+        return 0

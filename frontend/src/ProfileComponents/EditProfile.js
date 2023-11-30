@@ -18,7 +18,7 @@ function EditProfile() {
   const [state, setState] = useState("");
   const [phone, setPhone] = useState("");
 
-  function submitForm() {
+  const submitForm = async () => {
     console.log("First: ", first)
     console.log("Last: ", last)
     console.log("Vehicle: ", vehicle)
@@ -28,9 +28,35 @@ function EditProfile() {
     console.log("City: ", city)
     console.log("State: ", state)
     console.log("Phone: ", phone)
-    // Some conditional to make sure required fields are submitted
-    // Post API call to db here
-  }
+
+    const updateProfileFormData = {
+      name: first,
+      email: email,
+      password: password,
+      vehicle: vehicle,
+    };
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/update_profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({updateProfileFormData}),
+      });
+
+      if (response.ok) {
+        console.log('Profile updated successfully');
+        // Add any further actions after a successful update
+      } else {
+        console.error('Failed to update profile');
+        // Handle error cases
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle network errors or other exceptions
+    }
+  };
 
   return (
     <Box sx={{ display: 'flex'}}>
@@ -96,7 +122,7 @@ function EditProfile() {
           variant="outlined" 
           sx={{width:"40%", ml:"2.5%", mr:"2.5%"}}
         />
-        <TextField 
+        {/* <TextField 
           value={address}
           onChange={(event) => {
             setAddress(event.target.value)
@@ -105,9 +131,9 @@ function EditProfile() {
           placeholder="600 W Peachtree St NW"
           variant="outlined" 
           sx={{width:"85%", ml:"2.5%", mr:"2.5%", mt:"2%", mb:"2%"}}
-        />
+        /> */}
 
-        <TextField 
+        {/* <TextField 
           value={city}
           onChange={(event) => {
             setCity(event.target.value)
@@ -136,7 +162,7 @@ function EditProfile() {
           placeholder="(123) 456-7890"
           variant="outlined" 
           sx={{width:"25%", ml:"2.5%", mr:"2.5%"}}
-        />
+        /> */}
         
         <Button variant="outlined" onClick={submitForm}> Submit </Button>
 
