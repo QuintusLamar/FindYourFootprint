@@ -19,9 +19,10 @@ function Map({ routePoints }) {
   return (
     <MapContainer
       // center={[37.7749, -122.4194]}  // Cali testing
-      center={[33.7708, -84.3861]}   // Atlanta coord
-      zoom={12}
-      style={{ height: '500px', width: '100%' }}
+      center={[33.775, -84.393]}   // Atlanta coord
+      zoom={16}
+      style={{ height: '100%', width: '100%' }}
+      zoomControl={false} // Set zoomControl to false to hide zoom buttons
     >
       <TileLayer
         url="https://api.mapbox.com/styles/v1/quintus-lamar/cloui2cuk00jx01qofx3w1x1k/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicXVpbnR1cy1sYW1hciIsImEiOiJjbG91ZDJwYzMwaHc5MmtvOW82cm9uZGhnIn0.VL3TfnwBOoiek2f8bxw4RQ"

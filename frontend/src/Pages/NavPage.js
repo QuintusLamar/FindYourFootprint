@@ -2,14 +2,50 @@ import React, { useState, useEffect } from 'react';
 import Map from '../Components/Map';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
-import '../App.css';
-import { Grid, IconButton, Typography, colors, Box } from '@mui/material';
+import { Grid, IconButton, Typography, Box, Container, Paper, TextField, Button } from '@mui/material';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import DirectionsBusFilledIcon from '@mui/icons-material/DirectionsBusFilled';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import { Container } from '@mui/system';
+import { styled } from '@mui/system';
+import SearchIcon from '@mui/icons-material/Search';
 
+const InputForm = styled('form')({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  padding: 2,
+  zIndex: 1000,
+  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+});
+
+const InputField = styled(TextField)({
+  width: '100%',
+  marginBottom: 2,
+});
+
+const SubmitButton = styled(Button)({
+  width: '100%',
+});
+
+const CarbonInfo = styled('div')({
+  position: 'absolute',
+  top: 20,
+  right: 20,
+  zIndex: 1000,
+  display: 'flex',
+  flexDirection: 'row',
+  '& > *:not(:last-child)': {
+    marginRight: '12px', // Adjust the margin as needed
+  },
+});
+
+const FullHeightContainer = styled(Container)({
+  height: '100vh',
+});
 
 // Sample coordinates below
 
@@ -131,11 +167,6 @@ function NavPage() {
             console.log("Walk route: ", routePoints);
             break;
         }
-
-
-
-
-
       }
       catch (error) {
         //catches when there's the limbo stage between a null vlaue for route
@@ -202,36 +233,45 @@ function NavPage() {
   }
 
   return (
-    <Container sx={{ paddingTop: 5 }}>
-      <Grid container spacing={1}>
-        <Grid>
-          {/* input form  */}
-          <div className="inputBars">
-            <form>
-              <input
-                className="ChildInput"
-                type="text"
-                placeholder="Enter starting address here"
-                value={startAddr}
-                onChange={(e) => setStartAddr(e.target.value)}
-                required={true}
-              />
+    <FullHeightContainer sx={{ paddingTop: 10 }}>
+      <Grid container spacing={0}>
+        <InputForm sx={{ p: 2, backgroundColor: 'rgba(255, 255, 255, 0)', width: '380px' }}>
+          <InputField
+            type="text"
+            placeholder="Enter starting address here"
+            value={startAddr}
+            onChange={(e) => setStartAddr(e.target.value)}
+            required={true}
+            sx={{ backgroundColor: 'rgba(255, 255, 255, 1)', width: '100%', mb: 1, p: 0, borderRadius: '4px' }}
+          />
+          <InputField
+            type="text"
+            placeholder="Enter ending address here"
+            value={endAddr}
+            onChange={(e) => setEndAddr(e.target.value)}
+            required={true}
+            sx={{ backgroundColor: 'rgba(255, 255, 255, 1)', width: '100%', mb: 2, p: 0, borderRadius: '4px' }}
+          />
+          <SubmitButton 
+            variant="contained" 
+            onClick={submitRoute}
+            sx={{ width: '1%', mb: 2, p: 1 }}
+          >
+            <SearchIcon/>
+          </SubmitButton>
+        </InputForm>
 
-              <input
-                className="ChildInput"
-                type="text"
-                placeholder="Enter ending address here"
-                value={endAddr}
-                onChange={(e) => setEndAddr(e.target.value)}
-                required={true}
-              />
-              <input type="submit" value="Search" onClick={submitRoute} />
-            </form>
-          </div>
-        </Grid>
-
-        <Grid item xs={1.5}>
-          <Box display="flex" flexDirection="column" alignItems="center">
+        <CarbonInfo>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            sx={{
+              backgroundColor: 'rgba(255, 255, 255, 1)',
+              padding: '10px',
+              borderRadius: '4px',
+            }}
+          >
             <IconButton sx={selectedMode === "drive" ? selectedStyle : null}>
               <DirectionsCarIcon onClick={() => handleModeSelect("drive")}></DirectionsCarIcon>
             </IconButton>
@@ -239,10 +279,17 @@ function NavPage() {
             <Typography textAlign={'center'}>3600lbs of CO2</Typography>
             <Typography textAlign={'center'}>3600 minutes</Typography>
           </Box>
-        </Grid>
 
-        <Grid item xs={1.5}>
-          <Box display="flex" flexDirection="column" alignItems="center">
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            sx={{
+              backgroundColor: 'rgba(255, 255, 255, 1)',
+              padding: '10px',
+              borderRadius: '4px',
+            }}
+          >
             <IconButton sx={selectedMode === "bus" ? selectedStyle : null}>
               <DirectionsBusFilledIcon onClick={() => handleModeSelect("bus")}></DirectionsBusFilledIcon>
             </IconButton>
@@ -250,10 +297,17 @@ function NavPage() {
             <Typography textAlign={'center'}>3600lbs of CO2</Typography>
             <Typography textAlign={'center'}>3600 minutes</Typography>
           </Box>
-        </Grid>
 
-        <Grid item xs={1.5}>
-          <Box display="flex" flexDirection="column" alignItems="center">
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            sx={{
+              backgroundColor: 'rgba(255, 255, 255, 1)',
+              padding: '10px',
+              borderRadius: '4px',
+            }}
+          >
             <IconButton sx={selectedMode === "bike" ? selectedStyle : null}>
               <DirectionsBikeIcon onClick={() => handleModeSelect("bike")}></DirectionsBikeIcon>
             </IconButton>
@@ -261,10 +315,17 @@ function NavPage() {
             <Typography textAlign={'center'}>3600lbs of CO2</Typography>
             <Typography textAlign={'center'}>3600 minutes</Typography>
           </Box>
-        </Grid>
 
-        <Grid item xs={1.5}>
-          <Box display="flex" flexDirection="column" alignItems="center">
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            sx={{
+              backgroundColor: 'rgba(255, 255, 255, 1)',
+              padding: '10px',
+              borderRadius: '4px',
+            }}
+          >
             <IconButton sx={selectedMode === "walk" ? selectedStyle : null}>
               <DirectionsWalkIcon onClick={() => handleModeSelect("walk")}></DirectionsWalkIcon>
             </IconButton>
@@ -272,14 +333,23 @@ function NavPage() {
             <Typography textAlign={'center'}>3600lbs of CO2</Typography>
             <Typography textAlign={'center'}>3600 minutes</Typography>
           </Box>
-        </Grid>
+        </CarbonInfo>
 
-
+        <Paper
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 1, // Adjust zIndex as needed
+          }}
+        >
+          <Map routePoints={routePoints} />
+        </Paper>
       </Grid>
-      <Map
-        routePoints={routePoints}>
-      </Map>
-    </Container>
+
+    </FullHeightContainer>
   );
 };
 

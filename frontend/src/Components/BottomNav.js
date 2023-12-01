@@ -12,6 +12,8 @@ function BottomNav() {
 
   return (
     <BottomNavigation 
+      showLabels elevation={4} 
+      style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }}
       value={value}
       onChange={(event, newValue) => {
         console.log("Hey: ", newValue)
