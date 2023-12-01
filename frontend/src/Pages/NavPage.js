@@ -9,6 +9,7 @@ import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { styled } from '@mui/system';
 import SearchIcon from '@mui/icons-material/Search';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const InputForm = styled('form')({
   display: 'flex',
@@ -31,17 +32,20 @@ const SubmitButton = styled(Button)({
   width: '100%',
 });
 
-const CarbonInfo = styled('div')({
+const CarbonInfo = styled('div')(({ theme }) => ({
   position: 'absolute',
   top: 20,
-  right: 20,
+  right: 5,
   zIndex: 1000,
   display: 'flex',
   flexDirection: 'row',
   '& > *:not(:last-child)': {
-    marginRight: '12px', // Adjust the margin as needed
+    marginRight: '8px', // Adjust the margin as needed
   },
-});
+  '& > div': {
+    borderColor: theme.palette.grey[400], // Match the border color with the primary color of the theme
+  },
+}));
 
 const FullHeightContainer = styled(Container)({
   height: '100vh',
@@ -58,6 +62,8 @@ const FullHeightContainer = styled(Container)({
 // Lat/Lng: 33.7628 -84.3928
 
 function NavPage() {
+  const theme = createTheme();
+
   const [startAddr, setStartAddr] = useState("600 W Peachtree St NW, Atlanta, GA 30308");
   const [endAddr, setEndAddr] = useState("1 Coca Cola Plz NW, Atlanta, GA 30313");
   const [selectedMode, setSelectedMode] = useState("drive");
@@ -233,6 +239,7 @@ function NavPage() {
   }
 
   return (
+    <ThemeProvider theme={theme}>
     <FullHeightContainer sx={{ paddingTop: 10 }}>
       <Grid container spacing={0}>
         <InputForm sx={{ p: 2, backgroundColor: 'rgba(255, 255, 255, 0)', width: '380px' }}>
@@ -270,6 +277,7 @@ function NavPage() {
               backgroundColor: 'rgba(255, 255, 255, 1)',
               padding: '10px',
               borderRadius: '4px',
+              border: '1px solid'
             }}
           >
             <IconButton sx={selectedMode === "drive" ? selectedStyle : null}>
@@ -288,6 +296,7 @@ function NavPage() {
               backgroundColor: 'rgba(255, 255, 255, 1)',
               padding: '10px',
               borderRadius: '4px',
+              border: '1px solid'
             }}
           >
             <IconButton sx={selectedMode === "bus" ? selectedStyle : null}>
@@ -306,6 +315,7 @@ function NavPage() {
               backgroundColor: 'rgba(255, 255, 255, 1)',
               padding: '10px',
               borderRadius: '4px',
+              border: '1px solid'
             }}
           >
             <IconButton sx={selectedMode === "bike" ? selectedStyle : null}>
@@ -324,6 +334,7 @@ function NavPage() {
               backgroundColor: 'rgba(255, 255, 255, 1)',
               padding: '10px',
               borderRadius: '4px',
+              border: '1px solid'
             }}
           >
             <IconButton sx={selectedMode === "walk" ? selectedStyle : null}>
@@ -350,6 +361,7 @@ function NavPage() {
       </Grid>
 
     </FullHeightContainer>
+    </ThemeProvider>
   );
 };
 
