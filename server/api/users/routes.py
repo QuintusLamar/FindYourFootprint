@@ -12,6 +12,41 @@ users = Blueprint("users", __name__)
 
 session_days = 365
 
+@users.route('/register', methods=['POST'])
+def register():
+    name = str(request.json.get("updateProfileFormData").get("name"))
+    password = str(request.json.get("updateProfileFormData").get("password"))
+    email = str(request.json.get("updateProfileFormData").get("email"))
+    vehicle = str(request.json.get("updateProfileFormData").get("vehicle"))
+
+    if not name or not password or not email or not vehicle:
+        return jsonify({'success': False, 'message': 'Missing fields'})
+
+    if User.query.filter_by(email=email).first():
+        return jsonify({'success': False, 'message': 'Username is already taken'})
+
+    query = (
+        select(
+            func.max(User.id)
+        )
+        .select_from(
+            User
+        )
+    )
+    max_id = int(db.session.execute(query).scalar())
+
+    new_user = User(
+        id = max_id + 1,
+        name = name,
+        password = password,
+        email = email,
+        vehicle = vehicle
+    )
+    db.session.add(new_user)
+    db.session().commit()
+
+    return jsonify({'success': True, 'message': 'Registration successful'})
+
 
 # @users.route("/register", methods=["POST"])
 # def register():
@@ -58,7 +93,11 @@ def login():
             User.email == email and User.password == password
         )
     )
-    input_email, input_password = db.session.execute(query).first()
+    
+    try:
+        input_email, input_password = db.session.execute(query).first()
+    except:
+        return jsonify({'success': False, 'message': 'User does not exist'})
 
     if input_email == email and input_password == password:
         return jsonify({'success': True, 'message': 'Login successful'})
