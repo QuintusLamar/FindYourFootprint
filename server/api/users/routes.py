@@ -1,36 +1,16 @@
-from flask import jsonify, request, current_app, Blueprint
+from flask import Blueprint, current_app, jsonify, request
 from api import db
-from api.users.utils import *
 from api.models import *
-from api.users.utils import get_user_id, get_vehicle_id, get_all_users, calculate_carbon_cost
-from api.models import User, Friends, Records
+from api.users.utils import *
+
 import jwt
 import datetime
 
 from sqlalchemy import select, func, asc
 
-
-
 users = Blueprint("users", __name__)
 
 session_days = 365
-
-@users.route('/login', methods=['POST'])
-def login():
-    print("GOT HERE")
-
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-
-    print(username)
-
-    # Implement your authentication logic here
-    # For simplicity, a basic check is done. Replace this with a secure authentication method.
-    if username == 'demo' and password == 'password':
-        return jsonify({'success': True, 'message': 'Login successful'})
-    else:
-        return jsonify({'success': False, 'message': 'Invalid credentials'})
 
 
 # @users.route("/register", methods=["POST"])
@@ -59,6 +39,31 @@ def login():
 #         current_app.config["SECRET_KEY"],
 #     )
 #     return jsonify(token=token.decode("utf-8"))
+
+
+@users.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    query = (
+        select(
+            User.email,
+            User.password,
+        )
+        .select_from(
+            User
+        ).where(
+            User.email == email and User.password == password
+        )
+    )
+    input_email, input_password = db.session.execute(query).first()
+
+    if input_email == email and input_password == password:
+        return jsonify({'success': True, 'message': 'Login successful'})
+
+    return jsonify({'success': False, 'message': 'Invalid credentials'})
 
 
 # @users.route("/login", methods=["POST"])

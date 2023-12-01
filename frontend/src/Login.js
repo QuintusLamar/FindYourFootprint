@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Login.css'; // Import a CSS file for styling
 
 const Login = ({ setAuthenticated }) => {
-  const [username, setUsername] = useState('');
+  const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
@@ -12,10 +12,8 @@ const Login = ({ setAuthenticated }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
-
-      console.log("got heree")
 
       if (response.ok) {
         const data = await response.json();
@@ -39,8 +37,8 @@ const Login = ({ setAuthenticated }) => {
       <h2 className="app-title">Find Your Footprint</h2>
       <div className="login-form">
         <h3>Login</h3>
-        <label>Username: </label>
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+        <label>Email: </label>
+        <input type="text" value={email} onChange={(e) => setUsername(e.target.value)} />
         <br />
         <label>Password: </label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
