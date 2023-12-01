@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
-import './Login.css'; // Import a CSS file for styling
+import { Link } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import './Login.css';
 
 const Login = ({ setAuthenticated }) => {
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const theme = createTheme(); // Create a theme instance
 
   const handleLogin = async () => {
     try {
@@ -33,19 +41,41 @@ const Login = ({ setAuthenticated }) => {
   };
 
   return (
-    <div className="login-container">
-      <h2 className="app-title">Find Your Footprint</h2>
-      <div className="login-form">
-        <h3>Login</h3>
-        <label>Email: </label>
-        <input type="text" value={email} onChange={(e) => setUsername(e.target.value)} />
-        <br />
-        <label>Password: </label>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <br />
-        <button onClick={handleLogin}>Login</button>
-      </div>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Box className="login-container" sx={{ textAlign: 'center' }}>
+        <Typography variant="h2" sx={{ mb: 5 }}>
+          Find Your Footprint
+        </Typography>
+        <Box className="login-form">
+          <Typography variant="h4" sx={{ mb: 3 }}>
+            {/* Login */}
+          </Typography>
+          <TextField
+            label="Email"
+            type="text"
+            value={email}
+            onChange={(e) => setUsername(e.target.value)}
+            sx={{ mb: 0, width: '100%' }}
+          />
+          <br />
+          <TextField
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{ mb: 0, width: '100%' }}
+          />
+          <br />
+          <Button variant="contained" onClick={handleLogin} sx={{ mb: 4 }}>
+            Login
+          </Button>
+          {/* Link to the register page */}
+          <Typography variant="body1">
+            Don't have an account? <Link to="/register">Register here</Link>
+          </Typography>
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 };
 

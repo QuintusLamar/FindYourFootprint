@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import Profile from './Pages/Profile';
 import EditProfile from './ProfileComponents/EditProfile';
 import Notification from './ProfileComponents/Notification';
@@ -10,6 +10,7 @@ import NavPage from './Pages/NavPage';
 import Leaderboard from './Pages/Leaderboard';
 import BottomNav from './Components/BottomNav';
 import Login from './Login';
+import Register from './Register'; // Import your Register component
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -25,7 +26,7 @@ function App() {
             ) : (
               <>
                 <Login setAuthenticated={setAuthenticated} />
-                {/* Do not render BottomNav when on the login screen */}
+                {/* Add a link to the register page */}
               </>
             )
           }
@@ -37,6 +38,7 @@ function App() {
         <Route path="/Profile/Appearance" element={<Appearance />} />
         <Route path="/Profile/Help" element={<Help />} />
         <Route path="/Leaderboard" element={authenticated ? <Leaderboard /> : <Login setAuthenticated={setAuthenticated} />} />
+        <Route path="/register" element={<Register />} /> {/* New route for the register page */}
       </Routes>
       {authenticated && <BottomNav />} {/* Render BottomNav only when authenticated */}
     </div>

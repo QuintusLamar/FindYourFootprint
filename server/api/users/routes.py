@@ -14,10 +14,11 @@ session_days = 365
 
 @users.route('/register', methods=['POST'])
 def register():
-    name = str(request.json.get("updateProfileFormData").get("name"))
-    password = str(request.json.get("updateProfileFormData").get("password"))
-    email = str(request.json.get("updateProfileFormData").get("email"))
-    vehicle = str(request.json.get("updateProfileFormData").get("vehicle"))
+    print(request.json.get("registerProfileFormData"))
+    name = str(request.json.get("registerProfileFormData").get("name"))
+    password = str(request.json.get("registerProfileFormData").get("password"))
+    email = str(request.json.get("registerProfileFormData").get("email"))
+    vehicle = str(request.json.get("registerProfileFormData").get("vehicle"))
 
     if not name or not password or not email or not vehicle:
         return jsonify({'success': False, 'message': 'Missing fields'})
@@ -25,7 +26,7 @@ def register():
     if User.query.filter_by(email=email).first():
         return jsonify({'success': False, 'message': 'Username is already taken'})
 
-    query = (
+    uid_query = (
         select(
             func.max(User.id)
         )
@@ -33,17 +34,40 @@ def register():
             User
         )
     )
-    max_id = int(db.session.execute(query).scalar())
+    max_uid = int(db.session.execute(uid_query).scalar())
+
+    vid_query = (
+        select(
+            func.max(User.vehicleID)
+        )
+        .select_from(
+            User
+        )
+    )
+    max_vid = int(db.session.execute(vid_query).scalar())
 
     new_user = User(
-        id = max_id + 1,
+        id = max_uid + 1,
         name = name,
         password = password,
         email = email,
-        vehicle = vehicle
+        vehicleID = max_vid + 1
     )
     db.session.add(new_user)
     db.session().commit()
+
+    print(name, " added!")
+    query = (
+        select(
+            User.vehicleID
+        )
+        .select_from(
+            User
+        ).where(
+            User.email == email
+        )
+    )
+    print(db.session.execute(query).first())
 
     return jsonify({'success': True, 'message': 'Registration successful'})
 
@@ -93,7 +117,7 @@ def login():
             User.email == email and User.password == password
         )
     )
-    
+
     try:
         input_email, input_password = db.session.execute(query).first()
     except:
