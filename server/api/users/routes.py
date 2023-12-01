@@ -14,7 +14,6 @@ session_days = 365
 
 @users.route('/register', methods=['POST'])
 def register():
-    print(request.json.get("registerProfileFormData"))
     name = str(request.json.get("registerProfileFormData").get("name"))
     password = str(request.json.get("registerProfileFormData").get("password"))
     email = str(request.json.get("registerProfileFormData").get("email"))
@@ -56,7 +55,6 @@ def register():
     db.session.add(new_user)
     db.session().commit()
 
-    print(name, " added!")
     query = (
         select(
             User.vehicleID
