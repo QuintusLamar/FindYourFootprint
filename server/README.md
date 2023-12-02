@@ -1,3 +1,7 @@
-With Python 3 (venv recommended):
-`pip install -r requirements.txt`
+# Setup Guide
+
+## Dependency installation
+`conda env create -f environment.yml`
+
+## Starting the server
 `python run.py`
