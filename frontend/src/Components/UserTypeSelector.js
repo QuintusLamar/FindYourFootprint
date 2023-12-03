@@ -56,10 +56,10 @@ function UserTypeSelector({ changeUsers, title }) {
             }}
             variant="contained"
             onClick={callCallback}
-            value="Everyone"
-            color={users === "Everyone" ? "primary" : "secondary"}
-          >
-            Everyone
+            value="All Users"
+            color={users==="All Users" ? "primary" : "secondary"}
+          > 
+            All Users 
           </Button>
           <Typography sx={{ textAlign: "center", width: "70%" }}>
             {title}

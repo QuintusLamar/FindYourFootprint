@@ -21,9 +21,11 @@ const Login = ({ setAuthenticated, setCookie }) => {
         password,
         "Access-Control-Allow-Origin": "*",
       });
-
-      if (response.status === 200) {
-        const data = response.data;
+      
+      console.log("Response: ", response)
+      
+      if (response.ok) {
+        const data = await response.json();
         if (data.success) {
           // Authentication successful
           const token = data.token;

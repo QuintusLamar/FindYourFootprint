@@ -20,6 +20,7 @@ import { styled } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import axios from "axios";
+import EnergySavingsLeafOutlinedIcon from '@mui/icons-material/EnergySavingsLeafOutlined';
 
 const InputForm = styled("form")({
   display: "flex",
