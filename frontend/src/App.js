@@ -101,7 +101,7 @@ function App() {
             path="/Profile/Friends"
             element={
               authenticated ? (
-                <EditProfile ck={cookies} />
+                <ViewFriends ck={cookies} />
               ) : (
                 <Login
                   setAuthenticated={setAuthenticated}
