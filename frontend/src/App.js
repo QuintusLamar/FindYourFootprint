@@ -17,7 +17,7 @@ function App() {
 
   return (
     <div style={{ 
-      background: 'linear-gradient(to right, #ff9a9e, #fad0c4)', 
+      background: 'linear-gradient(to bottom, #98FB98, #2E8B57)', 
       minHeight: '85vh', 
       padding: '20px' 
     }}>
