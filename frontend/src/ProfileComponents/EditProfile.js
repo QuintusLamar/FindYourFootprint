@@ -6,6 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Sidebar from '../Components/Sidebar';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
 function EditProfile() {
   const [first, setFirst] = useState("");
@@ -13,36 +14,22 @@ function EditProfile() {
   const [vehicle, setVehicle] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [phone, setPhone] = useState("");
 
   const submitForm = async () => {
-    console.log("First: ", first)
-    console.log("Last: ", last)
-    console.log("Vehicle: ", vehicle)
-    console.log("Email: ", email)
-    console.log("Password: ", password)
-    console.log("Address: ", address)
-    console.log("City: ", city)
-    console.log("State: ", state)
-    console.log("Phone: ", phone)
-
-    const updateProfileFormData = {
-      name: first,
-      email: email,
-      password: password,
-      vehicle: vehicle,
-    };
-
     try {
+      const updateProfileFormData = {
+        name: first,
+        email: email,
+        password: password,
+        vehicle: vehicle,
+      };
+
       const response = await fetch('http://127.0.0.1:5000/update_profile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({updateProfileFormData}),
+        body: JSON.stringify({ updateProfileFormData }),
       });
 
       if (response.ok) {
@@ -59,113 +46,81 @@ function EditProfile() {
   };
 
   return (
-    <Box sx={{ display: 'flex'}}>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <Sidebar />
 
-      <Box sx={{ml: "10px"}}>
+      <Box sx={{ ml: "10px", flexGrow: 1, p: 3 }}>
+        <Typography variant="h3" gutterBottom>
+          Edit Profile
+        </Typography>
 
-        <h1> Edit Profile </h1>
-        <TextField 
-          required={true} 
-          value={first}
-          onChange={(event) => {
-            setFirst(event.target.value)
-          }}
-          label="First Name"
-          placeholder="First Name"
-          variant="outlined" 
-          sx={{width:"25%", ml:"2.5%", mr:"2.5%", mb: "2%"}}
-        />
-        <TextField 
-          required={true} 
-          value={last} 
-          onChange={(event) => {
-            setLast(event.target.value)
-          }}
-          label="Last Name" 
-          placeholder="Last Name"
-          variant="outlined" 
-          sx={{width:"25%", ml:"2.5%", mr:"2.5%", mb: "2%"}}
-        />
-        <TextField 
-          required={true} 
-          value={vehicle}
-          onChange={(event) => {
-            setVehicle(event.target.value)
-          }}
-          label="Primary Vehicle"
-          placeholder="Honda Civic" 
-          variant="outlined" 
-          sx={{width:"25%", ml:"2.5%", mr:"2.5%", mb: "2%"}}
-        />
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <TextField
+              required={true}
+              value={first}
+              onChange={(event) => setFirst(event.target.value)}
+              label="First Name"
+              placeholder="First Name"
+              variant="outlined"
+              fullWidth
+              mb={2}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              required={true}
+              value={last}
+              onChange={(event) => setLast(event.target.value)}
+              label="Last Name"
+              placeholder="Last Name"
+              variant="outlined"
+              fullWidth
+              mb={2}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required={true}
+              value={vehicle}
+              onChange={(event) => setVehicle(event.target.value)}
+              label="Primary Vehicle"
+              placeholder="Honda Civic"
+              variant="outlined"
+              fullWidth
+              mb={2}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required={true}
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              label="Email"
+              placeholder="name@gmail.com"
+              variant="outlined"
+              fullWidth
+              mb={2}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required={true}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              label="Password"
+              placeholder="123abc"
+              variant="outlined"
+              fullWidth
+              mb={2}
+            />
+          </Grid>
+        </Grid>
 
-        <TextField 
-          required={true} 
-          value={email}
-          onChange={(event) => {
-            setEmail(event.target.value)
-          }}
-          label="Email"
-          placeholder="name@gmail.com"
-          variant="outlined" 
-          sx={{width:"40%", ml:"2.5%", mr:"2.5%"}}
-        />
-        <TextField 
-          required={true} 
-          value={password}
-          onChange={(event) => {
-            setPassword(event.target.value)
-          }}
-          label="Password"
-          placeholder="123abc"
-          variant="outlined" 
-          sx={{width:"40%", ml:"2.5%", mr:"2.5%"}}
-        />
-        {/* <TextField 
-          value={address}
-          onChange={(event) => {
-            setAddress(event.target.value)
-          }}
-          label="Address"
-          placeholder="600 W Peachtree St NW"
-          variant="outlined" 
-          sx={{width:"85%", ml:"2.5%", mr:"2.5%", mt:"2%", mb:"2%"}}
-        /> */}
-
-        {/* <TextField 
-          value={city}
-          onChange={(event) => {
-            setCity(event.target.value)
-          }}
-          label="City"
-          placeholder="Atlanta"
-          variant="outlined" 
-          sx={{width:"25%", ml:"2.5%", mr:"2.5%"}}
-        />
-        <TextField 
-          value={state}
-          onChange={(event) => {
-            setState(event.target.value)
-          }}
-          label="State"
-          placeholder="GA"
-          variant="outlined" 
-          sx={{width:"25%", ml:"2.5%", mr:"2.5%"}}
-        />
-        <TextField 
-          value={phone}
-          onChange={(event) => {
-            setPhone(event.target.value)
-          }}
-          label="Phone Number"
-          placeholder="(123) 456-7890"
-          variant="outlined" 
-          sx={{width:"25%", ml:"2.5%", mr:"2.5%"}}
-        /> */}
-        
-        <Button variant="outlined" onClick={submitForm}> Submit </Button>
-
+        <Button variant="contained" onClick={submitForm} sx={{ mt: '2%' }}>
+          Submit
+        </Button>
       </Box>
     </Box>
   );
