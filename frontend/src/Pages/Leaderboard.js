@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import '../App.css';
-import UserTable from '../Components/UserTable'
-import UserTypeSelector from '../Components/UserTypeSelector'
+import UserTable from '../Components/UserTable';
+import UserTypeSelector from '../Components/UserTypeSelector';
 import TimeRangeSelector from '../Components/TimeRangeSelector';
-import { private_excludeVariablesFromRoot } from '@mui/material';
-import { create } from '@mui/material/styles/createTransitions';
-
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 function createData(rank, name, output) {
   return { rank, name, output };
 }
-
 
 function Leaderboard() {
   const [userType, setUserType] = useState("Friends");
@@ -28,65 +27,73 @@ function Leaderboard() {
     createData(10, "CJ Stroud", 28)
   ]);
 
-  // Don't implement this yet
   useEffect(() => {
-    // Pretty sure I want to change data (aka rows) if either the title or users gets changed,
-    const updateData = async () => { try {
-      const apiUrl = 'http://127.0.0.1:5000/leaderboard';
-      const email = "user_5@example.com"
-      const time_period = title.replace('Leaders in Carbon Output ', '').replace(' ', '').toLowerCase()
-      const urlWithParameters = `${apiUrl}?email=${email}&time_period=${time_period}&is_friends_only=${userType}`;
-      const response = await fetch(urlWithParameters, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
+    const updateData = async () => {
+      try {
+        const apiUrl = 'http://127.0.0.1:5000/leaderboard';
+        const email = "user_5@example.com";
+        const time_period = title.replace('Leaders in Carbon Output ', '').replace(' ', '').toLowerCase();
+        const urlWithParameters = `${apiUrl}?email=${email}&time_period=${time_period}&is_friends_only=${userType}`;
+        const response = await fetch(urlWithParameters, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
 
-      if (response.ok) {
-        const data = await response.json();
-        const newrows = [];
-        for (let index = 0; index < data.length; index++) {
-          newrows.push(createData(data[index][0], data[index][1], data[index][2]))
+        if (response.ok) {
+          const data = await response.json();
+          const newrows = [];
+          for (let index = 0; index < data.length; index++) {
+            newrows.push(createData(data[index][0], data[index][1], data[index][2]))
+          }
+          setRows(newrows);
+
+        } else {
+          console.error('Failed to update profile');
         }
-        setRows(newrows)
-    
-      } else {
-        console.error('Failed to update profile');
-        // Handle error cases
+      } catch (error) {
+        console.error('Error:', error);
       }
-    } catch (error) {
-      console.error('Error:', error);
-      // Handle network errors or other exceptions
-    } };
+    };
     updateData();
   }, [title, userType]);
 
 
   function changeUsers(target) {
-    console.log("Selected user: ", target)
-    setUserType(target)
+    setUserType(target);
   }
 
   function changeTime(target) {
-    console.log("Selected title: ", target)
-    setTitle("Leaders in Carbon Output " + target)
+    setTitle("Leaders in Carbon Output " + target);
   }
 
   return (
-    <div className="Leaderboard">
-      <TimeRangeSelector 
-        changeTime={changeTime}
-      />
-      <UserTypeSelector 
-        changeUsers={changeUsers}
-        title={title}
-      />
-      <UserTable 
-        rows = {rows}
-      />
-      
-    </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', overflow: 'auto' }}>
+      <Paper elevation={3} sx={{ p: 3, mb: 3, width: '80%', maxWidth: '800px', textAlign: 'center' }}>
+        <Typography variant="h4" gutterBottom>
+          Leaderboard
+        </Typography>
+        <Typography variant="body1" color="textSecondary" gutterBottom>
+          See who's making a positive impact on the environment!
+        </Typography>
+        <TimeRangeSelector
+          changeTime={changeTime}
+        />
+        <UserTypeSelector
+          changeUsers={changeUsers}
+          title={title}
+        />
+      </Paper>
+      <Paper elevation={3} sx={{ p: 3, width: '80%', maxWidth: '800px', textAlign: 'center' }}>
+        <Typography variant="h5" gutterBottom>
+          Top Performers
+        </Typography>
+        <UserTable
+          rows={rows}
+        />
+      </Paper>
+    </Box>
   );
 }
 
