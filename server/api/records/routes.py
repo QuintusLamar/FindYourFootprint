@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app, jsonify, request
-from api import db
+from api import db, cross_origin
 from api.models import *
 from api.utils import *
 
@@ -9,6 +9,7 @@ import datetime
 records = Blueprint("records", __name__)
 
 
+@cross_origin
 @records.route("/add_routerecord", methods=["POST"])
 def add_routerecord():
     email = str(request.json.get("addRouteRecordFormData").get("email"))
@@ -38,6 +39,7 @@ def add_routerecord():
     return jsonify({"status": "Success! Added route record"})
 
 
+@cross_origin
 @records.route("/carboncost", methods=["GET"])
 def calculate_carboncost():
     token = str(request.args.get("token"))

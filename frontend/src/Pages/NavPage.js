@@ -20,7 +20,7 @@ import { styled } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import axios from "axios";
-import EnergySavingsLeafOutlinedIcon from '@mui/icons-material/EnergySavingsLeafOutlined';
+import EnergySavingsLeafOutlinedIcon from "@mui/icons-material/EnergySavingsLeafOutlined";
 
 const InputForm = styled("form")({
   display: "flex",
@@ -187,12 +187,23 @@ const NavPage = (ck) => {
       let bicycleRoute = await getRoute(startCoord, endCoord, "bicycle");
       let walkRoute = await getRoute(startCoord, endCoord, "walk");
 
+      console.log(
+        "INITIAL DRIVE ROUTE TIME (IN SECONDS):",
+        driveRoute.features[0].properties.time
+      );
+      console.log(
+        "INITIAL TRANSIT ROUTE TIME (IN SECONDS):",
+        transitRoute.features[0].properties.time
+      );
+      console.log(
+        "INITIAL BICYCLE ROUTE TIME (IN SECONDS):",
+        bicycleRoute.features[0].properties.time
+      );
+      console.log(
+        "INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):",
+        walkRoute.features[0].properties.time
+      );
 
-      console.log("INITIAL DRIVE ROUTE TIME (IN SECONDS):", driveRoute.features[0].properties.time)
-      console.log("INITIAL TRANSIT ROUTE TIME (IN SECONDS):", transitRoute.features[0].properties.time)
-      console.log("INITIAL BICYCLE ROUTE TIME (IN SECONDS):", bicycleRoute.features[0].properties.time)
-      console.log("INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):", walkRoute.features[0].properties.time)
-      
       try {
         let drivePoints = driveRoute.features[0].geometry.coordinates[0];
         setRoutePoints(drivePoints);
@@ -273,10 +284,7 @@ const NavPage = (ck) => {
         const urlWithParameters = `${apiUrl}?token=${
           ck["ck"]["token"]
         }&driveDistance=${driveDistance.toString()}&transitDistance=${transitDistance.toString()}`;
-        const response = await axios.get(urlWithParameters, {
-          "Access-Control-Allow-Origin": "*",
-          Accept: "application/json",
-        });
+        const response = await axios.get(urlWithParameters);
         const result = await response.data;
         // console.log("RESPONSE:", response.data);
 

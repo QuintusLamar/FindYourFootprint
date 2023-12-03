@@ -4,7 +4,6 @@ const checkTokenExpiration = async (token) => {
   try {
     const response = await axios.post("http://localhost:5000/valid_token", {
       token: token,
-      "Access-Control-Allow-Origin": "*",
     });
 
     const res = response.data;

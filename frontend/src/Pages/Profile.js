@@ -23,10 +23,7 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
       const urlWithParameters = `${apiUrl}?token=${encodeURIComponent(
         ck["token"]
       )}`;
-      const response = await axios.get(urlWithParameters, {
-        "Access-Control-Allow-Origin": "*",
-        Accept: "application/json",
-      });
+      const response = await axios.get(urlWithParameters);
       const result = await response.data;
       // console.log("RESPONSE:", response.data);
 

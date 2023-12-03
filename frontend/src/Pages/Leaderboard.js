@@ -40,9 +40,7 @@ const Leaderboard = (ck) => {
           .replace(" ", "")
           .toLowerCase();
         const urlWithParameters = `${apiUrl}?token=${ck["ck"]["token"]}&time_period=${time_period}&is_friends_only=${userType}`;
-        const response = await axios.get(urlWithParameters, {
-          "Access-Control-Allow-Origin": "*",
-        });
+        const response = await axios.get(urlWithParameters);
         if (response.statusText === "OK") {
           const data = await response.data;
           const newrows = [];

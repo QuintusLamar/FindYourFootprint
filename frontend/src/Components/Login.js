@@ -19,11 +19,10 @@ const Login = ({ setAuthenticated, setCookie }) => {
       const response = await axios.post("http://localhost:5000/login", {
         email,
         password,
-        "Access-Control-Allow-Origin": "*",
       });
-      
-      console.log("Response: ", response)
-      
+
+      console.log("Response: ", response);
+
       if (response.ok) {
         const data = await response.json();
         if (data.success) {

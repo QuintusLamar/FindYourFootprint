@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app, jsonify, request
-from api import db, bcrypt
+from api import db, bcrypt, cross_origin
 from api.models import *
 from api.utils import *
 
@@ -11,6 +11,7 @@ from sqlalchemy import select, func, asc
 users = Blueprint("users", __name__)
 
 
+@cross_origin
 @users.route("/register", methods=["POST"])
 def register():
     name = str(request.json.get("registerProfileFormData").get("name"))
@@ -50,6 +51,7 @@ def register():
     return jsonify({"success": True, "token": token})
 
 
+@cross_origin
 @users.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -76,6 +78,7 @@ def login():
     return jsonify({"success": False, "message": "Invalid credentials"})
 
 
+@cross_origin
 @users.route("/friends", methods=["GET"])
 def friends():
     token = request.json.get("token")
@@ -113,6 +116,7 @@ def friends():
     )
 
 
+@cross_origin
 @users.route("/add_friend", methods=["POST"])
 def add_friend():
     token = request.json.get("token")
@@ -141,6 +145,7 @@ def add_friend():
     return jsonify({"status": "Success! Added friend record"})
 
 
+@cross_origin
 @users.route("/update_profile", methods=["POST"])
 def update_profile():
     token = request.json.get("token")
@@ -172,6 +177,7 @@ def update_profile():
     return jsonify({"status": "Success! Updated your profile!"})
 
 
+@cross_origin
 @users.route("/valid_token", methods=["POST"])
 def account():
     token = request.json.get("token")

@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app, jsonify, request
-from api import db
+from api import db, cross_origin
 from api.models import *
 from api.utils import *
 import bcrypt
@@ -13,6 +13,7 @@ from sqlalchemy import select, func, asc
 stats = Blueprint("stats", __name__)
 
 
+@cross_origin
 @stats.route("/leaderboard", methods=["GET"])
 def leaderboard():
     token = str(request.args.get("token"))
@@ -77,6 +78,7 @@ def leaderboard():
         )
 
 
+@cross_origin
 @stats.route("/user_stats", methods=["GET"])
 def user_stats():
     token = str(request.args.get("token"))
