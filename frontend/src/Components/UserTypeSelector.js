@@ -40,10 +40,10 @@ function UserTypeSelector({changeUsers, title}) {
             sx={{borderRadius:"10px", minWidth:"12px", color:"black", fontSize:14, fontWeight: 600, margin:"4px", height:"28px"}} 
             variant="contained"
             onClick={callCallback}
-            value="Everyone"
-            color={users==="Everyone" ? "primary" : "secondary"}
+            value="All Users"
+            color={users==="All Users" ? "primary" : "secondary"}
           > 
-            Everyone 
+            All Users 
           </Button>
           <Typography sx={{textAlign:"center", width:"70%"}}>
             {title}

@@ -22,7 +22,9 @@ const Login = ({ setAuthenticated }) => {
         },
         body: JSON.stringify({ email, password }),
       });
-
+      
+      console.log("Response: ", response)
+      
       if (response.ok) {
         const data = await response.json();
         if (data.success) {

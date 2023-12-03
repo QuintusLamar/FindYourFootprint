@@ -122,47 +122,6 @@ function EditProfile() {
           variant="outlined" 
           sx={{width:"40%", ml:"2.5%", mr:"2.5%"}}
         />
-        {/* <TextField 
-          value={address}
-          onChange={(event) => {
-            setAddress(event.target.value)
-          }}
-          label="Address"
-          placeholder="600 W Peachtree St NW"
-          variant="outlined" 
-          sx={{width:"85%", ml:"2.5%", mr:"2.5%", mt:"2%", mb:"2%"}}
-        /> */}
-
-        {/* <TextField 
-          value={city}
-          onChange={(event) => {
-            setCity(event.target.value)
-          }}
-          label="City"
-          placeholder="Atlanta"
-          variant="outlined" 
-          sx={{width:"25%", ml:"2.5%", mr:"2.5%"}}
-        />
-        <TextField 
-          value={state}
-          onChange={(event) => {
-            setState(event.target.value)
-          }}
-          label="State"
-          placeholder="GA"
-          variant="outlined" 
-          sx={{width:"25%", ml:"2.5%", mr:"2.5%"}}
-        />
-        <TextField 
-          value={phone}
-          onChange={(event) => {
-            setPhone(event.target.value)
-          }}
-          label="Phone Number"
-          placeholder="(123) 456-7890"
-          variant="outlined" 
-          sx={{width:"25%", ml:"2.5%", mr:"2.5%"}}
-        /> */}
         
         <Button variant="outlined" onClick={submitForm}> Submit </Button>
 

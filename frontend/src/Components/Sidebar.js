@@ -11,7 +11,8 @@ import Typography from '@mui/material/Typography';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useNavigate } from "react-router-dom";
-
+import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
+import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 
 function Sidebar() {
   const [title, setTitle] = useState("");
@@ -21,6 +22,8 @@ function Sidebar() {
   const sideBarItems = [
     { "text": "View Profile", "navigation": "ViewProfile", "element": <AccountBoxOutlinedIcon ></AccountBoxOutlinedIcon> },
     { "text": "Edit Profile", "navigation": "EditProfile", "element": <EditOutlinedIcon></EditOutlinedIcon> },
+    { "text": "Friends", "navigation": "Friends", "element": <PeopleOutlineOutlinedIcon></PeopleOutlineOutlinedIcon> },
+    // { "text": "Add Friend", "navigation": "AddFriend", "element": <PersonAddOutlinedIcon></PersonAddOutlinedIcon> },
   ]
 
   const selectedStyle = {
@@ -40,7 +43,6 @@ function Sidebar() {
       navigate("/Profile/" + replacedText);
     }
   }
-
 
   return (
     <Drawer
