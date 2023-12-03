@@ -10,13 +10,18 @@ import NavPage from './Pages/NavPage';
 import Leaderboard from './Pages/Leaderboard';
 import BottomNav from './Components/BottomNav';
 import Login from './Login';
-import Register from './Register'; // Import your Register component
+import Register from './Register';
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
 
   return (
-    <div>
+    <div style={{ 
+      background: 'linear-gradient(to right, #ff9a9e, #fad0c4)', 
+      minHeight: '85vh', 
+      padding: '20px' 
+    }}>
+      {/* Add your gradient background color and styling here */}
       <Routes>
         <Route
           path="/"
