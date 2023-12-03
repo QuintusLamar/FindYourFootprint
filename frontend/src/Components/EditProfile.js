@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../App.css';
+import '../Style/App.css';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
