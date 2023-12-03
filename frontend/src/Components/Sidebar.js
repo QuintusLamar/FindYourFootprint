@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../App.css';
+import '../Style/App.css';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
@@ -11,12 +11,20 @@ import Typography from '@mui/material/Typography';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useNavigate } from "react-router-dom";
+import LogoutButton from './LogoutButton';
+import Box from '@mui/material/Box';
 
-
-function Sidebar() {
+const Sidebar = ({setAuthenticated, removeCookie}) => {
   const [title, setTitle] = useState("");
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    // Perform logout actions
+    // Example: Redirect to the login page, clear user data, etc.
+    removeCookie("token");
+    setAuthenticated(false);
+    navigate("/")
+  };
 
   const sideBarItems = [
     { "text": "View Profile", "navigation": "ViewProfile", "element": <AccountBoxOutlinedIcon ></AccountBoxOutlinedIcon> },
@@ -55,6 +63,11 @@ function Sidebar() {
       variant="permanent"
       anchor="left"
     >
+      <Box sx={{ display: 'flex', alignItems: 'right' }}>
+          <Box>
+              <LogoutButton onLogout={handleLogout} />
+          </Box>
+        </Box>
       <Toolbar />
       <Divider />
 
@@ -62,7 +75,6 @@ function Sidebar() {
         {sideBarItems.map((key) => {
           const isSelected = key.text === title;
           // console.log(key.text)
-          console.log(title)
           return (
             < ListItem key={key.text} disablePadding >
               {/* Something about this needs to be updated, the state takes too long to set */}
