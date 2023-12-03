@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapContainer, TileLayer, Polyline, Marker } from 'react-leaflet';
-import marker from "./Vector4.svg";
+import marker from "./mapMarker.svg";
 import { Icon } from 'leaflet'
 
 function Map({ routePoints }) {
