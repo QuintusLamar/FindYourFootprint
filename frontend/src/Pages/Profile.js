@@ -18,7 +18,7 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
   const [name, setName] = useState(""); // These need to be updated
   const [savedCO2, setSavedCO2] = useState(0);
   const [traveledMiles, setTraveledMiles] = useState(0);
-  //   const [favMode, setFavMode] = useState("Bike");
+  const [favMode, setFavMode] = useState("Bike");
 
   console.log(ck);
   const format_twodec = (x) => {
