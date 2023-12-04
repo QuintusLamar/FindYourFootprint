@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box"
 
 // Defines the theme for custom colored buttons
 const outerTheme = createTheme({
@@ -15,7 +16,7 @@ const outerTheme = createTheme({
   },
 });
 
-function UserTypeSelector({ changeUsers, title }) {
+function UserTypeSelector({ changeUsers }) {
   const [users, setUsers] = useState("Friends");
 
   function callCallback(event) {
@@ -24,7 +25,7 @@ function UserTypeSelector({ changeUsers, title }) {
   }
 
   return (
-    <div>
+    <Box sx={{display: "flex", justifyContent: "left", mt:"10px", width: "30%"}}>
       <ThemeProvider theme={outerTheme}>
         <div className="Rand">
           <Button
@@ -61,12 +62,9 @@ function UserTypeSelector({ changeUsers, title }) {
           > 
             All Users 
           </Button>
-          <Typography sx={{ textAlign: "center", width: "70%" }}>
-            {title}
-          </Typography>
         </div>
       </ThemeProvider>
-    </div>
+    </Box>
   );
 }
 

@@ -12,7 +12,6 @@ import Register from "./Components/Register"; // Import your Register component
 import { CookiesProvider } from "react-cookie";
 import { useCookies } from "react-cookie";
 import ViewFriends from './Components/ViewFriends';
-import AddFriend from './Components/AddFriend';
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
@@ -41,7 +40,11 @@ function App() {
 
   return (
     <CookiesProvider>
-      <div>
+      <div style={{ 
+      background: 'linear-gradient(to right, #3498db, #2ecc71)', 
+      minHeight: '100vh', 
+      padding: '20px' 
+    }}>
         <Routes>
           <Route
             path="/"
@@ -128,30 +131,6 @@ function App() {
         {/* Render BottomNav only when authenticated */}
       </div>
     </CookiesProvider>
-    // <div>
-    //   <Routes>
-    //     <Route
-    //       path="/"
-    //       element={
-    //         authenticated ? (
-    //           <NavPage />
-    //         ) : (
-    //           <>
-    //             <Login setAuthenticated={setAuthenticated} />
-    //             {/* Add a link to the register page */}
-    //           </>
-    //         )
-    //       }
-    //     />
-    //     <Route path="/Profile/" element={<Profile />} />
-    //     <Route path="/Profile/EditProfile" element={<EditProfile />} />
-    //     <Route path="/Profile/Friends" element={<ViewFriends />} />
-    //     <Route path="/Profile/AddFriend" element={<AddFriend />} />
-    //     <Route path="/Leaderboard" element={authenticated ? <Leaderboard /> : <Login setAuthenticated={setAuthenticated} />} />
-    //     <Route path="/register" element={<Register />} /> {/* New route for the register page */}
-    //   </Routes>
-    //   {authenticated && <BottomNav />} {/* Render BottomNav only when authenticated */}
-    // </div>
   );
 }
 

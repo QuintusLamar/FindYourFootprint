@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import { MapContainer, TileLayer, Polyline, Marker } from 'react-leaflet';
 import marker from "./mapMarker.svg";
 import { Icon } from 'leaflet'
@@ -25,11 +25,10 @@ function Map({ routePoints }) {
 
   return (
     <MapContainer
-      // center={[37.7749, -122.4194]}  // Cali testing
-      center={[33.775, -84.393]} // Atlanta coord
+      center={[33.775, -84.393]}
       zoom={16}
-      style={{ height: "100%", width: "100%" }}
-      zoomControl={false} // Set zoomControl to false to hide zoom buttons
+      style={{ height: '100%', width: '100%' }}
+      zoomControl={false}
     >
       {startMarker && startMarker}
       {endMarker && endMarker}
