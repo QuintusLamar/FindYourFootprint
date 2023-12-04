@@ -113,7 +113,6 @@ const NavPage = (ck) => {
   const handleModeSelect = (mode) => {
     setSelectedMode(mode);
     const event = { preventDefault: () => {} };
-    recordingRoute(event, mode);
     // submitRoute(event); //TODO TEST IF YOU CAN REMOVE THIS AND FUNCTIONALITY STILL WORKS
   };
 
@@ -129,9 +128,9 @@ const NavPage = (ck) => {
     }
   }
 
-  async function recordingRoute(e, modeTransport) {
+  async function recordingRoute(e) {
     e.preventDefault();
-    console.log("INSIDE RECORDING ROUTE:", modeTransport);
+    console.log("INSIDE RECORDING ROUTE:", selectedMode);
     
     if (startAddr !== "" && endAddr !== "") {
       let startAddrStr = addressToString(startAddr);
@@ -159,7 +158,7 @@ const NavPage = (ck) => {
       // let drivePoints = driveRoute.features[0].geometry.coordinates[0];
       // console.log("DRIVE Route: ", driveRoute)
     // things we need for recording route: userId, routeId, carbonOutput, timeStamp, vehicleId, routeDistance
-    switch (modeTransport) {
+    switch (selectedMode) {
       case "drive":
         try {
           const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
@@ -505,13 +504,23 @@ const NavPage = (ck) => {
                 borderRadius: "4px",
               }}
             />
-            <SubmitButton
-              variant="contained"
-              onClick={submitRoute}
-              sx={{ width: "1%", mb: 2, p: 1 }}
-            >
-              <SearchIcon />
-            </SubmitButton>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
+  <SubmitButton
+    variant="contained"
+    onClick={submitRoute}
+    sx={{ width: "1%", mb: 2, p: 1 }}
+  >
+    <SearchIcon />
+  </SubmitButton>
+  <SubmitButton
+    variant="contained"
+    onClick={recordingRoute}
+    sx={{ width: "100%", mb: 2, p: 1 }}
+  >
+    Submit Route
+  </SubmitButton>
+</div>
+
           </InputForm>
 
           <CarbonInfo>
