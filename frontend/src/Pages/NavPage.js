@@ -117,6 +117,18 @@ const NavPage = (ck) => {
     // submitRoute(event); //TODO TEST IF YOU CAN REMOVE THIS AND FUNCTIONALITY STILL WORKS
   };
 
+  async function getDirections(startCoord, endCoord, mode) {
+    const apiUrl = `https://api.geoapify.com/v1/routing?waypoints=${startCoord[0]},${startCoord[1]}|${endCoord[0]},${endCoord[1]}&mode=${mode}&apiKey=${api_key}`;
+  
+    try {
+      const response = await axios.get(apiUrl);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching directions from Geoapify:', error.message);
+      throw error;
+    }
+  }
+
   async function recordingRoute(e, modeTransport) {
     e.preventDefault();
     console.log("INSIDE RECORDING ROUTE:", modeTransport);
@@ -138,9 +150,14 @@ const NavPage = (ck) => {
       let startResult = await getPoints(startUrl);
       let endResult = await getPoints(endUrl);
 
+
       let startCoord = getAve(startResult.features);
       let endCoord = getAve(endResult.features);
-    
+
+      
+      // let driveRoute = await getRoute(startCoord, endCoord, "drive");
+      // let drivePoints = driveRoute.features[0].geometry.coordinates[0];
+      // console.log("DRIVE Route: ", driveRoute)
     // things we need for recording route: userId, routeId, carbonOutput, timeStamp, vehicleId, routeDistance
     switch (modeTransport) {
       case "drive":
