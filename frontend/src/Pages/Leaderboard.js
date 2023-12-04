@@ -4,6 +4,10 @@ import UserTable from "../Components/UserTable";
 import UserTypeSelector from "../Components/UserTypeSelector";
 import TimeRangeSelector from "../Components/TimeRangeSelector";
 import axios from "axios";
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+
 
 function createData(rank, name, output) {
   return { rank, name, output };
@@ -14,22 +18,10 @@ const Leaderboard = (ck) => {
   const [title, setTitle] = useState("Leaders in Carbon Output All Time");
 
   // This shouldn't be used by anything
-  const [rows, setRows] = useState([
-    // createData(1, "Tom Brady", 0.5),
-    // createData(2, "Aaron Rodgers", 1),
-    // createData(3, "Patrick Mahomes", 2),
-    // createData(4, "Lamar Jackson", 6),
-    // createData(5, "Jalen hurts", 12),
-    // createData(6, "Brock Purdy", 14),
-    // createData(7, "Joe Burrow", 18),
-    // createData(8, "Trevor Lawrence", 21),
-    // createData(9, "Joshua Dobbs", 26),
-    // createData(10, "CJ Stroud", 28)
-  ]);
+  const [rows, setRows] = useState([]);
   console.log(ck);
   const token = ck["token"];
-  // console.log(token)
-  // Don't implement this yet
+
   useEffect(() => {
     // Pretty sure I want to change data (aka rows) if either the title or users gets changed,
     const updateData = async () => {
@@ -74,11 +66,33 @@ const Leaderboard = (ck) => {
   }
 
   return (
-    <div className="Leaderboard">
-      <TimeRangeSelector changeTime={changeTime} />
-      <UserTypeSelector changeUsers={changeUsers} title={title} />
-      <UserTable rows={rows} />
-    </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', overflow: 'auto' }}>
+      <Paper elevation={3} sx={{ p: 3, mb: 3, width: '80%', maxWidth: '800px', textAlign: 'center' }}>
+        <Typography variant="h4" gutterBottom>
+          Leaderboard
+        </Typography>
+        <Typography variant="body1" color="textSecondary" gutterBottom>
+          See who's making a positive impact on the environment!
+        </Typography>
+        <Box sx={{display: "flex"}}>
+          <UserTypeSelector
+            changeUsers={changeUsers}
+          />
+          <TimeRangeSelector
+            changeTime={changeTime}
+          />
+          
+        </Box>
+      </Paper>
+      <Paper elevation={3} sx={{ p: 3, width: '80%', maxWidth: '800px', textAlign: 'center' }}>
+        <Typography variant="h5" gutterBottom>
+          {title}
+        </Typography>
+        <UserTable
+          rows={rows}
+        />
+      </Paper>
+    </Box>
   );
 };
 

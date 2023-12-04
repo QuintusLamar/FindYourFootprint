@@ -362,19 +362,19 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: "rgba(255, 255, 255, 1)",
+                backgroundColor: selectedMode === "drive" ? 'grey' : 'white',
+                color: selectedMode === "drive" ? 'white' : 'black',
+                '&:hover': {
+                  backgroundColor: 'lightgrey',
+                  color: 'black'
+                },
                 padding: "10px",
-                borderRadius: "4px",
+                borderRadius: '30px',
                 border: "1px solid",
                 cursor: "pointer",
               }}
               onClick={() => {handleModeSelect("drive")}}
             >
-              {/* <IconButton sx={selectedMode === "drive" ? selectedStyle : null}>
-                <DirectionsCarIcon
-                  // onClick={() => handleModeSelect("drive")}
-                ></DirectionsCarIcon>
-              </IconButton> */}
               <DirectionsCarIcon />
 
               <Typography textAlign={"center"}>
@@ -393,19 +393,20 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: "rgba(255, 255, 255, 1)",
+                backgroundColor: selectedMode === "bus" ? 'grey' : 'white',
+                color: selectedMode === "bus" ? 'white' : 'black',
+                '&:hover': {
+                  backgroundColor: 'lightgrey',
+                  color: 'black'
+                },
                 padding: "10px",
-                borderRadius: "4px",
+                borderRadius: '30px',
                 border: "1px solid",
                 cursor: "pointer",
               }}
               onClick={() => {handleModeSelect("bus")}}
             >
-              {/* <IconButton sx={selectedMode === "bus" ? selectedStyle : null}>
-                <DirectionsBusFilledIcon
-                  // onClick={() => handleModeSelect("bus")}
-                ></DirectionsBusFilledIcon>
-              </IconButton> */}
+              
               <DirectionsBusFilledIcon />
 
               <Typography textAlign={"center"}>
@@ -424,19 +425,20 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: "rgba(255, 255, 255, 1)",
+                backgroundColor: selectedMode === "bike" ? 'grey' : 'white',
+                color: selectedMode === "bike" ? 'white' : 'black',
+                '&:hover': {
+                  backgroundColor: 'lightgrey',
+                  color: 'black'
+                },
                 padding: "10px",
-                borderRadius: "4px",
+                borderRadius: '30px',
                 border: "1px solid",
                 cursor: "pointer",
               }}
               onClick={() => {handleModeSelect("bike")}}
             >
-              {/* <IconButton sx={selectedMode === "bike" ? selectedStyle : null}>
-                <DirectionsBikeIcon
-                  // onClick={() => handleModeSelect("bike")}
-                ></DirectionsBikeIcon>
-              </IconButton> */}
+
               <DirectionsBikeIcon />
 
               <Typography textAlign={"center"}>0 grams of CO2</Typography>
@@ -453,19 +455,19 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: "rgba(255, 255, 255, 1)",
+                backgroundColor: selectedMode === "walk" ? 'grey' : 'white',
+                color: selectedMode === "walk" ? 'white' : 'black',
+                '&:hover': {
+                  backgroundColor: 'lightgrey',
+                  color: 'black'
+                },
                 padding: "10px",
-                borderRadius: "4px",
+                borderRadius: '30px',
                 border: "1px solid",
                 cursor: "pointer",
               }}
               onClick={() => {handleModeSelect("walk")}}
             >
-              {/* <IconButton sx={selectedMode === "walk" ? selectedStyle : null}>
-                <DirectionsWalkIcon
-                  // onClick={() => handleModeSelect("walk")}
-                ></DirectionsWalkIcon>
-              </IconButton> */}
               <DirectionsWalkIcon />
 
               <Typography textAlign={"center"}>0 grams of CO2</Typography>

@@ -40,7 +40,11 @@ function App() {
 
   return (
     <CookiesProvider>
-      <div>
+      <div style={{ 
+      background: 'linear-gradient(to right, #3498db, #2ecc71)', 
+      minHeight: '100vh', 
+      padding: '20px' 
+    }}>
         <Routes>
           <Route
             path="/"
