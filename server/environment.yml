@@ -8,3 +8,4 @@ dependencies:
     - Flask_SQLAlchemy
     - PyJWT
     - transport-co2
+    - flask-cors

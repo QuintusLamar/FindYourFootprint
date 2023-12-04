@@ -1,5 +1,5 @@
 from datetime import datetime
-from api import db
+from api import db, bcrypt
 
 
 class User(db.Model):
@@ -10,6 +10,9 @@ class User(db.Model):
     vehicleID = db.Column(
         db.Integer, db.ForeignKey("vehicle.vehicleID"), unique=False, nullable=True
     )
+
+    def verify_password(self, password):
+        return bcrypt.check_password_hash(self.password, password)
 
 
 class Vehicle(db.Model):
@@ -27,16 +30,6 @@ class Friends(db.Model):
         db.Integer, db.ForeignKey("user.id"), unique=False, nullable=False
     )
     friendID = db.Column(db.Integer, primary_key=True)
-    # user_one = db.relationship(
-    #     "User",
-    #     foreign_keys=[userOneId],
-    #     backref=db.backref("friends_user_one", lazy=True),
-    # )
-    # user_two = db.relationship(
-    #     "User",
-    #     foreign_keys=[userTwoId],
-    #     backref=db.backref("friends_user_two", lazy=True),
-    # )
 
 
 class Records(db.Model):
@@ -46,4 +39,3 @@ class Records(db.Model):
     timestamp = db.Column(db.DateTime, unique=False, nullable=False)
     vehicleID = db.Column(db.Integer, unique=False, nullable=False)
     routeDistance = db.Column(db.Float, unique=False, nullable=False)
-    # user = db.relationship("User", backref="records", lazy=True)
