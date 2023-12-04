@@ -144,30 +144,93 @@ const NavPage = (ck) => {
     // things we need for recording route: userId, routeId, carbonOutput, timeStamp, vehicleId, routeDistance
     switch (modeTransport) {
       case "drive":
-        const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
-        const tokenDrive = ck["ck"]["token"];
-        const urlWithParameters = `${apiUrl}?token=${ck["ck"]["token"]}`;
-        console.log("Drive Distance:", driveDistance);
-        console.log("Drive TIme:", driveTime);
-        console.log("Drive CO2:", driveCO2);
-        const response = await axios.post(urlWithParameters, {
-        tokenDrive,
-        driveDistance,
-        driveTime,
-        driveCO2,
-        "Access-Control-Allow-Origin": "*",
-      });
+        try {
+          const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
+          const tokenDrive = ck["ck"]["token"];
+          const currentOptionDistance = driveDistance;
+          const currentOptionTime = driveTime;
+          const currentOptionCO2 = driveCO2;
+          const response = await axios.post(apiUrl, {
+          tokenDrive,
+          currentOptionDistance,
+          currentOptionTime,
+          currentOptionCO2,
+          "Access-Control-Allow-Origin": "*",
+        });
+
+        if (response.status === 200) {
+          console.log("GREAT! SUCCESSFULLY ADDED DRIVE RECORD TO RECORDS TABLE")
+        }
+        } catch (error) {
+          console.log(error)
+        }
         break;
       case "bus":
-        // setRoutePoints(transitPoints);
-        // console.log("Transit route: ", routePoints);
+        try {
+          const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
+          const tokenDrive = ck["ck"]["token"];
+          const currentOptionDistance = transitDistance;
+          const currentOptionTime = transitTime;
+          const currentOptionCO2 = transitCO2;
+          const response = await axios.post(apiUrl, {
+          tokenDrive,
+          currentOptionDistance,
+          currentOptionTime,
+          currentOptionCO2,
+          "Access-Control-Allow-Origin": "*",
+        });
+
+        if (response.status === 200) {
+          console.log("GREAT! SUCCESSFULLY ADDED TRANSIT RECORD TO RECORDS TABLE")
+        }
+        } catch (error) {
+          console.log(error)
+        }
         break;
       case "bike":
-        // setRoutePoints(bicyclePoints);
-        // console.log("Bicycle route: ", routePoints);
+        try {
+          const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
+          const tokenDrive = ck["ck"]["token"];
+          const currentOptionDistance = bikeDistance;
+          const currentOptionTime = bikeTime;
+          const currentOptionCO2 = 0.0;
+          const response = await axios.post(apiUrl, {
+          tokenDrive,
+          currentOptionDistance,
+          currentOptionTime,
+          currentOptionCO2,
+          "Access-Control-Allow-Origin": "*",
+        });
+
+        if (response.status === 200) {
+          console.log("GREAT! SUCCESSFULLY ADDED BIKE RECORD TO RECORDS TABLE")
+        }
+        } catch (error) {
+          console.log(error)
+        }
         break;
+
       case "walk":
-        // setRoutePoints(walkPoints);
+        try {
+          const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
+          const tokenDrive = ck["ck"]["token"];
+          const currentOptionDistance = walkDistance;
+          const currentOptionTime = walkTime;
+          const currentOptionCO2 = 0.0;
+          const response = await axios.post(apiUrl, {
+          tokenDrive,
+          currentOptionDistance,
+          currentOptionTime,
+          currentOptionCO2,
+          "Access-Control-Allow-Origin": "*",
+        });
+
+        if (response.status === 200) {
+          console.log("GREAT! SUCCESSFULLY ADDED WALK RECORD TO RECORDS TABLE")
+        }
+        } catch (error) {
+          console.log(error)
+        }
         break;
       default:
         // setRoutePoints(drivePoints);
