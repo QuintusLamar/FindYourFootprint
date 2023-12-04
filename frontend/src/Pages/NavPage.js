@@ -406,6 +406,7 @@ const NavPage = (ck) => {
               }}
               onClick={() => {handleModeSelect("bus")}}
             >
+              
               <DirectionsBusFilledIcon />
 
               <Typography textAlign={"center"}>
@@ -437,6 +438,7 @@ const NavPage = (ck) => {
               }}
               onClick={() => {handleModeSelect("bike")}}
             >
+
               <DirectionsBikeIcon />
 
               <Typography textAlign={"center"}>0 grams of CO2</Typography>

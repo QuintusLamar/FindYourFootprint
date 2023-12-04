@@ -218,4 +218,3 @@ function ViewFriends() {
 }
 
 export default ViewFriends;
-

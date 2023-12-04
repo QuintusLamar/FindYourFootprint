@@ -31,6 +31,7 @@ function EditProfile() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ updateProfileFormData }),
+
       });
 
       if (response.ok) {
@@ -122,7 +123,6 @@ function EditProfile() {
           Submit
         </Button>
         </Paper>
-        
       </Box>
     </Box>
   );

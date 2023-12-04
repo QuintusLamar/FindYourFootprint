@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
+
 function createData(rank, name, output) {
   return { rank, name, output };
 }
@@ -21,7 +22,6 @@ const Leaderboard = (ck) => {
   console.log(ck);
   const token = ck["token"];
 
-  // Don't implement this yet
   useEffect(() => {
     // Pretty sure I want to change data (aka rows) if either the title or users gets changed,
     const updateData = async () => {

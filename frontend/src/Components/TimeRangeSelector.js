@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
+
 function TimeRangeSelector({ changeTime }) {
   const [title, setTitle] = useState("Leaders in Carbon Output All Time");
 

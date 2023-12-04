@@ -101,6 +101,19 @@ function App() {
             }
           />
           <Route
+            path="/Profile/Friends"
+            element={
+              authenticated ? (
+                <ViewFriends ck={cookies} />
+              ) : (
+                <Login
+                  setAuthenticated={setAuthenticated}
+                  setCookie={setCookie}
+                />
+              )
+            }
+          />
+          <Route
             path="/Leaderboard"
             element={
               authenticated ? (
