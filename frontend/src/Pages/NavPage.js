@@ -359,13 +359,16 @@ const NavPage = (ck) => {
                 padding: "10px",
                 borderRadius: "4px",
                 border: "1px solid",
+                cursor: "pointer",
               }}
+              onClick={() => {handleModeSelect("drive")}}
             >
-              <IconButton sx={selectedMode === "drive" ? selectedStyle : null}>
+              {/* <IconButton sx={selectedMode === "drive" ? selectedStyle : null}>
                 <DirectionsCarIcon
-                  onClick={() => handleModeSelect("drive")}
+                  // onClick={() => handleModeSelect("drive")}
                 ></DirectionsCarIcon>
-              </IconButton>
+              </IconButton> */}
+              <DirectionsCarIcon />
 
               <Typography textAlign={"center"}>
                 {format_twodec(driveCO2)} grams of CO2
@@ -387,13 +390,16 @@ const NavPage = (ck) => {
                 padding: "10px",
                 borderRadius: "4px",
                 border: "1px solid",
+                cursor: "pointer",
               }}
+              onClick={() => {handleModeSelect("bus")}}
             >
-              <IconButton sx={selectedMode === "bus" ? selectedStyle : null}>
+              {/* <IconButton sx={selectedMode === "bus" ? selectedStyle : null}>
                 <DirectionsBusFilledIcon
-                  onClick={() => handleModeSelect("bus")}
+                  // onClick={() => handleModeSelect("bus")}
                 ></DirectionsBusFilledIcon>
-              </IconButton>
+              </IconButton> */}
+              <DirectionsBusFilledIcon />
 
               <Typography textAlign={"center"}>
                 {format_twodec(transitCO2)} grams of CO2
@@ -415,13 +421,16 @@ const NavPage = (ck) => {
                 padding: "10px",
                 borderRadius: "4px",
                 border: "1px solid",
+                cursor: "pointer",
               }}
+              onClick={() => {handleModeSelect("bike")}}
             >
-              <IconButton sx={selectedMode === "bike" ? selectedStyle : null}>
+              {/* <IconButton sx={selectedMode === "bike" ? selectedStyle : null}>
                 <DirectionsBikeIcon
-                  onClick={() => handleModeSelect("bike")}
+                  // onClick={() => handleModeSelect("bike")}
                 ></DirectionsBikeIcon>
-              </IconButton>
+              </IconButton> */}
+              <DirectionsBikeIcon />
 
               <Typography textAlign={"center"}>0 grams of CO2</Typography>
               <Typography textAlign={"center"}>
@@ -441,13 +450,16 @@ const NavPage = (ck) => {
                 padding: "10px",
                 borderRadius: "4px",
                 border: "1px solid",
+                cursor: "pointer",
               }}
+              onClick={() => {handleModeSelect("walk")}}
             >
-              <IconButton sx={selectedMode === "walk" ? selectedStyle : null}>
+              {/* <IconButton sx={selectedMode === "walk" ? selectedStyle : null}>
                 <DirectionsWalkIcon
-                  onClick={() => handleModeSelect("walk")}
+                  // onClick={() => handleModeSelect("walk")}
                 ></DirectionsWalkIcon>
-              </IconButton>
+              </IconButton> */}
+              <DirectionsWalkIcon />
 
               <Typography textAlign={"center"}>0 grams of CO2</Typography>
               <Typography textAlign={"center"}>
