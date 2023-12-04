@@ -336,7 +336,7 @@ const NavPage = (ck) => {
             // console.log("Transit route: ", routePoints);
             break;
           case "bike":
-            setRoutePoints(bicyclePoints);
+            setRoutePoints(bikePoints);
             // console.log("Bicycle route: ", routePoints);
             break;
           case "walk":
