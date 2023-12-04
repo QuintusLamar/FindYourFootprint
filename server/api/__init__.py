@@ -136,9 +136,7 @@ def create_app(config_class=Config):
     with app.app_context():
         CORS(
             app,
-            origins=[
-                "http://localhost:3000",
-            ],
+            origins=["http://localhost:3000", "http://127.0.0.1:3000"],
         )
         db.drop_all()
         db.create_all()

@@ -11,7 +11,7 @@ import Register from "./Components/Register"; // Import your Register component
 
 import { CookiesProvider } from "react-cookie";
 import { useCookies } from "react-cookie";
-import ViewFriends from './Components/ViewFriends';
+import ViewFriends from "./Components/ViewFriends";
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
@@ -40,11 +40,13 @@ function App() {
 
   return (
     <CookiesProvider>
-      <div style={{ 
-      background: 'linear-gradient(to right, #3498db, #2ecc71)', 
-      minHeight: '100vh', 
-      padding: '20px' 
-    }}>
+      <div
+        style={{
+          background: "linear-gradient(to right, #3498db, #2ecc71)",
+          minHeight: "100vh",
+          padding: "20px",
+        }}
+      >
         <Routes>
           <Route
             path="/"
@@ -91,7 +93,11 @@ function App() {
             path="/Profile/EditProfile"
             element={
               authenticated ? (
-                <EditProfile ck={cookies} />
+                <EditProfile
+                  ck={cookies}
+                  setAuthenticated={setAuthenticated}
+                  removeCookie={removeCookie}
+                />
               ) : (
                 <Login
                   setAuthenticated={setAuthenticated}

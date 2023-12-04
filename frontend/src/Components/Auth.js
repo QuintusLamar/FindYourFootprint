@@ -2,7 +2,7 @@ import axios from "axios";
 
 const checkTokenExpiration = async (token) => {
   try {
-    const response = await axios.post("http://127.0.0.1:5000/valid_token", {
+    const response = await axios.post("http://localhost:5000/valid_token", {
       token: token,
     });
 

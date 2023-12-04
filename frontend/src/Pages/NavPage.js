@@ -187,25 +187,25 @@ const NavPage = (ck) => {
       let bikeRoute = await getRoute(startCoord, endCoord, "bicycle");
       let walkRoute = await getRoute(startCoord, endCoord, "walk");
 
-
       try {
-      console.log(
-        "INITIAL DRIVE ROUTE TIME (IN SECONDS):",
-        driveRoute.features[0].properties.time
-      );
-      console.log(
-        "INITIAL TRANSIT ROUTE TIME (IN SECONDS):",
-        transitRoute.features[0].properties.time
-      );
-      console.log(
-        "INITIAL BICYCLE ROUTE TIME (IN SECONDS):",
-        bikeRoute.features[0].properties.time
-      );
-      console.log(
-        "INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):",
-        walkRoute.features[0].properties.time
-      ); } catch(error) {
-        console.log(error)
+        console.log(
+          "INITIAL DRIVE ROUTE TIME (IN SECONDS):",
+          driveRoute.features[0].properties.time
+        );
+        console.log(
+          "INITIAL TRANSIT ROUTE TIME (IN SECONDS):",
+          transitRoute.features[0].properties.time
+        );
+        console.log(
+          "INITIAL BICYCLE ROUTE TIME (IN SECONDS):",
+          bikeRoute.features[0].properties.time
+        );
+        console.log(
+          "INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):",
+          walkRoute.features[0].properties.time
+        );
+      } catch (error) {
+        console.log(error);
       }
 
       try {
@@ -243,23 +243,23 @@ const NavPage = (ck) => {
 
       let drivePoints = driveRoute.features[0].geometry.coordinates[0];
       let transitPoints;
-      console.log("sarang")
-      console.log(driveRoute)
-      console.log(transitRoute)
+      console.log("sarang");
+      console.log(driveRoute);
+      console.log(transitRoute);
       if (transitRoute.features != null) {
-        transitPoints = transitRoute.features[0].geometry.coordinates[0]
-      } 
+        transitPoints = transitRoute.features[0].geometry.coordinates[0];
+      }
       let bikePoints = bikeRoute.features[0].geometry.coordinates[0];
       let walkPoints = walkRoute.features[0].geometry.coordinates[0];
 
       // all the distances are in meters
       let driveDistance =
         driveRoute.features[0].properties.distance / 1000 / 1.609;
-      
-      
+
       let transitDistance;
       if (transitPoints) {
-        transitDistance = transitRoute.features[0].properties.distance / 1000 / 1.609;
+        transitDistance =
+          transitRoute.features[0].properties.distance / 1000 / 1.609;
       }
 
       let bikeDistance =
@@ -272,12 +272,12 @@ const NavPage = (ck) => {
         driveRoute.features[0].properties.time
       );
 
-      if (transitPoints){
-      console.log(
-        "INITIAL TRANSIT ROUTE TIME (IN SECONDS):",
-        transitRoute.features[0].properties.time
-      );
-      } 
+      if (transitPoints) {
+        console.log(
+          "INITIAL TRANSIT ROUTE TIME (IN SECONDS):",
+          transitRoute.features[0].properties.time
+        );
+      }
 
       console.log(
         "INITIAL BICYCLE ROUTE TIME (IN SECONDS):",
@@ -300,10 +300,10 @@ const NavPage = (ck) => {
 
       if (transitRoute.features == null) {
         transitDistance = 0;
-      } 
+      }
 
       try {
-        const apiUrl = "http://127.0.0.1:5000/carboncost";
+        const apiUrl = "http://localhost:5000/carboncost";
         const urlWithParameters = `${apiUrl}?token=${
           ck["ck"]["token"]
         }&driveDistance=${driveDistance.toString()}&transitDistance=${transitDistance.toString()}`;
@@ -323,9 +323,9 @@ const NavPage = (ck) => {
           setDriveTime(driveRoute.features[0].properties.time);
           setWalkTime(walkRoute.features[0].properties.time);
           if (transitRoute.features == null) {
-            setTransitTime(0)
+            setTransitTime(0);
           } else {
-          setTransitTime(transitRoute.features[0].properties.time);
+            setTransitTime(transitRoute.features[0].properties.time);
           }
           setBikeTime(bikeRoute.features[0].properties.time);
           // Add any further actions after a successful update
@@ -396,23 +396,24 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "drive" ? 'grey' : 'white',
-                color: selectedMode === "drive" ? 'white' : 'black',
-                '&:hover': {
-                  backgroundColor: 'lightgrey',
-                  color: 'black'
+                backgroundColor: selectedMode === "drive" ? "grey" : "white",
+                color: selectedMode === "drive" ? "white" : "black",
+                "&:hover": {
+                  backgroundColor: "lightgrey",
+                  color: "black",
                 },
                 padding: "10px",
-                borderRadius: '30px',
+                borderRadius: "30px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
-              onClick={() => {handleModeSelect("drive")}}
+              onClick={() => {
+                handleModeSelect("drive");
+              }}
             >
               <DirectionsCarIcon />
 
-              <Typography textAlign={"center"}
-              >
+              <Typography textAlign={"center"}>
                 {format_twodec(driveCO2)} grams of CO2
               </Typography>
               <Typography textAlign={"center"}>
@@ -428,20 +429,21 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "bus" ? 'grey' : 'white',
-                color: selectedMode === "bus" ? 'white' : 'black',
-                '&:hover': {
-                  backgroundColor: 'lightgrey',
-                  color: 'black'
+                backgroundColor: selectedMode === "bus" ? "grey" : "white",
+                color: selectedMode === "bus" ? "white" : "black",
+                "&:hover": {
+                  backgroundColor: "lightgrey",
+                  color: "black",
                 },
                 padding: "10px",
-                borderRadius: '30px',
+                borderRadius: "30px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
-              onClick={() => {handleModeSelect("bus")}}
+              onClick={() => {
+                handleModeSelect("bus");
+              }}
             >
-              
               <DirectionsBusFilledIcon />
 
               <Typography textAlign={"center"}>
@@ -460,20 +462,21 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "bike" ? 'grey' : 'white',
-                color: selectedMode === "bike" ? 'white' : 'black',
-                '&:hover': {
-                  backgroundColor: 'lightgrey',
-                  color: 'black'
+                backgroundColor: selectedMode === "bike" ? "grey" : "white",
+                color: selectedMode === "bike" ? "white" : "black",
+                "&:hover": {
+                  backgroundColor: "lightgrey",
+                  color: "black",
                 },
                 padding: "10px",
-                borderRadius: '30px',
+                borderRadius: "30px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
-              onClick={() => {handleModeSelect("bike")}}
+              onClick={() => {
+                handleModeSelect("bike");
+              }}
             >
-
               <DirectionsBikeIcon />
 
               <Typography textAlign={"center"}>0 grams of CO2</Typography>
@@ -490,18 +493,20 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "walk" ? 'grey' : 'white',
-                color: selectedMode === "walk" ? 'white' : 'black',
-                '&:hover': {
-                  backgroundColor: 'lightgrey',
-                  color: 'black'
+                backgroundColor: selectedMode === "walk" ? "grey" : "white",
+                color: selectedMode === "walk" ? "white" : "black",
+                "&:hover": {
+                  backgroundColor: "lightgrey",
+                  color: "black",
                 },
                 padding: "10px",
-                borderRadius: '30px',
+                borderRadius: "30px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
-              onClick={() => {handleModeSelect("walk")}}
+              onClick={() => {
+                handleModeSelect("walk");
+              }}
             >
               <DirectionsWalkIcon />
 
