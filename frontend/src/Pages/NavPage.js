@@ -364,7 +364,7 @@ const NavPage = (ck) => {
               sx={{
                 backgroundColor: "rgba(255, 255, 255, 1)",
                 padding: "10px",
-                borderRadius: "4px",
+                borderRadius: '30px',
                 border: "1px solid",
                 cursor: "pointer",
               }}
@@ -395,7 +395,7 @@ const NavPage = (ck) => {
               sx={{
                 backgroundColor: "rgba(255, 255, 255, 1)",
                 padding: "10px",
-                borderRadius: "4px",
+                borderRadius: '30px',
                 border: "1px solid",
                 cursor: "pointer",
               }}
@@ -426,7 +426,7 @@ const NavPage = (ck) => {
               sx={{
                 backgroundColor: "rgba(255, 255, 255, 1)",
                 padding: "10px",
-                borderRadius: "4px",
+                borderRadius: '30px',
                 border: "1px solid",
                 cursor: "pointer",
               }}
@@ -455,7 +455,7 @@ const NavPage = (ck) => {
               sx={{
                 backgroundColor: "rgba(255, 255, 255, 1)",
                 padding: "10px",
-                borderRadius: "4px",
+                borderRadius: '30px',
                 border: "1px solid",
                 cursor: "pointer",
               }}

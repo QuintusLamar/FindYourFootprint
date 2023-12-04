@@ -17,21 +17,10 @@ const Leaderboard = (ck) => {
   const [title, setTitle] = useState("Leaders in Carbon Output All Time");
 
   // This shouldn't be used by anything
-  const [rows, setRows] = useState([
-    // createData(1, "Tom Brady", 0.5),
-    // createData(2, "Aaron Rodgers", 1),
-    // createData(3, "Patrick Mahomes", 2),
-    // createData(4, "Lamar Jackson", 6),
-    // createData(5, "Jalen hurts", 12),
-    // createData(6, "Brock Purdy", 14),
-    // createData(7, "Joe Burrow", 18),
-    // createData(8, "Trevor Lawrence", 21),
-    // createData(9, "Joshua Dobbs", 26),
-    // createData(10, "CJ Stroud", 28)
-  ]);
+  const [rows, setRows] = useState([]);
   console.log(ck);
   const token = ck["token"];
-  // console.log(token)
+
   // Don't implement this yet
   useEffect(() => {
     // Pretty sure I want to change data (aka rows) if either the title or users gets changed,
@@ -90,12 +79,11 @@ const Leaderboard = (ck) => {
         />
         <UserTypeSelector
           changeUsers={changeUsers}
-          title={title}
         />
       </Paper>
       <Paper elevation={3} sx={{ p: 3, width: '80%', maxWidth: '800px', textAlign: 'center' }}>
         <Typography variant="h5" gutterBottom>
-          Top Performers
+          {title}
         </Typography>
         <UserTable
           rows={rows}

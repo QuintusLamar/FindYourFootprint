@@ -42,7 +42,7 @@ function App() {
     <CookiesProvider>
       <div style={{ 
       background: 'linear-gradient(to right, #3498db, #2ecc71)', 
-      minHeight: '85vh', 
+      minHeight: '100vh', 
       padding: '20px' 
     }}>
         <Routes>
@@ -92,19 +92,6 @@ function App() {
             element={
               authenticated ? (
                 <EditProfile ck={cookies} />
-              ) : (
-                <Login
-                  setAuthenticated={setAuthenticated}
-                  setCookie={setCookie}
-                />
-              )
-            }
-          />
-          <Route
-            path="/Profile/Friends"
-            element={
-              authenticated ? (
-                <ViewFriends ck={cookies} />
               ) : (
                 <Login
                   setAuthenticated={setAuthenticated}

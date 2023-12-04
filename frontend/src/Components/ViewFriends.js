@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Sidebar from '../Components/Sidebar';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 import TextField from '@mui/material/TextField';
-import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 
 const modalStyle = {
   position: 'absolute',
@@ -38,10 +39,10 @@ const btnBarStyle = {
 
 function ViewFriends() {
   const [friends, setFriends] = useState([
-    "Sharan Sathish",
-    "Utkarsh NSR",
-    "Sarang Pujari",
-    "Manoj Niverthi"
+    { "name": "Sharan Sathish", "email": "ss@gmail.com" },
+    { "name": "Utkarsh NSR", "email": "un@gmail.com" },
+    { "name": "Sarang Pujari", "email": "sp@gmail.com" },
+    { "name": "Manoj Niverthi", "email": "mn@gmail.com" },
   ]);
 
   const [selected, setSelected] = useState("");
@@ -61,6 +62,7 @@ function ViewFriends() {
   };
 
   const removeFriend = (value) => {
+    console.log("Value: ", value)
     setSelected(value);
     setRemoveOpen(true);
   };
@@ -75,15 +77,15 @@ function ViewFriends() {
 
   const addFriend = () => {
     setSelected("");
-    setFname("");
-    setLname("");
-    setEmail("");
+    // setFname("");
+    // setLname("");
+    // setEmail("");
     setAddOpen(true);
   };
 
   const submitAddition = () => {
-    if (email != "") {
-      const newFriend = `${fname} ${lname}`;
+    if (email !== "") {
+      const newFriend = { "name": `${fname} ${lname}`, "email": `${email}` };
       setFriends([...friends, newFriend]);
       // API call to add friend here
       setAddOpen(false);
@@ -97,17 +99,26 @@ function ViewFriends() {
     // API call to update profile here
   };
 
-  return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-      <CssBaseline />
-      <Sidebar />
+  console.log(friends)
 
-      <Box elevation={3} sx={{ margin: '16px', padding: '16px', width: '200px' }}>
+  return (
+    <Box>
+      <Typography variant="h4" gutterBottom>
+        Friends
+      </Typography>
+      <Box elevation={3} sx={{ margin: '16px', padding: '16px', width: '400px' }}>
         <List dense>
           {friends.map((value) => (
-            <ListItem key={value} disablePadding>
-              <PersonOutlineOutlinedIcon />
-              <ListItemText primary={value} />
+            <ListItem key={value.name} disablePadding>
+              <PersonOutlineOutlinedIcon sx={{mr: '10px'}}/>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Typography variant="body1">{value.name}</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="body1">{value.email}</Typography>
+                </Grid>
+              </Grid>
               <Button onClick={() => removeFriend(value)}>
                 <PersonRemoveOutlinedIcon />
               </Button>
@@ -118,6 +129,7 @@ function ViewFriends() {
           Add friend
         </Button>
       </Box>
+      {/* </Paper> */}
 
       <Modal
         open={removeOpen}
@@ -130,18 +142,18 @@ function ViewFriends() {
             Remove friend
           </Typography>
 
-          <Typography sx={{mb: '10px'}}>
-            Are you sure you want to remove {selected} as a friend?
+          <Typography sx={{ mb: '10px' }}>
+            Are you sure you want to remove {selected.name} as a friend?
           </Typography>
 
-          <Box sx={btnBarStyle}>
-            <Button onClick={() => closeModal("remove")} variant="contained" color="error" mr={2} sx={{ml: '5px'}}>
+          <Stack direction="row" spacing={2} sx={btnBarStyle}>
+            <Button onClick={() => closeModal("remove")} variant="contained" color="error">
               Do not remove
             </Button>
-            <Button onClick={submitRemoval} variant="contained" color="success" mr={2} sx={{ml: '5px'}}>
+            <Button onClick={submitRemoval} variant="contained" color="success">
               Remove
             </Button>
-          </Box>
+          </Stack>
         </Box>
       </Modal>
 
@@ -156,48 +168,47 @@ function ViewFriends() {
             Add friend
           </Typography>
 
-          <TextField 
+          <TextField
             value={fname}
             onChange={(event) => setFname(event.target.value)}
             label="First name"
-            placeholder="Jack" 
-            variant="outlined" 
+            placeholder="Jack"
+            variant="outlined"
             fullWidth
             mb={2}
             sx={textStyle}
           />
 
-          <TextField 
+          <TextField
             value={lname}
             onChange={(event) => setLname(event.target.value)}
             label="Last name"
-            placeholder="Johnson" 
-            variant="outlined" 
+            placeholder="Johnson"
+            variant="outlined"
             fullWidth
             mb={2}
             sx={textStyle}
           />
 
-          <TextField 
+          <TextField
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             label="Email"
-            placeholder="JJ@gmail.com" 
-            variant="outlined" 
+            placeholder="JJ@gmail.com"
+            variant="outlined"
             fullWidth
             mb={2}
             sx={textStyle}
           />
-          <Box sx={btnBarStyle}>
-            <Button onClick={() => closeModal("add")} variant="contained" color="error" mr={2} sx={{ml: '5px'}}>
+          <Stack direction="row" spacing={2} sx={btnBarStyle}>
+            <Button onClick={() => closeModal("add")} variant="contained" color="error">
               Cancel
             </Button>
-
-            <Button onClick={submitAddition} variant="contained" color="success" sx={{ml: '5px'}}>
+            <Button onClick={submitAddition} variant="contained" color="success">
               Add
             </Button>
-          </Box>
+          </Stack>
         </Box>
       </Modal>
     </Box>
@@ -205,3 +216,4 @@ function ViewFriends() {
 }
 
 export default ViewFriends;
+

@@ -15,7 +15,7 @@ const outerTheme = createTheme({
   },
 });
 
-function UserTypeSelector({ changeUsers, title }) {
+function UserTypeSelector({ changeUsers }) {
   const [users, setUsers] = useState("Friends");
 
   function callCallback(event) {
@@ -61,9 +61,6 @@ function UserTypeSelector({ changeUsers, title }) {
           > 
             All Users 
           </Button>
-          <Typography sx={{ textAlign: "center", width: "70%" }}>
-            {title}
-          </Typography>
         </div>
       </ThemeProvider>
     </div>

@@ -7,6 +7,7 @@ import Sidebar from '../Components/Sidebar';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 function EditProfile() {
   const [first, setFirst] = useState("");
@@ -54,7 +55,7 @@ function EditProfile() {
         <Typography variant="h3" gutterBottom>
           Edit Profile
         </Typography>
-
+        <Paper elevation={3} sx={{ p: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <TextField
@@ -120,6 +121,8 @@ function EditProfile() {
         <Button variant="contained" onClick={submitForm} sx={{ mt: '2%' }}>
           Submit
         </Button>
+        </Paper>
+        
       </Box>
     </Box>
   );

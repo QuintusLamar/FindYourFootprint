@@ -12,6 +12,7 @@ import NaturePeopleIcon from '@mui/icons-material/NaturePeople';
 import Co2Icon from '@mui/icons-material/Co2';
 import MovingIcon from '@mui/icons-material/Moving';
 import axios from "axios";
+import ViewFriends from '../Components/ViewFriends';
 // This should be nicer, idk what the plan is for the design though
 
 const Profile = ({ ck, setAuthenticated, removeCookie }) => {
@@ -89,7 +90,7 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
 
         <Divider sx={{ my: 3 }} />
 
-        <Paper elevation={3} sx={{ p: 3 }}>
+        <Paper elevation={3} sx={{ p: 3, justifyContent:'center', alignItems:'center' }}>
           <Typography variant="h4" gutterBottom>
             Your favorite mode of sustainable transportation is:
           </Typography>
@@ -99,6 +100,12 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
           <Typography variant="h5" align="center" gutterBottom sx={{ mt: 2 }}>
             {favMode}
           </Typography>
+        </Paper>
+
+        <Divider sx={{ my: 3 }} />
+
+        <Paper elevation={3} sx={{ p: 3, display: "flex", justifyContent:'center', alignItems:'center' }}>
+          <ViewFriends />
         </Paper>
       </Box>
     </Box>
