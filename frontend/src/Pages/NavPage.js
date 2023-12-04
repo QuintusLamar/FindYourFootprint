@@ -187,6 +187,13 @@ const NavPage = (ck) => {
       let bicycleRoute = await getRoute(startCoord, endCoord, "bicycle");
       let walkRoute = await getRoute(startCoord, endCoord, "walk");
 
+
+      console.log("INITIAL DRIVE ROUTE TIME (IN SECONDS):", driveRoute.features[0].properties.time)
+      console.log("INITIAL TRANSIT ROUTE TIME (IN SECONDS):", transitRoute.features[0].properties.time)
+      console.log("INITIAL BICYCLE ROUTE TIME (IN SECONDS):", bicycleRoute.features[0].properties.time)
+      console.log("INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):", walkRoute.features[0].properties.time)
+
+
       try {
         let drivePoints = driveRoute.features[0].geometry.coordinates[0];
         setRoutePoints(drivePoints);
