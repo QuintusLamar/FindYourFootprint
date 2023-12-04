@@ -85,7 +85,7 @@ def seed_database():
             email=email,
             name=name,
             vehicleID=random.randint(0, 9),
-            password=bcrypt.generate_password_hash(password),
+            password=bcrypt.generate_password_hash(password).decode("utf-8"),
         )
         db.session.add(user)
 
