@@ -182,3 +182,20 @@ def account():
     if not user:
         return jsonify(error="Invalid token")
     return jsonify({"status": "success"})
+
+
+@users.route("/add_routeRecord", methods=["POST"])
+def add_routeRecord():
+    print("\n \n INSIDE ADD ROUTE RECORD \n \n")
+    token = request.json.get("token")
+    if not token:
+        return jsonify(error="Missing token")
+    user = auth_user(token)
+    if not user:
+        return jsonify(error="Invalid token")
+    
+   
+    data = request.get_json()
+    print(f"DATA: {data}")
+    driveDistance = data.get("DriveDistance")
+    print(f"DRIVE DISTANCE: {driveDistance}")
