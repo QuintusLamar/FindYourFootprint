@@ -7,7 +7,7 @@ from api.models import Records
 import jwt
 import datetime
 
-from sqlalchemy import select, func, asc
+from sqlalchemy import select, func, asc, and_
 
 users = Blueprint("users", __name__)
 
@@ -142,6 +142,34 @@ def add_friend():
     return jsonify({"status": "Success! Added friend record"})
 
 
+@users.route("/remove_friend", methods=["POST"])
+def remove_friend():
+    token = request.json.get("token")
+    if not token:
+        return jsonify(error="Missing token")
+    user = auth_user(token)
+    if not user:
+        return jsonify(error="Invalid token")
+
+    second_email = request.json.get("email2")
+
+    first = user.id
+    second = get_user_id(second_email)
+
+    all_users = set(User.id)
+
+    if first not in all_users or second not in all_users:
+        return jsonify(error="Users do not exist")
+    Friends.query.filter_by(
+        and_(Friends.userOneID == first, Friends.userTwoID == second)
+    ).delete()
+    Friends.query.filter_by(
+        and_(Friends.userOneID == second, Friends.userTwoID == first)
+    ).delete()
+    db.session().commit()
+    return jsonify({"status": "success", "msg": "Deleted friend record!"})
+
+
 @users.route("/update_profile", methods=["POST"])
 def update_profile():
     token = request.json.get("token")
@@ -184,6 +212,7 @@ def account():
         return jsonify(error="Invalid token")
     return jsonify({"status": "success"})
 
+
 @users.route("/add_routeRecord", methods=["POST"])
 def add_routeRecord():
     print("\n \n INSIDE ADD ROUTE RECORD \n \n")
@@ -194,7 +223,7 @@ def add_routeRecord():
     user = auth_user(token)
     if not user:
         return jsonify(error="Invalid token")
-    
+
     data = request.get_json()
     currentuserID = user.id
     rId_query = select(func.max(Records.routeID)).select_from(Records)
@@ -210,23 +239,25 @@ def add_routeRecord():
     print("\n \n \n \n")
     print(f"CURRENT CARBON OUTPUT: {currentDistance}")
     print("\n \n \n \n")
-    
 
-    db.session.add(Records(
-        userID=currentuserID,
-        carbonOutput=currentcarbonOutput,
-        timestamp=currenttimestamp,
-        vehicleID=currentvehicleID,
-        routeDistance=currentDistance
-    ))
+    db.session.add(
+        Records(
+            userID=currentuserID,
+            carbonOutput=currentcarbonOutput,
+            timestamp=currenttimestamp,
+            vehicleID=currentvehicleID,
+            routeDistance=currentDistance,
+        )
+    )
     db.session.commit()
-
 
     all_records = Records.query.all()
 
     for record in all_records:
         print("\n \n \n \n")
-        print(f"UserID: {record.userID}, RouteID: {record.routeID}, Carbon Output: {record.carbonOutput}, Timestamp: {record.timestamp}, VehicleID: {record.vehicleID}, Route Distance: {record.routeDistance}")
+        print(
+            f"UserID: {record.userID}, RouteID: {record.routeID}, Carbon Output: {record.carbonOutput}, Timestamp: {record.timestamp}, VehicleID: {record.vehicleID}, Route Distance: {record.routeDistance}"
+        )
         print("\n \n \n \n")
 
     return jsonify({"status": "Success! Added route record"})
