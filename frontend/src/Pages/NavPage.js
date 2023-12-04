@@ -184,9 +184,11 @@ const NavPage = (ck) => {
 
       let driveRoute = await getRoute(startCoord, endCoord, "drive");
       let transitRoute = await getRoute(startCoord, endCoord, "transit");
-      let bicycleRoute = await getRoute(startCoord, endCoord, "bicycle");
+      let bikeRoute = await getRoute(startCoord, endCoord, "bicycle");
       let walkRoute = await getRoute(startCoord, endCoord, "walk");
 
+
+      try {
       console.log(
         "INITIAL DRIVE ROUTE TIME (IN SECONDS):",
         driveRoute.features[0].properties.time
@@ -197,18 +199,20 @@ const NavPage = (ck) => {
       );
       console.log(
         "INITIAL BICYCLE ROUTE TIME (IN SECONDS):",
-        bicycleRoute.features[0].properties.time
+        bikeRoute.features[0].properties.time
       );
       console.log(
         "INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):",
         walkRoute.features[0].properties.time
-      );
+      ); } catch(error) {
+        console.log(error)
+      }
 
       try {
         let drivePoints = driveRoute.features[0].geometry.coordinates[0];
         setRoutePoints(drivePoints);
         let transitPoints = transitRoute.features[0].geometry.coordinates[0];
-        let bicyclePoints = bicycleRoute.features[0].geometry.coordinates[0];
+        let bikePoints = bikeRoute.features[0].geometry.coordinates[0];
         let walkPoints = walkRoute.features[0].geometry.coordinates[0];
 
         switch (selectedMode) {
@@ -221,7 +225,7 @@ const NavPage = (ck) => {
             console.log("Transit route: ", routePoints);
             break;
           case "bike":
-            setRoutePoints(bicyclePoints);
+            setRoutePoints(bikePoints);
             console.log("Bicycle route: ", routePoints);
             break;
           case "walk":
@@ -238,17 +242,28 @@ const NavPage = (ck) => {
       }
 
       let drivePoints = driveRoute.features[0].geometry.coordinates[0];
-      let transitPoints = transitRoute.features[0].geometry.coordinates[0];
-      let bicyclePoints = bicycleRoute.features[0].geometry.coordinates[0];
+      let transitPoints;
+      console.log("sarang")
+      console.log(driveRoute)
+      console.log(transitRoute)
+      if (transitRoute.features != null) {
+        transitPoints = transitRoute.features[0].geometry.coordinates[0]
+      } 
+      let bikePoints = bikeRoute.features[0].geometry.coordinates[0];
       let walkPoints = walkRoute.features[0].geometry.coordinates[0];
 
       // all the distances are in meters
       let driveDistance =
         driveRoute.features[0].properties.distance / 1000 / 1.609;
-      let transitDistance =
-        transitRoute.features[0].properties.distance / 1000 / 1.609;
-      let bicycleDistance =
-        bicycleRoute.features[0].properties.distance / 1000 / 1.609;
+      
+      
+      let transitDistance;
+      if (transitPoints) {
+        transitDistance = transitRoute.features[0].properties.distance / 1000 / 1.609;
+      }
+
+      let bikeDistance =
+        bikeRoute.features[0].properties.distance / 1000 / 1.609;
       let walkDistance =
         walkRoute.features[0].properties.distance / 1000 / 1.609;
 
@@ -256,13 +271,17 @@ const NavPage = (ck) => {
         "INITIAL DRIVE ROUTE TIME (IN SECONDS):",
         driveRoute.features[0].properties.time
       );
+
+      if (transitPoints){
       console.log(
         "INITIAL TRANSIT ROUTE TIME (IN SECONDS):",
         transitRoute.features[0].properties.time
       );
+      } 
+
       console.log(
         "INITIAL BICYCLE ROUTE TIME (IN SECONDS):",
-        bicycleRoute.features[0].properties.time
+        bikeRoute.features[0].properties.time
       );
       console.log(
         "INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):",
@@ -271,13 +290,17 @@ const NavPage = (ck) => {
 
       console.log("Drive route: ", drivePoints);
       console.log("Transit route: ", transitPoints);
-      console.log("Bicycle route: ", bicyclePoints);
+      console.log("Bicycle route: ", bikePoints);
       console.log("Walk route: ", walkPoints);
 
       console.log("Drive Distance in miles: ", driveDistance);
       console.log("Transit Distance in miles: ", transitDistance);
-      console.log("Bicycle Distance in miles: ", bicycleDistance);
+      console.log("Bicycle Distance in miles: ", bikeDistance);
       console.log("Walk Distance in miles: ", walkDistance);
+
+      if (transitRoute.features == null) {
+        transitDistance = 0;
+      } 
 
       try {
         const apiUrl = "http://localhost:5000/carboncost";
@@ -295,12 +318,16 @@ const NavPage = (ck) => {
           setTransitCO2(result["Bus"] + result["Train"] / 2);
           setdriveDistance(driveDistance);
           setTransitDistance(transitDistance);
-          setBikeDistance(bicycleDistance);
+          setBikeDistance(bikeDistance);
           setWalkDistance(walkDistance);
           setDriveTime(driveRoute.features[0].properties.time);
           setWalkTime(walkRoute.features[0].properties.time);
+          if (transitRoute.features == null) {
+            setTransitTime(0)
+          } else {
           setTransitTime(transitRoute.features[0].properties.time);
-          setBikeTime(bicycleRoute.features[0].properties.time);
+          }
+          setBikeTime(bikeRoute.features[0].properties.time);
           // Add any further actions after a successful update
         } else {
           console.error("Failed to calculate carbon cost successfully");
@@ -381,7 +408,8 @@ const NavPage = (ck) => {
                 ></DirectionsCarIcon>
               </IconButton>
 
-              <Typography textAlign={"center"}>
+              <Typography textAlign={"center"}
+              >
                 {format_twodec(driveCO2)} grams of CO2
               </Typography>
               <Typography textAlign={"center"}>
