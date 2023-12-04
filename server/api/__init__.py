@@ -3,6 +3,9 @@ from api.config import Config
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS
+
+import logging
 
 
 import random
@@ -10,6 +13,7 @@ from datetime import datetime, timedelta
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
+logging.getLogger("flask_cors").level = logging.DEBUG
 
 from api.models import User, Vehicle, Friends, Records
 
@@ -81,7 +85,7 @@ def seed_database():
             email=email,
             name=name,
             vehicleID=random.randint(0, 9),
-            password=password,
+            password=bcrypt.generate_password_hash(password),
         )
         db.session.add(user)
 
@@ -129,17 +133,13 @@ def create_app(config_class=Config):
     app.register_blueprint(records)
     app.register_blueprint(stats)
 
-    @app.after_request
-    def apply_caching(response):
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Credentials"] = "true"
-        response.headers["Access-Control-Allow-Methods"] = "GET,HEAD,OPTIONS,POST,PUT"
-        response.headers[
-            "Access-Control-Allow-Headers"
-        ] = "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
-        return response
-
     with app.app_context():
+        CORS(
+            app,
+            origins=[
+                "http://localhost:3000",
+            ],
+        )
         db.drop_all()
         db.create_all()
         seed_database()

@@ -17,8 +17,7 @@ def auth_user(token):
     email = token_data.get("email")
     password = token_data.get("password")
     if email is None or password is None:
-        return False
-    print("here")
+        return None
     user = User.query.filter_by(email=email).first()
     if user and user.verify_password(password):
         return user

@@ -29,13 +29,11 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
   const get_stats = async () => {
     try {
       const apiUrl = "http://127.0.0.1:5000/user_stats";
+
       const urlWithParameters = `${apiUrl}?token=${encodeURIComponent(
         ck["token"]
       )}`;
-      const response = await axios.get(urlWithParameters, {
-        "Access-Control-Allow-Origin": "*",
-        Accept: "application/json",
-      });
+      const response = await axios.get(urlWithParameters);
       const result = await response.data;
       // console.log("RESPONSE:", response.data);
 
