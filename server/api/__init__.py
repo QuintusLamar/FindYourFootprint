@@ -3,7 +3,7 @@ from api.config import Config
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
 import logging
 
@@ -134,7 +134,12 @@ def create_app(config_class=Config):
     app.register_blueprint(stats)
 
     with app.app_context():
-        CORS(app)
+        CORS(
+            app,
+            origins=[
+                "http://localhost:3000",
+            ],
+        )
         db.drop_all()
         db.create_all()
         seed_database()
