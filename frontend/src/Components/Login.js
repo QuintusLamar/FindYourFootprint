@@ -23,8 +23,8 @@ const Login = ({ setAuthenticated, setCookie }) => {
 
       console.log("Response: ", response);
 
-      if (response.ok) {
-        const data = await response.json();
+      if (response.statusText === "OK") {
+        const data = response.data;
         if (data.success) {
           // Authentication successful
           const token = data.token;
