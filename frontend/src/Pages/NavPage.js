@@ -162,6 +162,7 @@ const NavPage = (ck) => {
 
   async function submitRoute(e) {
     e.preventDefault();
+    console.log("INSIDE SUBMIT ROUTE")
     if (startAddr !== "" && endAddr !== "") {
       let startAddrStr = addressToString(startAddr);
       let startUrl =
