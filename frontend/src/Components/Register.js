@@ -1,15 +1,16 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import './App.css';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
+import "../Style/App.css";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import axios from "axios";
 
-function Register() {
+const Register = ({ setAuthenticated, setCookie }) => {
   const navigate = useNavigate();
 
   const [first, setFirst] = useState("");
@@ -19,15 +20,15 @@ function Register() {
   const [password, setPassword] = useState("");
 
   const goBack = () => {
-    navigate('/');
+    navigate("/");
   };
 
   const submitForm = async () => {
-    console.log("First: ", first + last)
-    console.log("Last: ", last)
-    console.log("Vehicle: ", vehicle)
-    console.log("Email: ", email)
-    console.log("Password: ", password)
+    console.log("First: ", first + last);
+    console.log("Last: ", last);
+    console.log("Vehicle: ", vehicle);
+    console.log("Email: ", email);
+    console.log("Password: ", password);
 
     const registerProfileFormData = {
       name: first + last,
@@ -37,43 +38,44 @@ function Register() {
     };
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({registerProfileFormData: registerProfileFormData}),
+      const response = await axios.post("http://localhost:5000/register", {
+        registerProfileFormData,
+        "Access-Control-Allow-Origin": "*",
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status === 200) {
+        const data = response.data;
 
         if (data.success) {
-          console.log('Registration successful');
+          console.log("Registration successful");
           // Navigate to the main page upon successful registration
-          navigate('/');
+          const token = data.token;
+          console.log("This is the token");
+          console.log(token);
+          setCookie("token", token);
+          setAuthenticated(true);
+          navigate("/");
         } else {
-          console.error('Registration failed:', data.message);
+          console.error("Registration failed:", data.message);
           // Handle registration failure cases
         }
       } else {
-        console.error('Failed to register:', response.statusText);
+        console.error("Failed to register:", response.statusText);
         // Handle error cases
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       // Handle network errors or other exceptions
     }
   };
 
   return (
-    
     <Box
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh', 
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
       }}
     >
       <CssBaseline />
@@ -81,7 +83,7 @@ function Register() {
         variant="outlined"
         onClick={goBack}
         sx={{
-          position: 'absolute', 
+          position: "absolute",
           left: 16,
           top: 16,
         }}
@@ -92,7 +94,7 @@ function Register() {
         <Typography variant="h1" gutterBottom>
           Register Profile
         </Typography>
-        <Box sx={{ width: '40%' }}>
+        <Box sx={{ width: "40%" }}>
           <Grid container spacing={0}>
             <Grid item xs={6}>
               <TextField
@@ -159,7 +161,6 @@ function Register() {
       </Grid>
     </Box>
   );
-
-}
+};
 
 export default Register;

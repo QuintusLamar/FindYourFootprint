@@ -2,10 +2,14 @@ from flask import Flask
 from api.config import Config
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+
+
 import random
 from datetime import datetime, timedelta
 
 db = SQLAlchemy()
+bcrypt = Bcrypt()
 
 from api.models import User, Vehicle, Friends, Records
 
@@ -21,7 +25,6 @@ def seed_database():
             highwayMPG=highway_mpg,
             vehicleID=id,
         )
-        print(vehicle_type)
         db.session.add(vehicle)
     db.session.add(
         Vehicle(
@@ -45,6 +48,14 @@ def seed_database():
             cityMPG=30,
             highwayMPG=40,
             vehicleID=12,
+        )
+    )
+    db.session.add(
+        Vehicle(
+            vehicleType="SUV",
+            cityMPG=30,
+            highwayMPG=40,
+            vehicleID=13,
         )
     )
     names = [
@@ -77,8 +88,6 @@ def seed_database():
     friendid = 0
     for i in range(10):
         for j in range(i):
-            # name1 = names[i]
-            # name2 = names[j]
             friend_record1 = Friends(userOneID=i, userTwoID=j, friendID=friendid)
             friend_record2 = Friends(userOneID=j, userTwoID=i, friendID=friendid + 1)
             db.session.add(friend_record1)
@@ -95,18 +104,10 @@ def seed_database():
                 carbonOutput=random.random() * 50 + 10,
                 timestamp=datetime.now() - timedelta(days=random.randint(1, 50)),
                 vehicleID=random.randint(0, 9),
-                routeDistance = random.random() * 100 + 10
+                routeDistance=random.random() * 100 + 10,
             )
             db.session.add(record)
             routeid += 1
-
-    # for _ in range(3):
-    #     record = Records(
-    #         userID="user_5",  # Replace with the actual range of user IDs
-    #         carbonOutput=random.uniform(1.0, 10.0),
-    #         timestamp=datetime.now(),
-    #         vehicleID=random.randint(1, 5),  # Replace with the actual range of vehicle IDs
-    #     )
 
     db.session.commit()
 
@@ -116,12 +117,17 @@ def create_app(config_class=Config):
     app.config.from_object(Config)
 
     db.init_app(app)
+    bcrypt.init_app(app)
 
     from api.users.routes import users
     from api.main.routes import main
+    from api.records.routes import records
+    from api.stats.routes import stats
 
     app.register_blueprint(users)
     app.register_blueprint(main)
+    app.register_blueprint(records)
+    app.register_blueprint(stats)
 
     @app.after_request
     def apply_caching(response):

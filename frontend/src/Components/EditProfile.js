@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../App.css';
+import '../Style/App.css';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -117,7 +117,6 @@ function EditProfile() {
             />
           </Grid>
         </Grid>
-
         <Button variant="contained" onClick={submitForm} sx={{ mt: '2%' }}>
           Submit
         </Button>
