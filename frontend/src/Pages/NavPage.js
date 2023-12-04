@@ -113,8 +113,69 @@ const NavPage = (ck) => {
   const handleModeSelect = (mode) => {
     setSelectedMode(mode);
     const event = { preventDefault: () => {} };
-    submitRoute(event); //TODO TEST IF YOU CAN REMOVE THIS AND FUNCTIONALITY STILL WORKS
+    recordingRoute(event, mode);
+    // submitRoute(event); //TODO TEST IF YOU CAN REMOVE THIS AND FUNCTIONALITY STILL WORKS
   };
+
+  async function recordingRoute(e, modeTransport) {
+    e.preventDefault();
+    console.log("INSIDE RECORDING ROUTE:", modeTransport);
+    
+    if (startAddr !== "" && endAddr !== "") {
+      let startAddrStr = addressToString(startAddr);
+      let startUrl =
+        "https://api.geoapify.com/v1/geocode/search?text=" +
+        startAddrStr +
+        "&apiKey=" +
+        api_key;
+      let endAddrStr = addressToString(endAddr);
+      let endUrl =
+        "https://api.geoapify.com/v1/geocode/search?text=" +
+        endAddrStr +
+        "&apiKey=" +
+        api_key;
+
+      let startResult = await getPoints(startUrl);
+      let endResult = await getPoints(endUrl);
+
+      let startCoord = getAve(startResult.features);
+      let endCoord = getAve(endResult.features);
+    
+    // things we need for recording route: userId, routeId, carbonOutput, timeStamp, vehicleId, routeDistance
+    switch (modeTransport) {
+      case "drive":
+        const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
+        const tokenDrive = ck["ck"]["token"];
+        const urlWithParameters = `${apiUrl}?token=${ck["ck"]["token"]}`;
+        console.log("Drive Distance:", driveDistance);
+        console.log("Drive TIme:", driveTime);
+        console.log("Drive CO2:", driveCO2);
+        const response = await axios.post(urlWithParameters, {
+        tokenDrive,
+        driveDistance,
+        driveTime,
+        driveCO2,
+        "Access-Control-Allow-Origin": "*",
+      });
+        break;
+      case "bus":
+        // setRoutePoints(transitPoints);
+        // console.log("Transit route: ", routePoints);
+        break;
+      case "bike":
+        // setRoutePoints(bicyclePoints);
+        // console.log("Bicycle route: ", routePoints);
+        break;
+      case "walk":
+        // setRoutePoints(walkPoints);
+        break;
+      default:
+        // setRoutePoints(drivePoints);
+        console.log("Walk route: ", routePoints);
+        break;
+    }
+  }
+  }
 
   const format_twodec = (x) => {
     return Math.floor(x) + Math.floor(x * 100 - Math.floor(x) * 100) / 100;
@@ -162,7 +223,7 @@ const NavPage = (ck) => {
 
   async function submitRoute(e) {
     e.preventDefault();
-    console.log("INSIDE SUBMIT ROUTE")
+    // console.log("INSIDE SUBMIT ROUTE:", selectedMode)
     if (startAddr !== "" && endAddr !== "") {
       let startAddrStr = addressToString(startAddr);
       let startUrl =
@@ -189,10 +250,10 @@ const NavPage = (ck) => {
       let walkRoute = await getRoute(startCoord, endCoord, "walk");
 
 
-      console.log("INITIAL DRIVE ROUTE TIME (IN SECONDS):", driveRoute.features[0].properties.time)
-      console.log("INITIAL TRANSIT ROUTE TIME (IN SECONDS):", transitRoute.features[0].properties.time)
-      console.log("INITIAL BICYCLE ROUTE TIME (IN SECONDS):", bicycleRoute.features[0].properties.time)
-      console.log("INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):", walkRoute.features[0].properties.time)
+      // console.log("INITIAL DRIVE ROUTE TIME (IN SECONDS):", driveRoute.features[0].properties.time)
+      // console.log("INITIAL TRANSIT ROUTE TIME (IN SECONDS):", transitRoute.features[0].properties.time)
+      // console.log("INITIAL BICYCLE ROUTE TIME (IN SECONDS):", bicycleRoute.features[0].properties.time)
+      // console.log("INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):", walkRoute.features[0].properties.time)
 
 
       try {
@@ -205,15 +266,15 @@ const NavPage = (ck) => {
         switch (selectedMode) {
           case "drive":
             setRoutePoints(drivePoints);
-            console.log("Drive route: ", routePoints);
+            // console.log("Drive route: ", routePoints);
             break;
           case "bus":
             setRoutePoints(transitPoints);
-            console.log("Transit route: ", routePoints);
+            // console.log("Transit route: ", routePoints);
             break;
           case "bike":
             setRoutePoints(bicyclePoints);
-            console.log("Bicycle route: ", routePoints);
+            // console.log("Bicycle route: ", routePoints);
             break;
           case "walk":
             setRoutePoints(walkPoints);
@@ -243,32 +304,32 @@ const NavPage = (ck) => {
       let walkDistance =
         walkRoute.features[0].properties.distance / 1000 / 1.609;
 
-      console.log(
-        "INITIAL DRIVE ROUTE TIME (IN SECONDS):",
-        driveRoute.features[0].properties.time
-      );
-      console.log(
-        "INITIAL TRANSIT ROUTE TIME (IN SECONDS):",
-        transitRoute.features[0].properties.time
-      );
-      console.log(
-        "INITIAL BICYCLE ROUTE TIME (IN SECONDS):",
-        bicycleRoute.features[0].properties.time
-      );
-      console.log(
-        "INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):",
-        walkRoute.features[0].properties.time
-      );
+      // console.log(
+      //   "INITIAL DRIVE ROUTE TIME (IN SECONDS):",
+      //   driveRoute.features[0].properties.time
+      // );
+      // console.log(
+      //   "INITIAL TRANSIT ROUTE TIME (IN SECONDS):",
+      //   transitRoute.features[0].properties.time
+      // );
+      // console.log(
+      //   "INITIAL BICYCLE ROUTE TIME (IN SECONDS):",
+      //   bicycleRoute.features[0].properties.time
+      // );
+      // console.log(
+      //   "INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):",
+      //   walkRoute.features[0].properties.time
+      // );
 
-      console.log("Drive route: ", drivePoints);
-      console.log("Transit route: ", transitPoints);
-      console.log("Bicycle route: ", bicyclePoints);
-      console.log("Walk route: ", walkPoints);
+      // console.log("Drive route: ", drivePoints);
+      // console.log("Transit route: ", transitPoints);
+      // console.log("Bicycle route: ", bicyclePoints);
+      // console.log("Walk route: ", walkPoints);
 
-      console.log("Drive Distance in miles: ", driveDistance);
-      console.log("Transit Distance in miles: ", transitDistance);
-      console.log("Bicycle Distance in miles: ", bicycleDistance);
-      console.log("Walk Distance in miles: ", walkDistance);
+      // console.log("Drive Distance in miles: ", driveDistance);
+      // console.log("Transit Distance in miles: ", transitDistance);
+      // console.log("Bicycle Distance in miles: ", bicycleDistance);
+      // console.log("Walk Distance in miles: ", walkDistance);
 
       try {
         const apiUrl = "http://127.0.0.1:5000/carboncost";
@@ -283,8 +344,8 @@ const NavPage = (ck) => {
         // console.log("RESPONSE:", response.data);
 
         if (response.status === 200) {
-          console.log("Calculated carbon cost successfully");
-          console.log(result);
+          // console.log("Calculated carbon cost successfully");
+          // console.log(result);
           setDriveCO2((result["Sedan"] + result["SUV"]) / 2);
           setTransitCO2(result["Bus"] + result["Train"] / 2);
           setdriveDistance(driveDistance);
