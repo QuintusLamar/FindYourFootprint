@@ -16,7 +16,7 @@ const Login = ({ setAuthenticated, setCookie }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/login", {
+      const response = await axios.post("http://127.0.0.1:5000/login", {
         email,
         password,
       });
@@ -27,6 +27,7 @@ const Login = ({ setAuthenticated, setCookie }) => {
         const data = response.data;
         if (data.success) {
           // Authentication successful
+          console.log("Authentication success")
           const token = data.token;
           setCookie("token", token);
           console.log(token);

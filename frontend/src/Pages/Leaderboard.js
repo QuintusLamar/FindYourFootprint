@@ -34,7 +34,7 @@ const Leaderboard = (ck) => {
     // Pretty sure I want to change data (aka rows) if either the title or users gets changed,
     const updateData = async () => {
       try {
-        const apiUrl = "http://localhost:5000/leaderboard";
+        const apiUrl = "http://127.0.0.1:5000/leaderboard";
         const time_period = title
           .replace("Leaders in Carbon Output ", "")
           .replace(" ", "")

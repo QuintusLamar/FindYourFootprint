@@ -18,7 +18,7 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
   };
   const get_stats = async () => {
     try {
-      const apiUrl = "http://localhost:5000/user_stats";
+      const apiUrl = "http://127.0.0.1:5000/user_stats";
       // console.log()
       const urlWithParameters = `${apiUrl}?token=${encodeURIComponent(
         ck["token"]

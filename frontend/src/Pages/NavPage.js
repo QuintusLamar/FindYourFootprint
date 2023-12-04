@@ -303,7 +303,7 @@ const NavPage = (ck) => {
       } 
 
       try {
-        const apiUrl = "http://localhost:5000/carboncost";
+        const apiUrl = "http://127.0.0.1:5000/carboncost";
         const urlWithParameters = `${apiUrl}?token=${
           ck["ck"]["token"]
         }&driveDistance=${driveDistance.toString()}&transitDistance=${transitDistance.toString()}`;
