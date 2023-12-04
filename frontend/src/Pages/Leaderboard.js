@@ -74,12 +74,15 @@ const Leaderboard = (ck) => {
         <Typography variant="body1" color="textSecondary" gutterBottom>
           See who's making a positive impact on the environment!
         </Typography>
-        <TimeRangeSelector
-          changeTime={changeTime}
-        />
-        <UserTypeSelector
-          changeUsers={changeUsers}
-        />
+        <Box sx={{display: "flex"}}>
+          <UserTypeSelector
+            changeUsers={changeUsers}
+          />
+          <TimeRangeSelector
+            changeTime={changeTime}
+          />
+          
+        </Box>
       </Paper>
       <Paper elevation={3} sx={{ p: 3, width: '80%', maxWidth: '800px', textAlign: 'center' }}>
         <Typography variant="h5" gutterBottom>

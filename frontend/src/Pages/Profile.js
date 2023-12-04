@@ -91,7 +91,7 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
         <Divider sx={{ my: 3 }} />
 
         <Paper elevation={3} sx={{ p: 3, justifyContent:'center', alignItems:'center' }}>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h4" gutterBottom sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
             Your favorite mode of sustainable transportation is:
           </Typography>
           <Avatar sx={{ width: 150, height: 150, bgcolor: 'info.main', mx: 'auto', mt: 2 }}>

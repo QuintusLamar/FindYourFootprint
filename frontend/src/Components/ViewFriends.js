@@ -103,7 +103,7 @@ function ViewFriends() {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom sx={{alignItems: "center", display: "flex", justifyContent: "center"}}>
         Friends
       </Typography>
       <Box elevation={3} sx={{ margin: '16px', padding: '16px', width: '400px' }}>
@@ -125,11 +125,13 @@ function ViewFriends() {
             </ListItem>
           ))}
         </List>
-        <Button onClick={addFriend}>
+        
+      </Box>
+      <Box sx={{display: "flex", justifyContent: "right"}}>
+        <Button variant="contained" onClick={addFriend} sx={{mr:"55px"}}>
           Add friend
         </Button>
       </Box>
-      {/* </Paper> */}
 
       <Modal
         open={removeOpen}
