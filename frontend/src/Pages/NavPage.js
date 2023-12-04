@@ -21,6 +21,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import axios from "axios";
 import EnergySavingsLeafOutlinedIcon from "@mui/icons-material/EnergySavingsLeafOutlined";
+import { Dialog, DialogContent, Typography } from "@mui/material";
 
 const InputForm = styled("form")({
   display: "flex",
@@ -114,11 +115,12 @@ const NavPage = (ck) => {
     setSelectedMode(mode);
     const event = { preventDefault: () => {} };
     // submitRoute(event); //TODO TEST IF YOU CAN REMOVE THIS AND FUNCTIONALITY STILL WORKS
+    displayDirections();
   };
 
   async function getDirections(startCoord, endCoord, mode) {
-    const apiUrl = `https://api.geoapify.com/v1/routing?waypoints=${startCoord[0]},${startCoord[1]}|${endCoord[0]},${endCoord[1]}&mode=${mode}&apiKey=${api_key}`;
-  
+    const apiUrl = `https://api.geoapify.com/v1/routing?waypoints=${encodeURIComponent(`${startCoord[0]},${startCoord[1]}`)}|${encodeURIComponent(`${endCoord[0]},${endCoord[1]}`)}&mode=${encodeURIComponent(mode)}&apiKey=${encodeURIComponent(api_key)}`;
+
     try {
       const response = await axios.get(apiUrl);
       return response.data;
@@ -127,6 +129,49 @@ const NavPage = (ck) => {
       throw error;
     }
   }
+
+
+
+  async function displayDirections() {
+    console.log("INSIDE DISPLAY DIRECTIONS")
+    if (startAddr !== "" && endAddr !== "") {
+      console.log("INSIDE IF")
+      let startAddrStr = addressToString(startAddr);
+      let startUrl =
+        "https://api.geoapify.com/v1/geocode/search?text=" +
+        startAddrStr +
+        "&apiKey=" +
+        api_key;
+      let endAddrStr = addressToString(endAddr);
+      let endUrl =
+        "https://api.geoapify.com/v1/geocode/search?text=" +
+        endAddrStr +
+        "&apiKey=" +
+        api_key;
+
+      let startResult = await getPoints(startUrl);
+      let endResult = await getPoints(endUrl);
+
+
+      let startCoord = getAve(startResult.features);
+      let endCoord = getAve(endResult.features);
+
+      const routeDirections = await getDirections(startCoord, endCoord, selectedMode)
+      const directionSteps = routeDirections.features[0].properties.legs[0].steps;
+      const instructionArray = [];
+
+      console.log(directionSteps)
+      for (let i = 0; i < directionSteps.length; i++) {
+        instructionArray.push(directionSteps[i].instruction.text);
+      }
+
+      
+      
+    }
+
+    
+  }
+
 
   async function recordingRoute(e) {
     e.preventDefault();
