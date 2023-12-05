@@ -217,7 +217,7 @@ def account():
 def add_routeRecord():
     print("\n \n INSIDE ADD ROUTE RECORD \n \n")
 
-    token = request.json.get("tokenDrive")
+    token = request.json.get("token")
     if not token:
         return jsonify(error="Missing token")
     user = auth_user(token)
@@ -229,12 +229,18 @@ def add_routeRecord():
     rId_query = select(func.max(Records.routeID)).select_from(Records)
     max_rId = int(db.session.execute(rId_query).scalar())
     currentRouteId = max_rId + 1
+    mode = data["mode"]
+    if mode == "drive":
+        mode = get_user_vehicle(currentuserID).vehicleID
+    else:
+        mode = get_vehicle_id(mode)
+
     currentcarbonOutput = data.get("currentOptionCO2")
     print("\n \n \n \n")
     print(f"CURRENT CARBON OUTPUT: {currentcarbonOutput}")
     print("\n \n \n \n")
     currenttimestamp = datetime.datetime.now()
-    currentvehicleID = user.vehicleID
+    currentvehicleID = mode
     currentDistance = data.get("currentOptionDistance")
     print("\n \n \n \n")
     print(f"CURRENT CARBON OUTPUT: {currentDistance}")
@@ -247,6 +253,7 @@ def add_routeRecord():
             timestamp=currenttimestamp,
             vehicleID=currentvehicleID,
             routeDistance=currentDistance,
+            routeID=currentRouteId,
         )
     )
     db.session.commit()
