@@ -21,7 +21,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import axios from "axios";
 import EnergySavingsLeafOutlinedIcon from "@mui/icons-material/EnergySavingsLeafOutlined";
-import { Dialog, DialogContent, Typography } from "@mui/material";
+import { Dialog, DialogContent } from "@mui/material";
 
 const InputForm = styled("form")({
   display: "flex",
@@ -74,6 +74,9 @@ const FullHeightContainer = styled(Container)({
 // Lat/Lng: 33.7628 -84.3928
 
 const NavPage = (ck) => {
+  const [instructionArray, setInstructionArray] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+
   const theme = createTheme();
 
   const [startAddr, setStartAddr] = useState(
@@ -165,7 +168,8 @@ const NavPage = (ck) => {
         instructionArray.push(directionSteps[i].instruction.text);
       }
 
-      
+      setInstructionArray(instructionArray);
+      setOpenDialog(true);
       
     }
 
@@ -705,6 +709,18 @@ const NavPage = (ck) => {
           >
             <Map routePoints={routePoints} />
           </Paper>
+          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+          <DialogContent>
+            <Typography variant="h6" gutterBottom>
+              Instructions:
+            </Typography>
+            {instructionArray.map((instruction, index) => (
+              <Typography key={index} paragraph>
+                {instruction}
+              </Typography>
+            ))}
+          </DialogContent>
+        </Dialog>
         </Grid>
       </FullHeightContainer>
     </ThemeProvider>
