@@ -85,79 +85,83 @@ const Register = ({ setAuthenticated, setCookie }) => {
           position: "absolute",
           left: 16,
           top: 16,
+          backgroundColor: 'white'
         }}
       >
         Back to Login
       </Button>
-      <Grid container direction="column" alignItems="center">
-        <Typography variant="h1" gutterBottom>
-          Register Profile
-        </Typography>
-        <Box sx={{ width: "40%" }}>
-          <Grid container spacing={0}>
-            <Grid item xs={6}>
-              <TextField
-                required
-                value={first}
-                onChange={(event) => setFirst(event.target.value)}
-                label="First Name"
-                placeholder="First Name"
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                required
-                value={last}
-                onChange={(event) => setLast(event.target.value)}
-                label="Last Name"
-                placeholder="Last Name"
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-          </Grid>
-          <TextField
-            required
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            label="Email"
-            placeholder="name@gmail.com"
-            variant="outlined"
-            fullWidth
-            mb={2}
-          />
-          <TextField
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            label="Password"
-            type="password" // Set type to "password" for password input
-            placeholder="123abc"
-            variant="outlined"
-            fullWidth
-            mb={2}
-          />
-          <TextField
-            required
-            value={vehicle}
-            onChange={(event) => setVehicle(event.target.value)}
-            label="Vehicle"
-            placeholder="Honda"
-            variant="outlined"
-            fullWidth
-            mb={2}
-          />
-          <Button variant="outlined" onClick={submitForm} fullWidth>
-            Submit
-          </Button>
+        <Grid container direction="column" alignItems="center">
+          <Typography variant="h2" gutterBottom color={"white"} fontSize={54}>
+            Register Profile
+          </Typography>
+          <Box className="login-form" sx={{ backgroundColor: "white", width: '500px'}}>
 
-          {/* <Button variant="outlined" onClick={goBack} fullWidth>
-            Back to Login
-          </Button> */}
-        </Box>
-      </Grid>
+          <Box sx={{ width: "100%" }}>
+            <Grid container spacing={0}>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  value={first}
+                  onChange={(event) => setFirst(event.target.value)}
+                  label="First Name"
+                  placeholder="First Name"
+                  variant="outlined"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  value={last}
+                  onChange={(event) => setLast(event.target.value)}
+                  label="Last Name"
+                  placeholder="Last Name"
+                  variant="outlined"
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
+            <TextField
+              required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              label="Email"
+              placeholder="name@gmail.com"
+              variant="outlined"
+              fullWidth
+              mb={2}
+            />
+            <TextField
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              label="Password"
+              type="password" // Set type to "password" for password input
+              placeholder="123abc"
+              variant="outlined"
+              fullWidth
+              mb={2}
+            />
+            <TextField
+              required
+              value={vehicle}
+              onChange={(event) => setVehicle(event.target.value)}
+              label="Vehicle"
+              placeholder="Honda"
+              variant="outlined"
+              fullWidth
+              mb={2}
+            />
+            <Button variant="outlined" onClick={submitForm} fullWidth>
+              Submit
+            </Button>
+
+            {/* <Button variant="outlined" onClick={goBack} fullWidth>
+              Back to Login
+            </Button> */}
+            </Box>
+          </Box>
+        </Grid>
     </Box>
   );
 };

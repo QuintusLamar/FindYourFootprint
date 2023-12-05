@@ -22,6 +22,8 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
   const [traveledMiles, setTraveledMiles] = useState(0);
   const [favMode, setFavMode] = useState("Bike");
 
+  window.scrollTo(0, 0);
+
   console.log(ck);
   const format_twodec = (x) => {
     return Math.floor(x) + Math.floor(x * 100 - Math.floor(x) * 100) / 100;
@@ -60,7 +62,7 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
       <CssBaseline />
       <Sidebar />
       <Box sx={{ ml: '10px', flexGrow: 1, p: 3 }}>
-        <Typography variant="h3" gutterBottom>Welcome, {name}!</Typography>
+        <Typography variant="h3" gutterBottom color={'white'}>Welcome, {name}!</Typography>
 
         <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
           <Grid container spacing={3}>

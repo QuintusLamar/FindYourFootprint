@@ -16,6 +16,8 @@ function EditProfile() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  window.scrollTo(0, 0);
+
   const submitForm = async () => {
     try {
       const updateProfileFormData = {
@@ -53,7 +55,7 @@ function EditProfile() {
       <Sidebar />
 
       <Box sx={{ ml: "10px", flexGrow: 1, p: 3 }}>
-        <Typography variant="h3" gutterBottom>
+        <Typography variant="h3" gutterBottom color={'white'}>
           Edit Profile
         </Typography>
         <Paper elevation={3} sx={{ p: 3 }}>

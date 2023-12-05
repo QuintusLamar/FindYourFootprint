@@ -104,6 +104,8 @@ const NavPage = (ck) => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    
     if (selectedMode) {
       const event = { preventDefault: () => {} };
       submitRoute(event);

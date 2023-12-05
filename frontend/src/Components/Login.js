@@ -46,14 +46,11 @@ const Login = ({ setAuthenticated, setCookie }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box className="login-container" sx={{ textAlign: "center" }}>
-        <Typography variant="h2" sx={{ mb: 5 }}>
+      <Box className="login-container" sx={{ textAlign: "center"}}>
+        <Typography variant="h2" sx={{ mb: 5 }} color={"white"} bottom={400} fontSize={72}>
           Find Your Footprint
         </Typography>
-        <Box className="login-form">
-          <Typography variant="h4" sx={{ mb: 3 }}>
-            {/* Login */}
-          </Typography>
+        <Box className="login-form" sx={{ backgroundColor: "white", width: '290px'}}>
           <TextField
             label="Email"
             type="text"
@@ -70,12 +67,20 @@ const Login = ({ setAuthenticated, setCookie }) => {
             sx={{ mb: 0, width: "100%" }}
           />
           <br />
-          <Button variant="contained" onClick={handleLogin} sx={{ mb: 4 }}>
+          <Button 
+            variant="contained" 
+            onClick={handleLogin} 
+            sx={{ 
+              mb: 2, 
+              color: 'white',
+              backgroundColor: "#349dd0",
+              "&:hover": { backgroundColor: "#2fc484" }
+            }}
+          >
             Login
           </Button>
-          {/* Link to the register page */}
-          <Typography variant="body1">
-            Don't have an account? <Link to="/register">Register here</Link>
+          <Typography variant="body1" mt={2}>
+            Don't have an account?  <Link to="/register">Register here</Link>
           </Typography>
         </Box>
       </Box>
