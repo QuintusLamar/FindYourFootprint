@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 
-function EditProfile() {
+function EditProfile({removeCookie, setAuthenticated}) {
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [vehicle, setVehicle] = useState("");
@@ -49,7 +49,7 @@ function EditProfile() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Sidebar />
+      <Sidebar setAuthenticated={setAuthenticated} removeCookie={removeCookie}/>
 
       <Box sx={{ ml: "10px", flexGrow: 1, p: 3 }}>
         <Typography variant="h3" gutterBottom>

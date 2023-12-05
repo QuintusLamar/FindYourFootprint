@@ -56,3 +56,7 @@ def calculate_carbon_cost(distance):
         "Bus": estimate_co2(mode="transit", distance_in_km=distance * 1.609),
         "Train": estimate_co2(mode="LIGHT_RAIL", distance_in_km=distance * 1.609),
     }
+
+
+def get_vehicle_from_id(name):
+    return Vehicle.query.where(Vehicle.vehicleID == name).first()

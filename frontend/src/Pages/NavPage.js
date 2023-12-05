@@ -91,10 +91,12 @@ const NavPage = (ck) => {
   const [driveDistance, setdriveDistance] = useState("");
   const [driveTime, setDriveTime] = useState("");
   const [driveCO2, setDriveCO2] = useState("");
+  const [driveCO2Ratio, setDriveCO2Ratio] = useState(0);
 
   const [transitDistance, setTransitDistance] = useState("");
   const [transitTime, setTransitTime] = useState("");
   const [transitCO2, setTransitCO2] = useState("");
+  const [transitCO2Ratio, setTransitCO2Ratio] = useState(0);
 
   const [bikeDistance, setBikeDistance] = useState("");
   const [bikeTime, setBikeTime] = useState("");
@@ -210,13 +212,15 @@ const NavPage = (ck) => {
       switch (selectedMode) {
         case "drive":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
-            const tokenDrive = ck["ck"]["token"];
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
             const currentOptionDistance = driveDistance;
             const currentOptionTime = driveTime;
             const currentOptionCO2 = driveCO2;
+            const mode = "drive";
             const response = await axios.post(apiUrl, {
-              tokenDrive,
+              token,
+              mode,
               currentOptionDistance,
               currentOptionTime,
               currentOptionCO2,
@@ -234,13 +238,15 @@ const NavPage = (ck) => {
           break;
         case "bus":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
-            const tokenDrive = ck["ck"]["token"];
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
             const currentOptionDistance = transitDistance;
             const currentOptionTime = transitTime;
             const currentOptionCO2 = transitCO2;
+            const mode = "bus";
             const response = await axios.post(apiUrl, {
-              tokenDrive,
+              token,
+              mode,
               currentOptionDistance,
               currentOptionTime,
               currentOptionCO2,
@@ -258,13 +264,15 @@ const NavPage = (ck) => {
           break;
         case "bicycle":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
-            const tokenDrive = ck["ck"]["token"];
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
             const currentOptionDistance = bikeDistance;
             const currentOptionTime = bikeTime;
             const currentOptionCO2 = 0.0;
+            const mode = "bicycle";
             const response = await axios.post(apiUrl, {
-              tokenDrive,
+              token,
+              mode,
               currentOptionDistance,
               currentOptionTime,
               currentOptionCO2,
@@ -283,13 +291,15 @@ const NavPage = (ck) => {
 
         case "walk":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
-            const tokenDrive = ck["ck"]["token"];
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
             const currentOptionDistance = walkDistance;
             const currentOptionTime = walkTime;
             const currentOptionCO2 = 0.0;
+            const mode = "walk";
             const response = await axios.post(apiUrl, {
-              tokenDrive,
+              token,
+              mode,
               currentOptionDistance,
               currentOptionTime,
               currentOptionCO2,
@@ -385,11 +395,6 @@ const NavPage = (ck) => {
       let bikeRoute = await getRoute(startCoord, endCoord, "bicycle");
       let walkRoute = await getRoute(startCoord, endCoord, "walk");
 
-      // console.log("INITIAL DRIVE ROUTE TIME (IN SECONDS):", driveRoute.features[0].properties.time)
-      // console.log("INITIAL TRANSIT ROUTE TIME (IN SECONDS):", transitRoute.features[0].properties.time)
-      // console.log("INITIAL BICYCLE ROUTE TIME (IN SECONDS):", bicycleRoute.features[0].properties.time)
-      // console.log("INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):", walkRoute.features[0].properties.time)
-
       try {
         let drivePoints = driveRoute.features[0].geometry.coordinates[0];
         setRoutePoints(drivePoints);
@@ -449,33 +454,6 @@ const NavPage = (ck) => {
       let walkDistance =
         walkRoute.features[0].properties.distance / 1000 / 1.609;
 
-      // console.log(
-      //   "INITIAL DRIVE ROUTE TIME (IN SECONDS):",
-      //   driveRoute.features[0].properties.time
-      // );
-      // console.log(
-      //   "INITIAL TRANSIT ROUTE TIME (IN SECONDS):",
-      //   transitRoute.features[0].properties.time
-      // );
-      // console.log(
-      //   "INITIAL BICYCLE ROUTE TIME (IN SECONDS):",
-      //   bicycleRoute.features[0].properties.time
-      // );
-      // console.log(
-      //   "INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):",
-      //   walkRoute.features[0].properties.time
-      // );
-
-      // console.log("Drive route: ", drivePoints);
-      // console.log("Transit route: ", transitPoints);
-      // console.log("Bicycle route: ", bicyclePoints);
-      // console.log("Walk route: ", walkPoints);
-
-      // console.log("Drive Distance in miles: ", driveDistance);
-      // console.log("Transit Distance in miles: ", transitDistance);
-      // console.log("Bicycle Distance in miles: ", bicycleDistance);
-      // console.log("Walk Distance in miles: ", walkDistance);
-
       if (transitRoute.features == null) {
         transitDistance = 0;
       }
@@ -487,11 +465,8 @@ const NavPage = (ck) => {
         }&driveDistance=${driveDistance.toString()}&transitDistance=${transitDistance.toString()}`;
         const response = await axios.get(urlWithParameters);
         const result = await response.data;
-        // console.log("RESPONSE:", response.data);
 
         if (response.status === 200) {
-          // console.log("Calculated carbon cost successfully");
-          // console.log(result);
           setDriveCO2((result["Sedan"] + result["SUV"]) / 2);
           setTransitCO2(result["Bus"] + result["Train"] / 2);
           setdriveDistance(driveDistance);
@@ -500,6 +475,9 @@ const NavPage = (ck) => {
           setWalkDistance(walkDistance);
           setDriveTime(driveRoute.features[0].properties.time);
           setWalkTime(walkRoute.features[0].properties.time);
+          setTransitCO2Ratio(((result["Bus"] + result["Train"]) / 2) / (transitDistance * 1.609));
+          setDriveCO2Ratio(((result["Sedan"] + result["SUV"]) / 2) / (driveDistance * 1.609));
+
           if (transitRoute.features == null) {
             setTransitTime(0);
           } else {
@@ -598,7 +576,23 @@ const NavPage = (ck) => {
                 handleModeSelect("drive");
               }}
             >
-              <DirectionsCarIcon />
+              <Box
+                sx={{
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <DirectionsCarIcon sx={{ml: "45%"}}/>
+                <EnergySavingsLeafOutlinedIcon 
+                  sx={{
+                    ml: "20%",
+                    color: driveCO2Ratio < 100 ? 'lightgreen' : (driveCO2Ratio >= 100 && driveCO2Ratio <= 125) ? 'green' : 'brown'
+
+                  }}
+                />
+              </Box>
 
               <Typography textAlign={"center"}>
                 {format_twodec(driveCO2)} grams of CO2
@@ -631,7 +625,24 @@ const NavPage = (ck) => {
                 handleModeSelect("bus");
               }}
             >
-              <DirectionsBusFilledIcon />
+              
+              <Box
+                sx={{
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <DirectionsBusFilledIcon sx={{ml: "45%"}}/>
+                <EnergySavingsLeafOutlinedIcon 
+                  sx={{
+                    ml: "20%",
+                    color: transitCO2Ratio < 63 ? 'lightgreen' : (transitCO2Ratio >= 63 && transitCO2Ratio <= 160) ? 'green' : 'brown'
+
+                  }}
+                />
+              </Box>
 
               <Typography textAlign={"center"}>
                 {format_twodec(transitCO2)} grams of CO2
@@ -664,7 +675,24 @@ const NavPage = (ck) => {
                 handleModeSelect("bicycle");
               }}
             >
-              <DirectionsBikeIcon />
+              
+              <Box
+                sx={{
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <DirectionsBikeIcon sx={{ml: "45%"}}/>
+                <EnergySavingsLeafOutlinedIcon 
+                  sx={{
+                    ml: "12%",
+                    color: "lightgreen"
+                  }}
+                />
+              </Box>
+              
 
               <Typography textAlign={"center"}>0 grams of CO2</Typography>
               <Typography textAlign={"center"}>
@@ -695,7 +723,17 @@ const NavPage = (ck) => {
                 handleModeSelect("walk");
               }}
             >
-              <DirectionsWalkIcon />
+              <Box
+                sx={{
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <DirectionsWalkIcon sx={{ml: "45%"}}/>
+                <EnergySavingsLeafOutlinedIcon sx={{ml: "12%", color: "lightgreen"}}/>
+              </Box>
 
               <Typography textAlign={"center"}>0 grams of CO2</Typography>
               <Typography textAlign={"center"}>

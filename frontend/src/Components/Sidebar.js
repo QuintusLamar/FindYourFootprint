@@ -28,10 +28,8 @@ function Sidebar({setAuthenticated, removeCookie}) {
   };
 
   const sideBarItems = [
-    { "text": "View Profile", "navigation": "ViewProfile", "element": <AccountBoxOutlinedIcon ></AccountBoxOutlinedIcon> },
     { "text": "Edit Profile", "navigation": "EditProfile", "element": <EditOutlinedIcon></EditOutlinedIcon> },
     { "text": "Friends", "navigation": "Friends", "element": <PersonAddOutlinedIcon></PersonAddOutlinedIcon> },
-    // { "text": "Add Friend", "navigation": "AddFriend", "element": <PersonAddOutlinedIcon></PersonAddOutlinedIcon> },
   ]
 
   const selectedStyle = {

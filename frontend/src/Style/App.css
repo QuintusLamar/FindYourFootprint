@@ -40,3 +40,22 @@
 .Rand {
   display: flex;
 }
+
+.progressBar {
+  appearance: none;
+  height: 36px;
+  width: 100%;
+  border-radius: 100px;
+    
+  /* Chrome and Safari */
+  &::-webkit-progress-bar {
+    background-color: #2fc484;
+    border-radius: 100px;
+  }
+
+  &::-webkit-progress-value {
+    background-color: #349dd0 ;
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+  }
+}

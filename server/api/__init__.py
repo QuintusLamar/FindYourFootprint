@@ -19,20 +19,17 @@ from api.models import User, Vehicle, Friends, Records
 
 
 def seed_database():
-    for id in range(10):
-        vehicle_type = random.choice(["Sedan", "SUV", "Truck"])
-        city_mpg = random.uniform(15.0, 30.0)
-        highway_mpg = random.uniform(20.0, 40.0)
-        vehicle = Vehicle(
-            vehicleType=vehicle_type,
-            cityMPG=city_mpg,
-            highwayMPG=highway_mpg,
-            vehicleID=id,
-        )
-        db.session.add(vehicle)
     db.session.add(
         Vehicle(
-            vehicleType="Marta",
+            vehicleType="truck",
+            cityMPG=5,
+            highwayMPG=15,
+            vehicleID=9,
+        )
+    )
+    db.session.add(
+        Vehicle(
+            vehicleType="train",
             cityMPG=100,
             highwayMPG=200,
             vehicleID=10,
@@ -40,7 +37,7 @@ def seed_database():
     )
     db.session.add(
         Vehicle(
-            vehicleType="Bike",
+            vehicleType="bicycle",
             cityMPG=-1,
             highwayMPG=-1,
             vehicleID=11,
@@ -48,18 +45,34 @@ def seed_database():
     )
     db.session.add(
         Vehicle(
-            vehicleType="Bus",
-            cityMPG=30,
-            highwayMPG=40,
+            vehicleType="walk",
+            cityMPG=-1,
+            highwayMPG=-1,
             vehicleID=12,
         )
     )
     db.session.add(
         Vehicle(
+            vehicleType="bus",
+            cityMPG=50,
+            highwayMPG=60,
+            vehicleID=13,
+        )
+    )
+    db.session.add(
+        Vehicle(
             vehicleType="SUV",
+            cityMPG=10,
+            highwayMPG=20,
+            vehicleID=14,
+        )
+    )
+    db.session.add(
+        Vehicle(
+            vehicleType="Sedan",
             cityMPG=30,
             highwayMPG=40,
-            vehicleID=13,
+            vehicleID=15,
         )
     )
     names = [
@@ -84,7 +97,7 @@ def seed_database():
             id=idx,
             email=email,
             name=name,
-            vehicleID=random.randint(0, 9),
+            vehicleID=random.randint(14, 15),
             password=bcrypt.generate_password_hash(password),
         )
         db.session.add(user)
@@ -137,6 +150,7 @@ def create_app(config_class=Config):
         CORS(
             app,
             origins=[
+                "http://localhost:3000",
                 "http://localhost:3000",
             ],
         )
