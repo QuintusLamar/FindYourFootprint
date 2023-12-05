@@ -1,7 +1,19 @@
 import { useState } from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
+
+const outerTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#2fc484",
+    },
+    secondary: {
+      main: "#FFFFFFF",
+    },
+  },
+});
 
 function TimeRangeSelector({ changeTime }) {
   const [title, setTitle] = useState("Leaders in Carbon Output All Time");
@@ -13,11 +25,12 @@ function TimeRangeSelector({ changeTime }) {
   }
 
   return (
-    <Box sx={{width: "70%", justifyContent: "right", display: "flex"}}>
+    <ThemeProvider theme={outerTheme}>
+    <Box sx={{width: "800px", justifyContent: "right", display: "flex"}}>
       <ButtonGroup sx={{ width: "100%" }}>
         <Button
           sx={{
-            backgroundColor: title === "Leaders in Carbon Output All Time" ? 'grey' : 'transparent',
+            backgroundColor: title === "Leaders in Carbon Output All Time" ? 'primary' : 'transparent',
             color: title === "Leaders in Carbon Output All Time" ? 'white' : 'black' ,
             '&:hover': {
               backgroundColor: 'lightgrey',
@@ -34,7 +47,7 @@ function TimeRangeSelector({ changeTime }) {
         </Button>
         <Button
           sx={{
-            backgroundColor: title === "Leaders in Carbon Output This Year" ? 'grey' : 'transparent',
+            backgroundColor: title === "Leaders in Carbon Output This Year" ? 'primary' : 'transparent',
             color: title === "Leaders in Carbon Output This Year" ? 'white' : 'black' ,
             '&:hover': {
               backgroundColor: 'lightgrey',
@@ -51,7 +64,7 @@ function TimeRangeSelector({ changeTime }) {
         </Button>
         <Button
           sx={{
-            backgroundColor: title === "Leaders in Carbon Output This Month" ? 'grey' : 'transparent',
+            backgroundColor: title === "Leaders in Carbon Output This Month" ? 'primary' : 'transparent',
             color: title === "Leaders in Carbon Output This Month" ? 'white' : 'black' ,
             '&:hover': {
               backgroundColor: 'lightgrey',
@@ -68,7 +81,7 @@ function TimeRangeSelector({ changeTime }) {
         </Button>
         <Button
           sx={{
-            backgroundColor: title === "Leaders in Carbon Output This Week" ? 'grey' : 'transparent',
+            backgroundColor: title === "Leaders in Carbon Output This Week" ? 'primary' : 'transparent',
             color: title === "Leaders in Carbon Output This Week" ? 'white' : 'black' ,
             '&:hover': {
               backgroundColor: 'lightgrey',
@@ -85,6 +98,7 @@ function TimeRangeSelector({ changeTime }) {
         </Button>
       </ButtonGroup>
     </Box>
+    </ThemeProvider>
   );
 }
 
