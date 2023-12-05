@@ -8,7 +8,7 @@ import Leaderboard from "./Pages/Leaderboard";
 import BottomNav from "./Components/BottomNav";
 import Login from "./Components/Login";
 import Register from "./Components/Register"; // Import your Register component
-
+import Stats from "./Pages/Stats"
 import { CookiesProvider } from "react-cookie";
 import { useCookies } from "react-cookie";
 import ViewFriends from './Components/ViewFriends';
@@ -70,7 +70,7 @@ function App() {
               />
             }
           />
-          <Route
+          {/* <Route
             path="/Profile/"
             element={
               authenticated ? (
@@ -86,7 +86,7 @@ function App() {
                 />
               )
             }
-          />
+          /> */}
           <Route
             path="/Profile/EditProfile"
             element={
@@ -104,7 +104,24 @@ function App() {
             path="/Profile/Friends"
             element={
               authenticated ? (
-                <ViewFriends ck={cookies} />
+                <ViewFriends 
+                  ck={cookies}
+                  setAuthenticated={setAuthenticated}
+                  removeCookie={removeCookie}
+                />
+              ) : (
+                <Login
+                  setAuthenticated={setAuthenticated}
+                  setCookie={setCookie}
+                />
+              )
+            }
+          />
+          <Route
+            path="/Stats"
+            element={
+              authenticated ? (
+                <Stats ck={cookies} />
               ) : (
                 <Login
                   setAuthenticated={setAuthenticated}

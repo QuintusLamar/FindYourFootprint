@@ -4,6 +4,7 @@ import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HomeIcon from "@mui/icons-material/Home";
+import LeaderboardOutlinedIcon from '@mui/icons-material/LeaderboardOutlined';
 import GroupsIcon from "@mui/icons-material/Groups";
 import { useNavigate } from "react-router-dom";
 function BottomNav() {
@@ -23,7 +24,7 @@ function BottomNav() {
       sx={{ position: "absolute", bottom: 0, width: "100%" }}
     >
       <BottomNavigationAction
-        onClick={() => navigate("/Profile")}
+        onClick={() => navigate("/Profile/EditProfile")}
         value="Profile"
         label="Profile"
         icon={<AccountCircleIcon />}
@@ -33,6 +34,12 @@ function BottomNav() {
         value="Home"
         label="Home"
         icon={<HomeIcon />}
+      />
+      <BottomNavigationAction
+        onClick={() => navigate("/Stats")}
+        value="Stats"
+        label="Stats"
+        icon={<LeaderboardOutlinedIcon />}
       />
       <BottomNavigationAction
         onClick={() => navigate("/Leaderboard")}

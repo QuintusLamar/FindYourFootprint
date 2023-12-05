@@ -37,7 +37,7 @@ const btnBarStyle = {
   mt: '2',
 }
 
-function ViewFriends() {
+function ViewFriends({removeCookie, setAuthenticated}) {
   const [friends, setFriends] = useState([
     { "name": "Sharan Sathish", "email": "ss@gmail.com" },
     { "name": "Utkarsh NSR", "email": "un@gmail.com" },
@@ -99,38 +99,43 @@ function ViewFriends() {
     // API call to update profile here
   };
 
-  console.log(friends)
-
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom sx={{alignItems: "center", display: "flex", justifyContent: "center"}}>
-        Friends
-      </Typography>
-      <Box elevation={3} sx={{ margin: '16px', padding: '16px', width: '400px' }}>
-        <List dense>
-          {friends.map((value) => (
-            <ListItem key={value.name} disablePadding>
-              <PersonOutlineOutlinedIcon sx={{mr: '10px'}}/>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <Typography variant="body1">{value.name}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="body1">{value.email}</Typography>
-                </Grid>
-              </Grid>
-              <Button onClick={() => removeFriend(value)}>
-                <PersonRemoveOutlinedIcon />
-              </Button>
-            </ListItem>
-          ))}
-        </List>
+    <Box sx={{display: "flex" }}>
+      <CssBaseline />
+      <Sidebar setAuthenticated={setAuthenticated} removeCookie={removeCookie}/>
+
+      <Box sx={{ ml: "10px", flexGrow: 1, p: 3 }}>
+        <Typography variant="h3" gutterBottom>
+          Friends
+        </Typography>
+        <Paper elevation={3} sx={{ p: 3}}>
         
-      </Box>
-      <Box sx={{display: "flex", justifyContent: "right"}}>
-        <Button variant="contained" onClick={addFriend} sx={{mr:"55px"}}>
-          Add friend
-        </Button>
+          <List dense>
+            {friends.map((value) => (
+              <ListItem key={value.name} disablePadding>
+                <PersonOutlineOutlinedIcon sx={{mr: '10px'}}/>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <Typography variant="body1">{value.name}</Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography variant="body1">{value.email}</Typography>
+                  </Grid>
+                </Grid>
+                <Button onClick={() => removeFriend(value)}>
+                  <PersonRemoveOutlinedIcon />
+                </Button>
+              </ListItem>
+            ))}
+          </List>
+          
+          <Box sx={{display: "flex", justifyContent: "right"}}>
+            <Button variant="contained" onClick={addFriend} sx={{mr:"20px"}}>
+              Add friend
+            </Button>
+          </Box>
+
+        </Paper>
       </Box>
 
       <Modal
