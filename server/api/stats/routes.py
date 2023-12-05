@@ -107,15 +107,32 @@ def user_stats():
                 "total_distance": 0,
                 "saved_carbon": 0,
                 "favorite_mode": "SUV",
+                "saved_carbon_this_month": 0,
+                "num_transit_this_month": 0,
+                "num_bike_this_month": 0,
+                "num_walk_this_month": 0,
             }
         )
     total_carbon_output = result.carbon_output
-    vehicle_name = (
-        Vehicle.query.filter_by(Vehicle.vehicleID == result.most_frequent_transport)
-        .first()
-        .vehicleType
-    )
+    vehicle_name = get_vehicle_from_id(result.most_frequent_transport).vehicleType
     max_carbon_output = calculate_carbon_cost(result.total_distance)["SUV"]
+    time_bound = datetime.datetime.now() - datetime.timedelta(days=30)
+    query = (
+        select(
+            User.name,
+            Records.vehicleID,
+            func.sum(Records.routeDistance).label("total_distance_this_month"),
+            func.sum(Records.carbonOutput).label("carbon_output_this_month"),
+            func.count(Records.vehicleID).label("vehicle_freqs_this_month"),
+        )
+        .select_from(Records)
+        .join(User, User.id == Records.userID)
+        .group_by(Records.vehicleID)
+        .filter(User.id == userId)
+        .filter(Records.timestamp >= time_bound)
+    )
+    # result = db.session.execute(query).first()
+    print(result)
     return jsonify(
         {
             "email": result.email,
@@ -123,5 +140,9 @@ def user_stats():
             "total_distance": result.total_distance,
             "saved_carbon": max_carbon_output - total_carbon_output,
             "favorite_mode": vehicle_name,
+            "saved_carbon_this_month": 0,
+            "num_transit_this_month": 0,
+            "num_bike_this_month": 0,
+            "num_walk_this_month": 0,
         }
     )

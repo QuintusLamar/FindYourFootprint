@@ -97,7 +97,7 @@ def seed_database():
             id=idx,
             email=email,
             name=name,
-            vehicleID=random.randint(0, 9),
+            vehicleID=random.randint(14, 15),
             password=bcrypt.generate_password_hash(password),
         )
         db.session.add(user)
@@ -151,6 +151,7 @@ def create_app(config_class=Config):
             app,
             origins=[
                 "http://localhost:3000",
+                "http://127.0.0.1:3000",
             ],
         )
         db.drop_all()

@@ -210,7 +210,7 @@ const NavPage = (ck) => {
       switch (selectedMode) {
         case "drive":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
+            const apiUrl = "http://127.0.0.1:5000/route_record";
             const token = ck["ck"]["token"];
             const currentOptionDistance = driveDistance;
             const currentOptionTime = driveTime;
@@ -236,7 +236,7 @@ const NavPage = (ck) => {
           break;
         case "bus":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
+            const apiUrl = "http://127.0.0.1:5000/route_record";
             const token = ck["ck"]["token"];
             const currentOptionDistance = transitDistance;
             const currentOptionTime = transitTime;
@@ -262,7 +262,7 @@ const NavPage = (ck) => {
           break;
         case "bicycle":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
+            const apiUrl = "http://127.0.0.1:5000/route_record";
             const token = ck["ck"]["token"];
             const currentOptionDistance = bikeDistance;
             const currentOptionTime = bikeTime;
@@ -289,7 +289,7 @@ const NavPage = (ck) => {
 
         case "walk":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
+            const apiUrl = "http://127.0.0.1:5000/route_record";
             const token = ck["ck"]["token"];
             const currentOptionDistance = walkDistance;
             const currentOptionTime = walkTime;
