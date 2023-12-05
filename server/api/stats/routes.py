@@ -91,6 +91,7 @@ def user_stats():
             User.name,
             func.sum(Records.carbonOutput).label("carbon_output"),
             func.sum(Records.routeDistance).label("total_distance"),
+            func.max(Records.vehicleID).label("most_frequent_transport"),
         )
         .select_from(Records)
         .where(Records.userID == userId)
@@ -105,9 +106,15 @@ def user_stats():
                 "name": user.name,
                 "total_distance": 0,
                 "saved_carbon": 0,
+                "favorite_mode": "SUV",
             }
         )
     total_carbon_output = result.carbon_output
+    vehicle_name = (
+        Vehicle.query.filter_by(Vehicle.vehicleID == result.most_frequent_transport)
+        .first()
+        .vehicleType
+    )
     max_carbon_output = calculate_carbon_cost(result.total_distance)["SUV"]
     return jsonify(
         {
@@ -115,5 +122,6 @@ def user_stats():
             "name": result.name,
             "total_distance": result.total_distance,
             "saved_carbon": max_carbon_output - total_carbon_output,
+            "favorite_mode": vehicle_name,
         }
     )
