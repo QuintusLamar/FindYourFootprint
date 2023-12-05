@@ -7,7 +7,7 @@ from api.models import Records
 import jwt
 import datetime
 
-from sqlalchemy import select, func, asc, and_, or_, in_
+from sqlalchemy import select, func, asc, and_, or_
 
 users = Blueprint("users", __name__)
 
@@ -79,20 +79,23 @@ def login():
 
 @users.route("/friends", methods=["GET"])
 def friends():
-    token = request.json.get("token")
+    print("Got here!")
+    token = str(request.args.get("token"))
+
     if not token:
         return jsonify(error="Missing token")
     user = auth_user(token)
     if not user:
         return jsonify(error="Invalid token")
-
+    
     userID = user.id
     all_friends = Friends.query.filter(Friends.userOneID == userID).all()
     all_friends = set([a.userTwoID for a in all_friends])
     query = (
         select(
             User.name,
-            User.email
+            User.email,
+            Records.carbonOutput
         )
         .select_from(Records)
         .join(User, User.id == Records.userID)
@@ -101,10 +104,11 @@ def friends():
         .order_by(asc(User.name))
     )
     result = db.session.execute(query).fetchall()
+    print(result)
     return jsonify(
         [
-            (i + 1, row.name, row.carbon_output, row.vehicle_type)
-            for i, row in enumerate(result)
+            (row.name, row.email, row.carbonOutput)
+            for row in result
         ]
     )
 

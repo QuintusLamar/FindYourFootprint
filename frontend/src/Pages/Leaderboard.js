@@ -9,7 +9,9 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
 function createData(rank, name, output) {
-  return { rank, name, output };
+  // If output is a floating point, limit it to 7 decimal places
+  const formattedOutput = typeof output === 'number' ? output.toFixed(7) : output;
+  return { rank, name, output: formattedOutput };
 }
 
 const Leaderboard = (ck) => {

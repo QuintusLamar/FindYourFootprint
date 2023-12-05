@@ -39,6 +39,12 @@ function Map({ routePoints }) {
         tileSize={512}
         zoomOffset={-1}
       />
+      {/* <TileLayer
+        url="https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicXVpbnR1cy1sYW1hciIsImEiOiJjbG91ZDJwYzMwaHc5MmtvOW82cm9uZGhnIn0.VL3TfnwBOoiek2f8bxw4RQ"
+        attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
+        tileSize={512}
+        zoomOffset={-1}
+      /> */}
       {testRoute && testRoute}
     </MapContainer>
   );

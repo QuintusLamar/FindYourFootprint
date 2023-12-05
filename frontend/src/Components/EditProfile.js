@@ -120,7 +120,16 @@ function EditProfile({removeCookie, setAuthenticated}) {
               />
             </Grid>
           </Grid>
-          <Button variant="contained" onClick={submitForm} sx={{ mt: "2%" }}>
+          <Button 
+            variant="contained" 
+            onClick={submitForm} 
+            sx={{ 
+              mt: '2%', 
+              color: 'white',
+              backgroundColor: "#349dd0",
+              "&:hover": { backgroundColor: "#2fc484" }
+            }}
+          >
             Submit
           </Button>
         </Paper>

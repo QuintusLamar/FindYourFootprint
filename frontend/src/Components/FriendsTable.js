@@ -9,7 +9,11 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 import "../Style/App.css";
+import { Grid } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 
 // Defines the style for changing color of every other row in table
 const StyledTableRow = styled(TableRow)(({}) => ({
@@ -21,7 +25,7 @@ const StyledTableRow = styled(TableRow)(({}) => ({
   },
 }));
 
-function FriendsTable({ rows }) {
+function FriendsTable({ rows, onRemoveFriend }) {
   return (
     <div className="Friends">
       <TableContainer component={Paper}>
@@ -30,15 +34,21 @@ function FriendsTable({ rows }) {
             <TableRow>
               <TableCell align="center">Name</TableCell>
               <TableCell align="center">Email</TableCell>
+              <TableCell align="center">Carbon Output</TableCell>
+              <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <StyledTableRow>
-                <TableCell>{row.rank}</TableCell>
+              <StyledTableRow key={row.email}>
                 <TableCell align="center">{row.name}</TableCell>
+                <TableCell align="center">{row.email}</TableCell>
                 <TableCell align="center">{row.output}</TableCell>
-                {/* <TableCell align="center">{row.prev_rank}</TableCell> */}
+                <TableCell align="center">
+                  <IconButton onClick={() => onRemoveFriend(row)}>
+                    <PersonRemoveOutlinedIcon />
+                  </IconButton>
+                </TableCell>
               </StyledTableRow>
             ))}
           </TableBody>

@@ -28,24 +28,38 @@ function BottomNav() {
         value="Profile"
         label="Profile"
         icon={<AccountCircleIcon />}
+        style={{
+          color: (value == "Profile")  
+          ? "#2fc484" : "darkgrey",
+        }}
       />
       <BottomNavigationAction
         onClick={() => navigate("/")}
         value="Home"
         label="Home"
         icon={<HomeIcon />}
+        style={{
+          color: (value == "Home") 
+          ? "#2fc484" : "darkgrey",
+        }}
       />
       <BottomNavigationAction
         onClick={() => navigate("/Stats")}
         value="Stats"
         label="Stats"
         icon={<LeaderboardOutlinedIcon />}
+        style={{
+          color: value === "Stats" ? "#2fc484" : "darkgrey",
+        }}
       />
       <BottomNavigationAction
         onClick={() => navigate("/Leaderboard")}
         value="Leaderboard"
         label="Leaderboard"
         icon={<GroupsIcon />}
+        style={{
+          color: value === "Leaderboard" ? "#2fc484" : "darkgrey",
+        }}
       />
     </BottomNavigation>
   );

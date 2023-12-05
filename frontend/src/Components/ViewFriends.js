@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -12,6 +12,8 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Modal from '@mui/material/Modal';
 import Sidebar from '../Components/Sidebar';
+import axios from 'axios';
+import FriendsTable from './FriendsTable';
 
 const modalStyle = {
   position: 'absolute',
@@ -37,10 +39,10 @@ const btnBarStyle = {
 
 function ViewFriends({ck, removeCookie, setAuthenticated}) {
   const [friends, setFriends] = useState([
-    { "name": "Sharan Sathish", "email": "ss@gmail.com" },
-    { "name": "Utkarsh NSR", "email": "un@gmail.com" },
-    { "name": "Sarang Pujari", "email": "sp@gmail.com" },
-    { "name": "Manoj Niverthi", "email": "mn@gmail.com" },
+    // { "name": "Sharan Sathish", "email": "ss@gmail.com" },
+    // { "name": "Utkarsh NSR", "email": "un@gmail.com" },
+    // { "name": "Sarang Pujari", "email": "sp@gmail.com" },
+    // { "name": "Manoj Niverthi", "email": "mn@gmail.com" },
   ]);
 
   const [selected, setSelected] = useState("");
@@ -49,6 +51,38 @@ function ViewFriends({ck, removeCookie, setAuthenticated}) {
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [email, setEmail] = useState("");
+
+  function createData(name, email, output) {
+    // If output is a floating point, limit it to 3 decimal places
+    const formattedOutput = typeof output === 'number' ? output.toFixed(3) : output;
+    return { name, email, output: formattedOutput };
+  }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    
+    const updateData = async () => {
+      try {
+        const apiUrl = "http://127.0.0.1:5000/friends";
+        const urlWithParameters = `${apiUrl}?token=${ck["token"]}`;
+        const response = await axios.get(urlWithParameters);
+
+        if (response.status === 200) {
+          const data = await response.data;
+          const newfriends = data.map((item) => createData(item[0], item[1], item[2]));
+          setFriends(newfriends);
+        } else {
+          console.error("Error:", response);
+          // Handle error cases
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        // Handle network errors or other exceptions
+      }
+    };
+
+    updateData();
+  }, [ck]);
 
   const removeFriend = (value) => {
     setSelected(value);
@@ -68,12 +102,12 @@ function ViewFriends({ck, removeCookie, setAuthenticated}) {
     try {
       // Prepare the data for the POST request
       const data = {
-        token: ck['ck']['token'],
+        token: ck['token'],
         email: selected.email
       };
   
       // Make the POST request to the remove_friend endpoint
-      const response = await fetch('http://127.0.0.1:5000/remove_friend', {
+      const response = await fetch("http://127.0.0.1:5000/remove_friend", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -110,8 +144,9 @@ function ViewFriends({ck, removeCookie, setAuthenticated}) {
       setFriends([...friends, newFriend]);
   
       // Prepare the data for the POST request
+      console.log(ck)
       const data = {
-        token: ck['ck']['token'],  
+        token: ck['token'],  
         email: email
       };
 
@@ -144,85 +179,53 @@ function ViewFriends({ck, removeCookie, setAuthenticated}) {
     
   return (
     <Box sx={{ display: 'flex' }}>
-      <Sidebar setAuthenticated={setAuthenticated} removeCookie={removeCookie}/>
+      <Sidebar setAuthenticated={setAuthenticated} removeCookie={removeCookie} />
       <Box sx={{ margin: 'auto', textAlign: 'center' }}>
-        <Typography variant="h4" gutterBottom sx={{ alignItems: "center", display: "flex", justifyContent: "center" }} color={'white'} fontSize={48}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            ml: 2
+          }}
+          color={'white'}
+          fontSize={48}
+        >
           Friends
         </Typography>
-        <Paper elevation={3} sx={{ margin: '16px', padding: '16px', width: '400px' }}>
-          <List dense>
-            {friends.map((value) => (
-              <ListItem key={value.name} disablePadding>
-                <PersonOutlineOutlinedIcon sx={{ mr: '10px' }} />
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <Typography variant="body1">{value.name}</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="body1">{value.email}</Typography>
-                  </Grid>
-                </Grid>
-                <Button onClick={() => removeFriend(value)}>
-                  <PersonRemoveOutlinedIcon />
-                </Button>
-              </ListItem>
-            ))}
-          </List>
-          
-          <Box sx={{display: "flex", justifyContent: "right"}}>
-            <Button variant="contained" onClick={addFriend} sx={{mr:"20px"}}>
+        <Paper
+          elevation={3}
+          sx={{
+            margin: '16px',
+            padding: '16px',
+            width: '700px',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
+          }}
+        >
+          <FriendsTable rows={friends} onRemoveFriend={removeFriend} />
+  
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, ml: 2}}>
+            <Button
+              variant="contained"
+              onClick={addFriend}
+              sx={{ 
+                mr: '20px',
+                color: 'white',
+                backgroundColor: "#349dd0",
+                "&:hover": { backgroundColor: "#2fc484" }
+              }}
+            >
               Add friend
             </Button>
           </Box>
-
         </Paper>
-      </Box>
-
-      <Modal
-        open={removeOpen}
-        onClose={() => closeModal("remove")}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <Typography variant="h5" mb={2}>
-            Remove friend
-          </Typography>
-
-          <Typography sx={{ mb: '10px' }}>
-            Are you sure you want to remove {selected.name} as a friend?
-          </Typography>
-
-          <Stack direction="row" spacing={2} sx={btnBarStyle}>
-            <Button onClick={() => closeModal("remove")} variant="contained" color="error">
-              Do not remove
-            </Button>
-            <Button onClick={submitRemoval} variant="contained" color="success">
-              Remove
-            </Button>
-          </Stack>
-        </Box>
-      </Modal>
-
-      <Modal
-        open={addOpen}
-        onClose={() => closeModal("add")}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <Typography variant="h5" mb={2}>
-//         </Paper>
-//         <Box sx={{ display: "flex", justifyContent: "right", mt: 2 }}>
-//           <Button variant="contained" onClick={addFriend} sx={{ mr: "55px" }}>
-            Add friend
-          </Button>
-        </Box>
-
+  
         {/* Remove friend modal */}
         <Modal
           open={removeOpen}
-          onClose={() => closeModal("remove")}
+          onClose={() => closeModal('remove')}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -230,26 +233,34 @@ function ViewFriends({ck, removeCookie, setAuthenticated}) {
             <Typography variant="h5" mb={2}>
               Remove friend
             </Typography>
-
+  
             <Typography sx={{ mb: '10px' }}>
               Are you sure you want to remove {selected.name} as a friend?
             </Typography>
-
-            <Stack direction="row" spacing={2} sx={btnBarStyle}>
-              <Button onClick={() => closeModal("remove")} variant="contained" color="error">
+  
+            <Stack direction="row" spacing={2} sx={{ justifyContent: 'right', mt: 2 }}>
+              <Button
+                onClick={() => closeModal('remove')}
+                variant="contained"
+                sx={{ backgroundColor: '#FF4D4D', color: '#FFFFFF', "&:hover": { backgroundColor: "#FF0000" } }} 
+              >
                 Do not remove
               </Button>
-              <Button onClick={submitRemoval} variant="contained" color="success">
+              <Button
+                onClick={submitRemoval}
+                variant="contained"
+                sx={{ backgroundColor: '#2fc484', color: '#ffffff', "&:hover": { backgroundColor: "#33cc33" } }} 
+              >
                 Remove
               </Button>
             </Stack>
           </Box>
         </Modal>
-
+  
         {/* Add friend modal */}
         <Modal
           open={addOpen}
-          onClose={() => closeModal("add")}
+          onClose={() => closeModal('add')}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -257,7 +268,7 @@ function ViewFriends({ck, removeCookie, setAuthenticated}) {
             <Typography variant="h5" mb={2}>
               Add friend
             </Typography>
-
+  
             <TextField
               value={fname}
               onChange={(event) => setFname(event.target.value)}
@@ -268,7 +279,7 @@ function ViewFriends({ck, removeCookie, setAuthenticated}) {
               mb={2}
               sx={textStyle}
             />
-
+  
             <TextField
               value={lname}
               onChange={(event) => setLname(event.target.value)}
@@ -279,7 +290,7 @@ function ViewFriends({ck, removeCookie, setAuthenticated}) {
               mb={2}
               sx={textStyle}
             />
-
+  
             <TextField
               required
               value={email}
@@ -291,12 +302,20 @@ function ViewFriends({ck, removeCookie, setAuthenticated}) {
               mb={2}
               sx={textStyle}
             />
-
-            <Stack direction="row" spacing={2} sx={btnBarStyle}>
-              <Button onClick={() => closeModal("add")} variant="contained" color="error">
+  
+            <Stack direction="row" spacing={2} sx={{justifyContent: 'right', mt: 2}}>
+              <Button
+                onClick={() => closeModal('add')}
+                variant="contained"
+                sx={{ backgroundColor: '#FF4D4D', color: '#FFFFFF', "&:hover": { backgroundColor: "#FF0000" } }} 
+              >
                 Cancel
               </Button>
-              <Button onClick={submitAddition} variant="contained" color="success">
+              <Button
+                onClick={submitAddition}
+                variant="contained"
+                sx={{ backgroundColor: '#2fc484', color: '#ffffff', "&:hover": { backgroundColor: "#33cc33" } }} 
+              >
                 Add
               </Button>
             </Stack>
@@ -305,6 +324,7 @@ function ViewFriends({ck, removeCookie, setAuthenticated}) {
       </Box>
     </Box>
   );
+  
 }
 
 export default ViewFriends;
