@@ -107,15 +107,61 @@ def user_stats():
                 "total_distance": 0,
                 "saved_carbon": 0,
                 "favorite_mode": "SUV",
+                "saved_carbon_this_month": 0,
+                "num_transit_this_month": 0,
+                "num_bike_this_month": 0,
+                "num_walk_this_month": 0,
             }
         )
     total_carbon_output = result.carbon_output
-    vehicle_name = (
-        Vehicle.query.filter_by(Vehicle.vehicleID == result.most_frequent_transport)
-        .first()
-        .vehicleType
-    )
+    if result.most_frequent_transport:
+        vehicle_name = get_vehicle_from_id(result.most_frequent_transport).vehicleType
+    else:
+        vehicle_name = get_vehicle_from_id(user.vehicleID).vehicleType
     max_carbon_output = calculate_carbon_cost(result.total_distance)["SUV"]
+    time_bound = datetime.datetime.now() - datetime.timedelta(days=30)
+    query = (
+        select(
+            User.name,
+            Records.vehicleID,
+            func.sum(Records.routeDistance).label("total_distance_this_month"),
+            func.sum(Records.carbonOutput).label("carbon_output_this_month"),
+            func.count(Records.vehicleID).label("vehicle_freqs_this_month"),
+        )
+        .select_from(Records)
+        .join(User, User.id == Records.userID)
+        .group_by(Records.vehicleID)
+        .filter(User.id == userId)
+        .filter(Records.timestamp >= time_bound)
+    )
+    newresult = db.session.execute(query).all()
+    total_distance_this_month = 0
+    num_transit_this_month = 0
+    carbon_output_this_month = 0
+    num_bike_this_month = 0
+    num_walk_this_month = 0
+    for nr in newresult:
+        if nr.vehicleID == 9:
+            continue
+        elif nr.vehicleID == 10:
+            num_transit_this_month += nr.vehicle_freqs_this_month
+        elif nr.vehicleID == 11:
+            num_bike_this_month += nr.vehicle_freqs_this_month
+        elif nr.vehicleID == 12:
+            num_walk_this_month += nr.vehicle_freqs_this_month
+        elif nr.vehicleID == 13:
+            num_transit_this_month += nr.vehicle_freqs_this_month
+        elif nr.vehicleID == 14:
+            pass
+        elif nr.vehicleID == 15:
+            pass
+        total_distance_this_month += nr.total_distance_this_month
+        carbon_output_this_month += nr.carbon_output_this_month
+
+    max_carbon_output_this_month = calculate_carbon_cost(total_distance_this_month)[
+        "SUV"
+    ]
+
     return jsonify(
         {
             "email": result.email,
@@ -123,5 +169,10 @@ def user_stats():
             "total_distance": result.total_distance,
             "saved_carbon": max_carbon_output - total_carbon_output,
             "favorite_mode": vehicle_name,
+            "saved_carbon_this_month": max_carbon_output_this_month
+            - total_distance_this_month,
+            "num_transit_this_month": num_transit_this_month,
+            "num_bike_this_month": num_bike_this_month,
+            "num_walk_this_month": num_walk_this_month,
         }
     )

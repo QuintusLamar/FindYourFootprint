@@ -212,13 +212,15 @@ const NavPage = (ck) => {
       switch (selectedMode) {
         case "drive":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
-            const tokenDrive = ck["ck"]["token"];
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
             const currentOptionDistance = driveDistance;
             const currentOptionTime = driveTime;
             const currentOptionCO2 = driveCO2;
+            const mode = "drive";
             const response = await axios.post(apiUrl, {
-              tokenDrive,
+              token,
+              mode,
               currentOptionDistance,
               currentOptionTime,
               currentOptionCO2,
@@ -236,13 +238,15 @@ const NavPage = (ck) => {
           break;
         case "bus":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
-            const tokenDrive = ck["ck"]["token"];
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
             const currentOptionDistance = transitDistance;
             const currentOptionTime = transitTime;
             const currentOptionCO2 = transitCO2;
+            const mode = "bus";
             const response = await axios.post(apiUrl, {
-              tokenDrive,
+              token,
+              mode,
               currentOptionDistance,
               currentOptionTime,
               currentOptionCO2,
@@ -260,13 +264,15 @@ const NavPage = (ck) => {
           break;
         case "bicycle":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
-            const tokenDrive = ck["ck"]["token"];
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
             const currentOptionDistance = bikeDistance;
             const currentOptionTime = bikeTime;
             const currentOptionCO2 = 0.0;
+            const mode = "bicycle";
             const response = await axios.post(apiUrl, {
-              tokenDrive,
+              token,
+              mode,
               currentOptionDistance,
               currentOptionTime,
               currentOptionCO2,
@@ -285,13 +291,15 @@ const NavPage = (ck) => {
 
         case "walk":
           try {
-            const apiUrl = "http://127.0.0.1:5000/add_routeRecord";
-            const tokenDrive = ck["ck"]["token"];
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
             const currentOptionDistance = walkDistance;
             const currentOptionTime = walkTime;
             const currentOptionCO2 = 0.0;
+            const mode = "walk";
             const response = await axios.post(apiUrl, {
-              tokenDrive,
+              token,
+              mode,
               currentOptionDistance,
               currentOptionTime,
               currentOptionCO2,
