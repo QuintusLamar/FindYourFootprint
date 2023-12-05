@@ -21,7 +21,7 @@ from api.models import User, Vehicle, Friends, Records
 def seed_database():
     db.session.add(
         Vehicle(
-            vehicleType="Truck",
+            vehicleType="truck",
             cityMPG=5,
             highwayMPG=15,
             vehicleID=9,
@@ -151,7 +151,7 @@ def create_app(config_class=Config):
             app,
             origins=[
                 "http://localhost:3000",
-                "http://127.0.0.1:3000",
+                "http://localhost:3000",
             ],
         )
         db.drop_all()

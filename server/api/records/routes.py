@@ -38,7 +38,7 @@ def add_routeRecord():
     print("\n \n \n \n")
     currenttimestamp = datetime.datetime.now()
     currentvehicleID = mode
-    currentDistance = data.get("currentOptionDistance")
+    currentDistance = float(data.get("currentOptionDistance"))
     print("\n \n \n \n")
     print(f"CURRENT CARBON OUTPUT: {currentDistance}")
     print("\n \n \n \n")
