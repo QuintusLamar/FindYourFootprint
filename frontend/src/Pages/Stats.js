@@ -25,13 +25,18 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
   const [savedCO2, setSavedCO2] = useState(0);
   const [traveledMiles, setTraveledMiles] = useState(0);
   const [favMode, setFavMode] = useState("Bike");
+  const [numWalk, setNumWalk] = useState(0);
+  const [numBike, setNumBike] = useState(0);
+  const [numTransit, setNumTransit] = useState(0);
+  const [monthSavedCO2, setMonthSavedCO2] = useState(0)
+  const [icon, setIcon] = useState(<></>);
 
-  const modeIcons = [
-    {"drive": <DirectionsCarIcon></DirectionsCarIcon>},
-    {"transit": <DirectionsBusFilledIcon></DirectionsBusFilledIcon>},
-    {"bike": <DirectionsBusFilledIcon></DirectionsBusFilledIcon>},
-    {"walk": <DirectionsWalkIcon></DirectionsWalkIcon>}
-  ]
+  const modeIcons = {
+    "sedan": <DirectionsCarIcon fontSize="large" />,
+    "transit": <DirectionsBusFilledIcon fontSize="large"/>,
+    "bike": <DirectionsBikeIcon fontSize="large"/>,
+    "walk": <DirectionsWalkIcon fontSize="large"/>
+  }
 
   console.log(ck);
   const format_twodec = (x) => {
@@ -54,7 +59,12 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
         setName(result["name"]);
         setTraveledMiles(format_twodec(result["total_distance"]));
         setSavedCO2(format_twodec(result["saved_carbon"]));
-        setFavMode(result["favorite_mode"])
+        setFavMode(result["favorite_mode"]);
+        setNumWalk(result["num_walk_this_month"]);
+        setNumBike(result["num_bike_this_month"]);
+        setNumTransit(result["num_transit_this_month"]);
+        setMonthSavedCO2(result["saved_carbon_this_month"]);
+        setIcon(modeIcons[result["favorite_mode"]])
         // Add any further actions after a successful update
       } else {
         console.error("Failed to calculate user stats successfully");
@@ -103,7 +113,9 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
             Your favorite mode of sustainable transportation is: {favMode}
           </Typography>
           <Avatar sx={{ width: 150, height: 150, bgcolor: 'info.main', mx: 'auto', mt: 2 }}>
-            <DirectionsBikeIcon fontSize="large" />
+            {
+              favMode=="walk"? <DirectionsWalkIcon fontSize="large"/> : favMode=="bike"? <DirectionsBikeIcon fontSize="large"/> : favMode=="transit"? <DirectionsBusFilledIcon fontSize="large"/> : <DirectionsCarIcon fontSize="large"/>
+            }
           </Avatar>
           <Typography variant="h5" align="center" gutterBottom sx={{ mt: 2 }}>
             {favMode}
@@ -113,10 +125,10 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
         <Divider sx={{ my: 3 }} />
 
         <Paper elevation={3} sx={{ p: 3, display: "flex", justifyContent:'center', alignItems:'center', flexDirection:'column' }}>
-          <ProgressBar width={"80%"} label={"Number of walk routes this month"} currAmount={12} maxAmount={12}/>
-          <ProgressBar width={"80%"} label={"Number of bike routes this month"} currAmount={12} maxAmount={20}/>
-          <ProgressBar width={"80%"} label={"Number of public transport routes this month"} currAmount={3} maxAmount={10}/>
-          <ProgressBar width={"80%"} label={"Saved CO2"} currAmount={savedCO2} maxAmount={1000}/>
+          <ProgressBar width={"80%"} label={"Number of walk routes this month"} currAmount={numWalk} maxAmount={12}/>
+          <ProgressBar width={"80%"} label={"Number of bike routes this month"} currAmount={numBike} maxAmount={20}/>
+          <ProgressBar width={"80%"} label={"Number of public transport routes this month"} currAmount={numTransit} maxAmount={10}/>
+          <ProgressBar width={"80%"} label={"Saved CO2"} currAmount={monthSavedCO2} maxAmount={1000}/>
         </Paper>
         
       </Box>
