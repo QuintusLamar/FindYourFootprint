@@ -712,7 +712,7 @@ const NavPage = (ck) => {
           <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
           <DialogContent>
             <Typography variant="h6" gutterBottom>
-              Instructions:
+              Route Instructions:
             </Typography>
             {instructionArray.map((instruction, index) => (
               <Typography key={index} paragraph>
