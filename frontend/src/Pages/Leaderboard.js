@@ -4,10 +4,9 @@ import UserTable from "../Components/UserTable";
 import UserTypeSelector from "../Components/UserTypeSelector";
 import TimeRangeSelector from "../Components/TimeRangeSelector";
 import axios from "axios";
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 
 function createData(rank, name, output) {
   return { rank, name, output };
@@ -64,31 +63,44 @@ const Leaderboard = (ck) => {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', overflow: 'auto' }}>
-      <Paper elevation={3} sx={{ p: 3, mb: 3, width: '80%', maxWidth: '800px', textAlign: 'center' }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        height: "100vh",
+        overflow: "auto",
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          p: 3,
+          mb: 3,
+          width: "80%",
+          maxWidth: "800px",
+          textAlign: "center",
+        }}
+      >
         <Typography variant="h4" gutterBottom>
           Leaderboard
         </Typography>
         <Typography variant="body1" color="textSecondary" gutterBottom>
           See who's making a positive impact on the environment!
         </Typography>
-        <Box sx={{display: "flex"}}>
-          <UserTypeSelector
-            changeUsers={changeUsers}
-          />
-          <TimeRangeSelector
-            changeTime={changeTime}
-          />
-          
+        <Box sx={{ display: "flex" }}>
+          <UserTypeSelector changeUsers={changeUsers} />
+          <TimeRangeSelector changeTime={changeTime} />
         </Box>
       </Paper>
-      <Paper elevation={3} sx={{ p: 3, width: '80%', maxWidth: '800px', textAlign: 'center' }}>
+      <Paper
+        elevation={3}
+        sx={{ p: 3, width: "80%", maxWidth: "800px", textAlign: "center" }}
+      >
         <Typography variant="h5" gutterBottom>
           {title}
         </Typography>
-        <UserTable
-          rows={rows}
-        />
+        <UserTable rows={rows} />
       </Paper>
     </Box>
   );

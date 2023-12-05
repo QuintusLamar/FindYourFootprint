@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import Sidebar from '../Components/Sidebar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Divider from '@mui/material/Divider';
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
-import NaturePeopleIcon from '@mui/icons-material/NaturePeople';
-import Co2Icon from '@mui/icons-material/Co2';
-import MovingIcon from '@mui/icons-material/Moving';
+import React, { useState } from "react";
+import Sidebar from "../Components/Sidebar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Divider from "@mui/material/Divider";
+import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
+import NaturePeopleIcon from "@mui/icons-material/NaturePeople";
+import Co2Icon from "@mui/icons-material/Co2";
+import MovingIcon from "@mui/icons-material/Moving";
 import axios from "axios";
 import ViewFriends from '../Components/ViewFriends';
 import ProgressBar from '../Components/ProgressBar';
@@ -65,6 +65,6 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
       </Box>
     </Box>
   );
-}
+};
 
 export default Profile;
