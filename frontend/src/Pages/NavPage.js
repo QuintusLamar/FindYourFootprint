@@ -459,8 +459,6 @@ const NavPage = (ck) => {
         const result = await response.data;
 
         if (response.status === 200) {
-          console.log("Test: ", (result["Sedan"] + result["SUV"]) / 2)
-          console.log("Test again: ", driveDistance)
           setDriveCO2((result["Sedan"] + result["SUV"]) / 2);
           setTransitCO2(result["Bus"] + result["Train"] / 2);
           setdriveDistance(driveDistance);
@@ -471,7 +469,6 @@ const NavPage = (ck) => {
           setWalkTime(walkRoute.features[0].properties.time);
           setTransitCO2Ratio(((result["Bus"] + result["Train"]) / 2) / (transitDistance * 1.609));
           setDriveCO2Ratio(((result["Sedan"] + result["SUV"]) / 2) / (driveDistance * 1.609));
-          console.log(driveCO2Ratio)
 
           if (transitRoute.features == null) {
             setTransitTime(0);

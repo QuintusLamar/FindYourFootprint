@@ -94,8 +94,9 @@ function App() {
                 <EditProfile ck={cookies} />
               ) : (
                 <Login
+                  ck={cookies}
                   setAuthenticated={setAuthenticated}
-                  setCookie={setCookie}
+                  removeCookie={removeCookie}
                 />
               )
             }

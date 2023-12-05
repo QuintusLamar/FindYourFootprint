@@ -14,6 +14,9 @@ import MovingIcon from '@mui/icons-material/Moving';
 import axios from "axios";
 import ViewFriends from '../Components/ViewFriends';
 import ProgressBar from '../Components/ProgressBar';
+import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
+import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 
 // This should be nicer, idk what the plan is for the design though
 
@@ -22,6 +25,13 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
   const [savedCO2, setSavedCO2] = useState(0);
   const [traveledMiles, setTraveledMiles] = useState(0);
   const [favMode, setFavMode] = useState("Bike");
+
+  const modeIcons = [
+    {"drive": <DirectionsCarIcon></DirectionsCarIcon>},
+    {"transit": <DirectionsBusFilledIcon></DirectionsBusFilledIcon>},
+    {"bike": <DirectionsBusFilledIcon></DirectionsBusFilledIcon>},
+    {"walk": <DirectionsWalkIcon></DirectionsWalkIcon>}
+  ]
 
   console.log(ck);
   const format_twodec = (x) => {
@@ -36,7 +46,7 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
       )}`;
       const response = await axios.get(urlWithParameters);
       const result = await response.data;
-      // console.log("RESPONSE:", response.data);
+      console.log("RESPONSE:", response.data);
 
       if (response.status === 200) {
         console.log("Calculated user stats successfully");
@@ -44,6 +54,7 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
         setName(result["name"]);
         setTraveledMiles(format_twodec(result["total_distance"]));
         setSavedCO2(format_twodec(result["saved_carbon"]));
+        setFavMode(result["favorite_mode"])
         // Add any further actions after a successful update
       } else {
         console.error("Failed to calculate user stats successfully");
@@ -89,7 +100,7 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
 
         <Paper elevation={3} sx={{ p: 3, justifyContent:'center', alignItems:'center' }}>
           <Typography variant="h4" gutterBottom sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-            Your favorite mode of sustainable transportation is:
+            Your favorite mode of sustainable transportation is: {favMode}
           </Typography>
           <Avatar sx={{ width: 150, height: 150, bgcolor: 'info.main', mx: 'auto', mt: 2 }}>
             <DirectionsBikeIcon fontSize="large" />
