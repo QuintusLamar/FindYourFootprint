@@ -5,36 +5,65 @@ from api.utils import *
 
 import jwt
 import datetime
+from sqlalchemy import select, func, asc, and_
 
 records = Blueprint("records", __name__)
 
 
-@records.route("/add_routerecord", methods=["POST"])
-def add_routerecord():
-    email = str(request.json.get("addRouteRecordFormData").get("email"))
-    routeId = int(request.json.get("addrouteRecordFormData").get("routeId"))
-    routeDistance = float(
-        request.json.get("addrouteRecordFormData").get("routeDistance")
-    )
-    vehicleId = int(request.json.get("addrouteRecordFormData").get("vehicleId"))
-    timestamp = datetime.datetime.now()
-    carbonOutput = calculate_carbon_cost(routeDistance, vehicleId)
+@records.route("/route_record", methods=["POST"])
+def add_routeRecord():
+    print("\n \n INSIDE ADD ROUTE RECORD \n \n")
 
-    userId = get_user_id(email)
+    token = request.json.get("token")
+    if not token:
+        return jsonify(error="Missing token")
+    user = auth_user(token)
+    if not user:
+        return jsonify(error="Invalid token")
 
-    Records.insert().values(
-        [
-            {
-                "userID": userId,
-                "routeID": routeId,
-                "carbonOutput": carbonOutput,
-                "timestamp": timestamp,
-                "vehicleID": vehicleId,
-                "routeDistance": routeDistance,
-            }
-        ]
+    data = request.get_json()
+    currentuserID = user.id
+    rId_query = select(func.max(Records.routeID)).select_from(Records)
+    max_rId = int(db.session.execute(rId_query).scalar())
+    currentRouteId = max_rId + 1
+    mode = data["mode"]
+    if mode == "drive":
+        mode = get_user_vehicle(currentuserID).vehicleID
+    else:
+        mode = get_vehicle_id(mode)
+
+    currentcarbonOutput = data.get("currentOptionCO2")
+    print("\n \n \n \n")
+    print(f"CURRENT CARBON OUTPUT: {currentcarbonOutput}")
+    print("\n \n \n \n")
+    currenttimestamp = datetime.datetime.now()
+    currentvehicleID = mode
+    currentDistance = float(data.get("currentOptionDistance"))
+    print("\n \n \n \n")
+    print(f"CURRENT CARBON OUTPUT: {currentDistance}")
+    print("\n \n \n \n")
+
+    db.session.add(
+        Records(
+            userID=currentuserID,
+            carbonOutput=currentcarbonOutput,
+            timestamp=currenttimestamp,
+            vehicleID=currentvehicleID,
+            routeDistance=currentDistance,
+            routeID=currentRouteId,
+        )
     )
-    db.session().commit()
+    db.session.commit()
+
+    all_records = Records.query.all()
+
+    for record in all_records:
+        print("\n \n \n \n")
+        print(
+            f"UserID: {record.userID}, RouteID: {record.routeID}, Carbon Output: {record.carbonOutput}, Timestamp: {record.timestamp}, VehicleID: {record.vehicleID}, Route Distance: {record.routeDistance}"
+        )
+        print("\n \n \n \n")
+
     return jsonify({"status": "Success! Added route record"})
 
 
