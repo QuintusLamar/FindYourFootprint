@@ -2,6 +2,7 @@ from flask import Blueprint, current_app, jsonify, request
 from api import db, bcrypt
 from api.models import *
 from api.utils import *
+from api.models import Records
 
 import jwt
 import datetime
@@ -230,3 +231,4 @@ def account():
     if not user:
         return jsonify(error="Invalid token")
     return jsonify({"status": "success"})
+

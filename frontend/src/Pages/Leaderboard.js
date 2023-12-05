@@ -4,10 +4,9 @@ import UserTable from "../Components/UserTable";
 import UserTypeSelector from "../Components/UserTypeSelector";
 import TimeRangeSelector from "../Components/TimeRangeSelector";
 import axios from "axios";
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 
 function createData(rank, name, output) {
   return { rank, name, output };
@@ -83,13 +82,14 @@ const Leaderboard = (ck) => {
           </Box>
         </Box>
       </Paper>
-      <Paper elevation={3} sx={{ p: 3, width: '80%', maxWidth: '800px', textAlign: 'center' }}>
+      <Paper
+        elevation={3}
+        sx={{ p: 3, width: "80%", maxWidth: "800px", textAlign: "center" }}
+      >
         <Typography variant="h5" gutterBottom>
           {title}
         </Typography>
-        <UserTable
-          rows={rows}
-        />
+        <UserTable rows={rows} />
       </Paper>
     </Box>
   );

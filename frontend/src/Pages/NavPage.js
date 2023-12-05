@@ -21,6 +21,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import axios from "axios";
 import EnergySavingsLeafOutlinedIcon from "@mui/icons-material/EnergySavingsLeafOutlined";
+import { Dialog, DialogContent } from "@mui/material";
 
 const InputForm = styled("form")({
   display: "flex",
@@ -73,6 +74,9 @@ const FullHeightContainer = styled(Container)({
 // Lat/Lng: 33.7628 -84.3928
 
 const NavPage = (ck) => {
+  const [instructionArray, setInstructionArray] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+
   const theme = createTheme();
 
   const [startAddr, setStartAddr] = useState(
@@ -87,10 +91,12 @@ const NavPage = (ck) => {
   const [driveDistance, setdriveDistance] = useState("");
   const [driveTime, setDriveTime] = useState("");
   const [driveCO2, setDriveCO2] = useState("");
+  const [driveCO2Ratio, setDriveCO2Ratio] = useState(0);
 
   const [transitDistance, setTransitDistance] = useState("");
   const [transitTime, setTransitTime] = useState("");
   const [transitCO2, setTransitCO2] = useState("");
+  const [transitCO2Ratio, setTransitCO2Ratio] = useState(0);
 
   const [bikeDistance, setBikeDistance] = useState("");
   const [bikeTime, setBikeTime] = useState("");
@@ -115,8 +121,209 @@ const NavPage = (ck) => {
   const handleModeSelect = (mode) => {
     setSelectedMode(mode);
     const event = { preventDefault: () => {} };
-    submitRoute(event); //TODO TEST IF YOU CAN REMOVE THIS AND FUNCTIONALITY STILL WORKS
+    // submitRoute(event); //TODO TEST IF YOU CAN REMOVE THIS AND FUNCTIONALITY STILL WORKS
+    displayDirections();
   };
+
+  async function getDirections(startCoord, endCoord, mode) {
+    const apiUrl = `https://api.geoapify.com/v1/routing?waypoints=${encodeURIComponent(
+      `${startCoord[0]},${startCoord[1]}`
+    )}|${encodeURIComponent(
+      `${endCoord[0]},${endCoord[1]}`
+    )}&mode=${encodeURIComponent(mode)}&apiKey=${encodeURIComponent(api_key)}`;
+
+    try {
+      const response = await axios.get(apiUrl);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching directions from Geoapify:", error.message);
+      throw error;
+    }
+  }
+
+  async function displayDirections() {
+    console.log("INSIDE DISPLAY DIRECTIONS");
+    if (startAddr !== "" && endAddr !== "") {
+      console.log("INSIDE IF");
+      let startAddrStr = addressToString(startAddr);
+      let startUrl =
+        "https://api.geoapify.com/v1/geocode/search?text=" +
+        startAddrStr +
+        "&apiKey=" +
+        api_key;
+      let endAddrStr = addressToString(endAddr);
+      let endUrl =
+        "https://api.geoapify.com/v1/geocode/search?text=" +
+        endAddrStr +
+        "&apiKey=" +
+        api_key;
+
+      let startResult = await getPoints(startUrl);
+      let endResult = await getPoints(endUrl);
+
+      let startCoord = getAve(startResult.features);
+      let endCoord = getAve(endResult.features);
+
+      const routeDirections = await getDirections(
+        startCoord,
+        endCoord,
+        selectedMode
+      );
+      const directionSteps =
+        routeDirections.features[0].properties.legs[0].steps;
+      const instructionArray = [];
+
+      console.log(directionSteps);
+      for (let i = 0; i < directionSteps.length; i++) {
+        instructionArray.push(directionSteps[i].instruction.text);
+      }
+
+      setInstructionArray(instructionArray);
+      setOpenDialog(true);
+    }
+  }
+
+  async function recordingRoute(e) {
+    e.preventDefault();
+    console.log("INSIDE RECORDING ROUTE:", selectedMode);
+
+    if (startAddr !== "" && endAddr !== "") {
+      let startAddrStr = addressToString(startAddr);
+      let startUrl =
+        "https://api.geoapify.com/v1/geocode/search?text=" +
+        startAddrStr +
+        "&apiKey=" +
+        api_key;
+      let endAddrStr = addressToString(endAddr);
+      let endUrl =
+        "https://api.geoapify.com/v1/geocode/search?text=" +
+        endAddrStr +
+        "&apiKey=" +
+        api_key;
+
+      let startResult = await getPoints(startUrl);
+      let endResult = await getPoints(endUrl);
+
+      let startCoord = getAve(startResult.features);
+      let endCoord = getAve(endResult.features);
+
+      // let driveRoute = await getRoute(startCoord, endCoord, "drive");
+      // let drivePoints = driveRoute.features[0].geometry.coordinates[0];
+      // console.log("DRIVE Route: ", driveRoute)
+      // things we need for recording route: userId, routeId, carbonOutput, timeStamp, vehicleId, routeDistance
+      switch (selectedMode) {
+        case "drive":
+          try {
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
+            const currentOptionDistance = driveDistance;
+            const currentOptionTime = driveTime;
+            const currentOptionCO2 = driveCO2;
+            const mode = "drive";
+            const response = await axios.post(apiUrl, {
+              token,
+              mode,
+              currentOptionDistance,
+              currentOptionTime,
+              currentOptionCO2,
+              "Access-Control-Allow-Origin": "*",
+            });
+
+            if (response.status === 200) {
+              console.log(
+                "GREAT! SUCCESSFULLY ADDED DRIVE RECORD TO RECORDS TABLE"
+              );
+            }
+          } catch (error) {
+            console.log(error);
+          }
+          break;
+        case "bus":
+          try {
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
+            const currentOptionDistance = transitDistance;
+            const currentOptionTime = transitTime;
+            const currentOptionCO2 = transitCO2;
+            const mode = "bus";
+            const response = await axios.post(apiUrl, {
+              token,
+              mode,
+              currentOptionDistance,
+              currentOptionTime,
+              currentOptionCO2,
+              "Access-Control-Allow-Origin": "*",
+            });
+
+            if (response.status === 200) {
+              console.log(
+                "GREAT! SUCCESSFULLY ADDED TRANSIT RECORD TO RECORDS TABLE"
+              );
+            }
+          } catch (error) {
+            console.log(error);
+          }
+          break;
+        case "bicycle":
+          try {
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
+            const currentOptionDistance = bikeDistance;
+            const currentOptionTime = bikeTime;
+            const currentOptionCO2 = 0.0;
+            const mode = "bicycle";
+            const response = await axios.post(apiUrl, {
+              token,
+              mode,
+              currentOptionDistance,
+              currentOptionTime,
+              currentOptionCO2,
+              "Access-Control-Allow-Origin": "*",
+            });
+
+            if (response.status === 200) {
+              console.log(
+                "GREAT! SUCCESSFULLY ADDED BIKE RECORD TO RECORDS TABLE"
+              );
+            }
+          } catch (error) {
+            console.log(error);
+          }
+          break;
+
+        case "walk":
+          try {
+            const apiUrl = "http://127.0.0.1:5000/route_record";
+            const token = ck["ck"]["token"];
+            const currentOptionDistance = walkDistance;
+            const currentOptionTime = walkTime;
+            const currentOptionCO2 = 0.0;
+            const mode = "walk";
+            const response = await axios.post(apiUrl, {
+              token,
+              mode,
+              currentOptionDistance,
+              currentOptionTime,
+              currentOptionCO2,
+              "Access-Control-Allow-Origin": "*",
+            });
+
+            if (response.status === 200) {
+              console.log(
+                "GREAT! SUCCESSFULLY ADDED WALK RECORD TO RECORDS TABLE"
+              );
+            }
+          } catch (error) {
+            console.log(error);
+          }
+          break;
+        default:
+          // setRoutePoints(drivePoints);
+          console.log("Walk route: ", routePoints);
+          break;
+      }
+    }
+  }
 
   const format_twodec = (x) => {
     return Math.floor(x) + Math.floor(x * 100 - Math.floor(x) * 100) / 100;
@@ -164,6 +371,7 @@ const NavPage = (ck) => {
 
   async function submitRoute(e) {
     e.preventDefault();
+    // console.log("INSIDE SUBMIT ROUTE:", selectedMode)
     if (startAddr !== "" && endAddr !== "") {
       let startAddrStr = addressToString(startAddr);
       let startUrl =
@@ -189,27 +397,6 @@ const NavPage = (ck) => {
       let bikeRoute = await getRoute(startCoord, endCoord, "bicycle");
       let walkRoute = await getRoute(startCoord, endCoord, "walk");
 
-
-      try {
-      console.log(
-        "INITIAL DRIVE ROUTE TIME (IN SECONDS):",
-        driveRoute.features[0].properties.time
-      );
-      console.log(
-        "INITIAL TRANSIT ROUTE TIME (IN SECONDS):",
-        transitRoute.features[0].properties.time
-      );
-      console.log(
-        "INITIAL BICYCLE ROUTE TIME (IN SECONDS):",
-        bikeRoute.features[0].properties.time
-      );
-      console.log(
-        "INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):",
-        walkRoute.features[0].properties.time
-      ); } catch(error) {
-        console.log(error)
-      }
-
       try {
         let drivePoints = driveRoute.features[0].geometry.coordinates[0];
         setRoutePoints(drivePoints);
@@ -220,15 +407,15 @@ const NavPage = (ck) => {
         switch (selectedMode) {
           case "drive":
             setRoutePoints(drivePoints);
-            console.log("Drive route: ", routePoints);
+            // console.log("Drive route: ", routePoints);
             break;
           case "bus":
             setRoutePoints(transitPoints);
-            console.log("Transit route: ", routePoints);
+            // console.log("Transit route: ", routePoints);
             break;
-          case "bike":
+          case "bicycle":
             setRoutePoints(bikePoints);
-            console.log("Bicycle route: ", routePoints);
+            // console.log("Bicycle route: ", routePoints);
             break;
           case "walk":
             setRoutePoints(walkPoints);
@@ -245,23 +432,23 @@ const NavPage = (ck) => {
 
       let drivePoints = driveRoute.features[0].geometry.coordinates[0];
       let transitPoints;
-      console.log("sarang")
-      console.log(driveRoute)
-      console.log(transitRoute)
+      console.log("sarang");
+      console.log(driveRoute);
+      console.log(transitRoute);
       if (transitRoute.features != null) {
-        transitPoints = transitRoute.features[0].geometry.coordinates[0]
-      } 
+        transitPoints = transitRoute.features[0].geometry.coordinates[0];
+      }
       let bikePoints = bikeRoute.features[0].geometry.coordinates[0];
       let walkPoints = walkRoute.features[0].geometry.coordinates[0];
 
       // all the distances are in meters
       let driveDistance =
         driveRoute.features[0].properties.distance / 1000 / 1.609;
-      
-      
+
       let transitDistance;
       if (transitPoints) {
-        transitDistance = transitRoute.features[0].properties.distance / 1000 / 1.609;
+        transitDistance =
+          transitRoute.features[0].properties.distance / 1000 / 1.609;
       }
 
       let bikeDistance =
@@ -269,40 +456,9 @@ const NavPage = (ck) => {
       let walkDistance =
         walkRoute.features[0].properties.distance / 1000 / 1.609;
 
-      console.log(
-        "INITIAL DRIVE ROUTE TIME (IN SECONDS):",
-        driveRoute.features[0].properties.time
-      );
-
-      if (transitPoints){
-      console.log(
-        "INITIAL TRANSIT ROUTE TIME (IN SECONDS):",
-        transitRoute.features[0].properties.time
-      );
-      } 
-
-      console.log(
-        "INITIAL BICYCLE ROUTE TIME (IN SECONDS):",
-        bikeRoute.features[0].properties.time
-      );
-      console.log(
-        "INITIAL WALK ROUTE ROUTE TIME (IN SECONDS):",
-        walkRoute.features[0].properties.time
-      );
-
-      console.log("Drive route: ", drivePoints);
-      console.log("Transit route: ", transitPoints);
-      console.log("Bicycle route: ", bikePoints);
-      console.log("Walk route: ", walkPoints);
-
-      console.log("Drive Distance in miles: ", driveDistance);
-      console.log("Transit Distance in miles: ", transitDistance);
-      console.log("Bicycle Distance in miles: ", bikeDistance);
-      console.log("Walk Distance in miles: ", walkDistance);
-
       if (transitRoute.features == null) {
         transitDistance = 0;
-      } 
+      }
 
       try {
         const apiUrl = "http://127.0.0.1:5000/carboncost";
@@ -311,11 +467,8 @@ const NavPage = (ck) => {
         }&driveDistance=${driveDistance.toString()}&transitDistance=${transitDistance.toString()}`;
         const response = await axios.get(urlWithParameters);
         const result = await response.data;
-        // console.log("RESPONSE:", response.data);
 
         if (response.status === 200) {
-          console.log("Calculated carbon cost successfully");
-          console.log(result);
           setDriveCO2((result["Sedan"] + result["SUV"]) / 2);
           setTransitCO2(result["Bus"] + result["Train"] / 2);
           setdriveDistance(driveDistance);
@@ -324,10 +477,13 @@ const NavPage = (ck) => {
           setWalkDistance(walkDistance);
           setDriveTime(driveRoute.features[0].properties.time);
           setWalkTime(walkRoute.features[0].properties.time);
+          setTransitCO2Ratio(((result["Bus"] + result["Train"]) / 2) / (transitDistance * 1.609));
+          setDriveCO2Ratio(((result["Sedan"] + result["SUV"]) / 2) / (driveDistance * 1.609));
+
           if (transitRoute.features == null) {
-            setTransitTime(0)
+            setTransitTime(0);
           } else {
-          setTransitTime(transitRoute.features[0].properties.time);
+            setTransitTime(transitRoute.features[0].properties.time);
           }
           setBikeTime(bikeRoute.features[0].properties.time);
           // Add any further actions after a successful update
@@ -383,13 +539,22 @@ const NavPage = (ck) => {
                 borderRadius: "4px",
               }}
             />
-            <SubmitButton
-              variant="contained"
-              onClick={submitRoute}
-              sx={{ width: "1%", mb: 2, p: 1 }}
-            >
-              <SearchIcon />
-            </SubmitButton>
+            <div style={{ display: "flex", flexDirection: "row", gap: "8px" }}>
+              <SubmitButton
+                variant="contained"
+                onClick={submitRoute}
+                sx={{ width: "1%", mb: 2, p: 1 }}
+              >
+                <SearchIcon />
+              </SubmitButton>
+              <SubmitButton
+                variant="contained"
+                onClick={recordingRoute}
+                sx={{ width: "100%", mb: 2, p: 1 }}
+              >
+                Submit Route
+              </SubmitButton>
+            </div>
           </InputForm>
 
           <CarbonInfo>
@@ -398,23 +563,40 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "drive" ? 'grey' : 'white',
-                color: selectedMode === "drive" ? 'white' : 'black',
-                '&:hover': {
-                  backgroundColor: 'lightgrey',
-                  color: 'black'
+                backgroundColor: selectedMode === "drive" ? "grey" : "white",
+                color: selectedMode === "drive" ? "white" : "black",
+                "&:hover": {
+                  backgroundColor: "lightgrey",
+                  color: "black",
                 },
                 padding: "10px",
-                borderRadius: '30px',
+                borderRadius: "30px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
-              onClick={() => {handleModeSelect("drive")}}
+              onClick={() => {
+                handleModeSelect("drive");
+              }}
             >
-              <DirectionsCarIcon />
-
-              <Typography textAlign={"center"}
+              <Box
+                sx={{
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
               >
+                <DirectionsCarIcon sx={{ml: "45%"}}/>
+                <EnergySavingsLeafOutlinedIcon 
+                  sx={{
+                    ml: "20%",
+                    color: driveCO2Ratio < 100 ? 'lightgreen' : (driveCO2Ratio >= 100 && driveCO2Ratio <= 125) ? 'green' : 'brown'
+
+                  }}
+                />
+              </Box>
+
+              <Typography textAlign={"center"}>
                 {format_twodec(driveCO2)} grams of CO2
               </Typography>
               <Typography textAlign={"center"}>
@@ -430,21 +612,39 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "bus" ? 'grey' : 'white',
-                color: selectedMode === "bus" ? 'white' : 'black',
-                '&:hover': {
-                  backgroundColor: 'lightgrey',
-                  color: 'black'
+                backgroundColor: selectedMode === "bus" ? "grey" : "white",
+                color: selectedMode === "bus" ? "white" : "black",
+                "&:hover": {
+                  backgroundColor: "lightgrey",
+                  color: "black",
                 },
                 padding: "10px",
-                borderRadius: '30px',
+                borderRadius: "30px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
-              onClick={() => {handleModeSelect("bus")}}
+              onClick={() => {
+                handleModeSelect("bus");
+              }}
             >
               
-              <DirectionsBusFilledIcon />
+              <Box
+                sx={{
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <DirectionsBusFilledIcon sx={{ml: "45%"}}/>
+                <EnergySavingsLeafOutlinedIcon 
+                  sx={{
+                    ml: "20%",
+                    color: transitCO2Ratio < 63 ? 'lightgreen' : (transitCO2Ratio >= 63 && transitCO2Ratio <= 160) ? 'green' : 'brown'
+
+                  }}
+                />
+              </Box>
 
               <Typography textAlign={"center"}>
                 {format_twodec(transitCO2)} grams of CO2
@@ -462,21 +662,39 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "bike" ? 'grey' : 'white',
-                color: selectedMode === "bike" ? 'white' : 'black',
-                '&:hover': {
-                  backgroundColor: 'lightgrey',
-                  color: 'black'
+                backgroundColor: selectedMode === "bicycle" ? "grey" : "white",
+                color: selectedMode === "bicycle" ? "white" : "black",
+                "&:hover": {
+                  backgroundColor: "lightgrey",
+                  color: "black",
                 },
                 padding: "10px",
-                borderRadius: '30px',
+                borderRadius: "30px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
-              onClick={() => {handleModeSelect("bike")}}
+              onClick={() => {
+                handleModeSelect("bicycle");
+              }}
             >
-
-              <DirectionsBikeIcon />
+              
+              <Box
+                sx={{
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <DirectionsBikeIcon sx={{ml: "45%"}}/>
+                <EnergySavingsLeafOutlinedIcon 
+                  sx={{
+                    ml: "12%",
+                    color: "lightgreen"
+                  }}
+                />
+              </Box>
+              
 
               <Typography textAlign={"center"}>0 grams of CO2</Typography>
               <Typography textAlign={"center"}>
@@ -492,20 +710,32 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "walk" ? 'grey' : 'white',
-                color: selectedMode === "walk" ? 'white' : 'black',
-                '&:hover': {
-                  backgroundColor: 'lightgrey',
-                  color: 'black'
+                backgroundColor: selectedMode === "walk" ? "grey" : "white",
+                color: selectedMode === "walk" ? "white" : "black",
+                "&:hover": {
+                  backgroundColor: "lightgrey",
+                  color: "black",
                 },
                 padding: "10px",
-                borderRadius: '30px',
+                borderRadius: "30px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
-              onClick={() => {handleModeSelect("walk")}}
+              onClick={() => {
+                handleModeSelect("walk");
+              }}
             >
-              <DirectionsWalkIcon />
+              <Box
+                sx={{
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <DirectionsWalkIcon sx={{ml: "45%"}}/>
+                <EnergySavingsLeafOutlinedIcon sx={{ml: "12%", color: "lightgreen"}}/>
+              </Box>
 
               <Typography textAlign={"center"}>0 grams of CO2</Typography>
               <Typography textAlign={"center"}>
@@ -529,6 +759,18 @@ const NavPage = (ck) => {
           >
             <Map routePoints={routePoints} />
           </Paper>
+          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+            <DialogContent>
+              <Typography variant="h6" gutterBottom>
+                Route Instructions:
+              </Typography>
+              {instructionArray.map((instruction, index) => (
+                <Typography key={index} paragraph>
+                  {instruction}
+                </Typography>
+              ))}
+            </DialogContent>
+          </Dialog>
         </Grid>
       </FullHeightContainer>
     </ThemeProvider>

@@ -35,7 +35,7 @@ const btnBarStyle = {
   mt: '2',
 };
 
-const ViewFriends = (ck) => {
+function ViewFriends({ck, removeCookie, setAuthenticated}) {
   const [friends, setFriends] = useState([
     { "name": "Sharan Sathish", "email": "ss@gmail.com" },
     { "name": "Utkarsh NSR", "email": "un@gmail.com" },
@@ -141,12 +141,10 @@ const ViewFriends = (ck) => {
       alert("Email required");
     }
   };
-  
-  
-
+    
   return (
     <Box sx={{ display: 'flex' }}>
-      <Sidebar />
+      <Sidebar setAuthenticated={setAuthenticated} removeCookie={removeCookie}/>
       <Box sx={{ margin: 'auto', textAlign: 'center' }}>
         <Typography variant="h4" gutterBottom sx={{ alignItems: "center", display: "flex", justifyContent: "center" }} color={'white'} fontSize={48}>
           Friends
@@ -170,9 +168,53 @@ const ViewFriends = (ck) => {
               </ListItem>
             ))}
           </List>
+          
+          <Box sx={{display: "flex", justifyContent: "right"}}>
+            <Button variant="contained" onClick={addFriend} sx={{mr:"20px"}}>
+              Add friend
+            </Button>
+          </Box>
+
         </Paper>
-        <Box sx={{ display: "flex", justifyContent: "right", mt: 2 }}>
-          <Button variant="contained" onClick={addFriend} sx={{ mr: "55px" }}>
+      </Box>
+
+      <Modal
+        open={removeOpen}
+        onClose={() => closeModal("remove")}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography variant="h5" mb={2}>
+            Remove friend
+          </Typography>
+
+          <Typography sx={{ mb: '10px' }}>
+            Are you sure you want to remove {selected.name} as a friend?
+          </Typography>
+
+          <Stack direction="row" spacing={2} sx={btnBarStyle}>
+            <Button onClick={() => closeModal("remove")} variant="contained" color="error">
+              Do not remove
+            </Button>
+            <Button onClick={submitRemoval} variant="contained" color="success">
+              Remove
+            </Button>
+          </Stack>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={addOpen}
+        onClose={() => closeModal("add")}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography variant="h5" mb={2}>
+//         </Paper>
+//         <Box sx={{ display: "flex", justifyContent: "right", mt: 2 }}>
+//           <Button variant="contained" onClick={addFriend} sx={{ mr: "55px" }}>
             Add friend
           </Button>
         </Box>

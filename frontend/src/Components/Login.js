@@ -27,7 +27,7 @@ const Login = ({ setAuthenticated, setCookie }) => {
         const data = response.data;
         if (data.success) {
           // Authentication successful
-          console.log("Authentication success")
+          console.log("Authentication success");
           const token = data.token;
           setCookie("token", token);
           console.log(token);
