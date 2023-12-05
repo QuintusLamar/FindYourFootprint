@@ -70,7 +70,7 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
                   <Co2Icon fontSize="large" />
                 </Avatar>
                 <Typography variant="h5" gutterBottom>
-                  Saved CO2: {savedCO2} pounds
+                  Saved CO2: {savedCO2} grams
                 </Typography>
               </Box>
             </Grid>
