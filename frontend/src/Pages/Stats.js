@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import Sidebar from '../Components/Sidebar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Divider from '@mui/material/Divider';
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
-import NaturePeopleIcon from '@mui/icons-material/NaturePeople';
-import Co2Icon from '@mui/icons-material/Co2';
-import MovingIcon from '@mui/icons-material/Moving';
+import React, { useState } from "react";
+import Sidebar from "../Components/Sidebar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Divider from "@mui/material/Divider";
+import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
+import NaturePeopleIcon from "@mui/icons-material/NaturePeople";
+import Co2Icon from "@mui/icons-material/Co2";
+import MovingIcon from "@mui/icons-material/Moving";
 import axios from "axios";
-import ViewFriends from '../Components/ViewFriends';
-import ProgressBar from '../Components/ProgressBar';
+import ViewFriends from "../Components/ViewFriends";
+import ProgressBar from "../Components/ProgressBar";
 import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -30,15 +30,15 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
   const [numWalk, setNumWalk] = useState(0);
   const [numBike, setNumBike] = useState(0);
   const [numTransit, setNumTransit] = useState(0);
-  const [monthSavedCO2, setMonthSavedCO2] = useState(0)
+  const [monthSavedCO2, setMonthSavedCO2] = useState(0);
   const [icon, setIcon] = useState(<></>);
 
   const modeIcons = {
-    "sedan": <DirectionsCarIcon fontSize="large" />,
-    "transit": <DirectionsBusFilledIcon fontSize="large"/>,
-    "bike": <DirectionsBikeIcon fontSize="large"/>,
-    "walk": <DirectionsWalkIcon fontSize="large"/>
-  }
+    sedan: <DirectionsCarIcon fontSize="large" />,
+    transit: <DirectionsBusFilledIcon fontSize="large" />,
+    bike: <DirectionsBikeIcon fontSize="large" />,
+    walk: <DirectionsWalkIcon fontSize="large" />,
+  };
 
   console.log(ck);
   const format_twodec = (x) => {
@@ -66,7 +66,7 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
         setNumBike(result["num_bike_this_month"]);
         setNumTransit(result["num_transit_this_month"]);
         setMonthSavedCO2(result["saved_carbon_this_month"]);
-        setIcon(modeIcons[result["favorite_mode"]])
+        setIcon(modeIcons[result["favorite_mode"]]);
         // Add any further actions after a successful update
       } else {
         console.error("Failed to calculate user stats successfully");
@@ -81,25 +81,41 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Box sx={{ ml: '10px', flexGrow: 1, p: 3 }}>
+      <Box sx={{ ml: "10px", flexGrow: 1, p: 3 }}>
         <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
           <Typography variant="h3" gutterBottom>
             {name}'s Stats!
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Avatar sx={{ width: 100, height: 100, bgcolor: '#349dd0', mb: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Avatar
+                  sx={{ width: 100, height: 100, bgcolor: "#349dd0", mb: 2 }}
+                >
                   <Co2Icon fontSize="large" />
                 </Avatar>
                 <Typography variant="h5" gutterBottom>
-                  Saved CO2: {savedCO2} pounds
+                  Saved CO2: {savedCO2} grams
                 </Typography>
               </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Avatar sx={{ width: 100, height: 100, bgcolor: '#2fc484', mb: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Avatar
+                  sx={{ width: 100, height: 100, bgcolor: "#2fc484", mb: 2 }}
+                >
                   <MovingIcon fontSize="large" />
                 </Avatar>
                 <Typography variant="h5" gutterBottom>
@@ -108,9 +124,25 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
               </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Avatar sx={{ width: 100, height: 100, bgcolor: '#FFA500', mb: 2 }}>
-                  {favMode=="walk"? <DirectionsWalkIcon fontSize="large"/> : favMode=="bike"? <DirectionsBikeIcon fontSize="large"/> : favMode=="transit"? <DirectionsBusFilledIcon fontSize="large"/> : <DirectionsCarIcon fontSize="large"/>}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Avatar
+                  sx={{ width: 100, height: 100, bgcolor: "#FFA500", mb: 2 }}
+                >
+                  {favMode == "walk" ? (
+                    <DirectionsWalkIcon fontSize="large" />
+                  ) : favMode == "bike" ? (
+                    <DirectionsBikeIcon fontSize="large" />
+                  ) : favMode == "transit" ? (
+                    <DirectionsBusFilledIcon fontSize="large" />
+                  ) : (
+                    <DirectionsCarIcon fontSize="large" />
+                  )}
                 </Avatar>
                 <Typography variant="h5" gutterBottom>
                   Favorite Mode: {favMode}
@@ -163,16 +195,44 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
 
         <Divider sx={{ my: 3 }} />
 
-        <Paper elevation={3} sx={{ p: 3, display: "flex", justifyContent:'center', alignItems:'center', flexDirection:'column' }}>
-          <ProgressBar width={"80%"} label={"Number of walk routes this month"} currAmount={numWalk} maxAmount={12}/>
-          <ProgressBar width={"80%"} label={"Number of bike routes this month"} currAmount={numBike} maxAmount={20}/>
-          <ProgressBar width={"80%"} label={"Number of public transport routes this month"} currAmount={numTransit} maxAmount={10}/>
-          <ProgressBar width={"80%"} label={"Saved CO2"} currAmount={monthSavedCO2} maxAmount={1000}/>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 3,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <ProgressBar
+            width={"80%"}
+            label={"Number of walk routes this month"}
+            currAmount={numWalk}
+            maxAmount={12}
+          />
+          <ProgressBar
+            width={"80%"}
+            label={"Number of bike routes this month"}
+            currAmount={numBike}
+            maxAmount={20}
+          />
+          <ProgressBar
+            width={"80%"}
+            label={"Number of public transport routes this month"}
+            currAmount={numTransit}
+            maxAmount={10}
+          />
+          <ProgressBar
+            width={"80%"}
+            label={"Saved CO2"}
+            currAmount={monthSavedCO2}
+            maxAmount={1000}
+          />
         </Paper>
-        
       </Box>
     </Box>
   );
-}
+};
 
 export default Stats;
