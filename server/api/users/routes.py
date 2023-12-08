@@ -7,7 +7,7 @@ from api.models import Records
 import jwt
 import datetime
 
-from sqlalchemy import select, func, asc, and_
+from sqlalchemy import select, func, asc, and_, or_
 
 users = Blueprint("users", __name__)
 
@@ -79,64 +79,81 @@ def login():
 
 @users.route("/friends", methods=["GET"])
 def friends():
-    token = request.json.get("token")
+    print("Got here!")
+    token = str(request.args.get("token"))
+
     if not token:
         return jsonify(error="Missing token")
     user = auth_user(token)
     if not user:
         return jsonify(error="Invalid token")
-
+    
     userID = user.id
     all_friends = Friends.query.filter(Friends.userOneID == userID).all()
     all_friends = set([a.userTwoID for a in all_friends])
     query = (
         select(
-            Records.userID,
-            User.email,
             User.name,
-            User.vehicleID,
-            func.sum(Records.carbonOutput).label("carbon_output"),
-            Vehicle.vehicleType.label("vehicle_type"),
+            User.email,
+            Records.carbonOutput
         )
         .select_from(Records)
         .join(User, User.id == Records.userID)
-        .join(Vehicle, User.vehicleID == Vehicle.vehicleID)
         .where(Records.userID.in_(all_friends))
         .group_by(Records.userID)
         .order_by(asc(User.name))
     )
     result = db.session.execute(query).fetchall()
+    print(result)
     return jsonify(
         [
-            (i + 1, row.name, row.carbon_output, row.vehicle_type)
-            for i, row in enumerate(result)
+            (row.name, row.email, row.carbonOutput)
+            for row in result
         ]
     )
 
 
 @users.route("/add_friend", methods=["POST"])
 def add_friend():
+
     token = request.json.get("token")
     if not token:
+        print("ERROR!!!")
         return jsonify(error="Missing token")
     user = auth_user(token)
     if not user:
         return jsonify(error="Invalid token")
-
-    second_email = request.json.get("email2")
+    
+    second_email = request.json.get("email")
 
     first = user.id
     second = get_user_id(second_email)
 
-    all_users = set(User.id)
+    query = select(User.id).select_from(User)
+    all_users = db.session.execute(query).fetchall()
+    
+    first_exists = any(first in tup for tup in all_users)
+    second_exists = any(second in tup for tup in all_users)
 
-    if first not in all_users or second not in all_users:
+    if not first_exists or not second_exists:
         return jsonify(error="Users do not exist")
-    Friends.insert().values(
-        [
-            {"userOneId": first, "userTwoId": second},
-            {"userOneId": second, "userTwoId": first},
-        ]
+    
+    id_query = select(func.max(Friends.friendID)).select_from(Friends)
+    max_id = int(db.session.execute(id_query).scalar())
+
+    db.session.add(
+        Friends(
+            userOneID=first,
+            userTwoID=second,
+            friendID=max_id + 1
+        )
+    )
+    db.session.add(
+        Friends(
+            userOneID=first,
+            userTwoID=second,
+            friendID=max_id + 2
+        )
     )
     db.session().commit()
     return jsonify({"status": "Success! Added friend record"})
@@ -151,22 +168,29 @@ def remove_friend():
     if not user:
         return jsonify(error="Invalid token")
 
-    second_email = request.json.get("email2")
+    second_email = request.json.get("email")
 
     first = user.id
     second = get_user_id(second_email)
 
-    all_users = set(User.id)
+    query = select(User.id).select_from(User)
+    all_users = db.session.execute(query).fetchall()
 
-    if first not in all_users or second not in all_users:
+    first_exists = any(first in tup for tup in all_users)
+    second_exists = any(second in tup for tup in all_users)
+
+    if not first_exists or not second_exists:
         return jsonify(error="Users do not exist")
-    Friends.query.filter_by(
-        and_(Friends.userOneID == first, Friends.userTwoID == second)
-    ).delete()
-    Friends.query.filter_by(
-        and_(Friends.userOneID == second, Friends.userTwoID == first)
-    ).delete()
+    
+    delete_query = Friends.__table__.delete().where(
+        or_(
+            and_(Friends.userOneID == first, Friends.userTwoID == second),
+            and_(Friends.userOneID == second, Friends.userTwoID == first)
+        )
+    )
+    db.session.execute(delete_query)
     db.session().commit()
+
     return jsonify({"status": "success", "msg": "Deleted friend record!"})
 
 

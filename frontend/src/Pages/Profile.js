@@ -23,6 +23,8 @@ const Profile = ({ ck, setAuthenticated, removeCookie }) => {
   const [traveledMiles, setTraveledMiles] = useState(0);
   const [favMode, setFavMode] = useState("Bike");
 
+  window.scrollTo(0, 0);
+
   console.log(ck);
   const format_twodec = (x) => {
     return Math.floor(x) + Math.floor(x * 100 - Math.floor(x) * 100) / 100;

@@ -55,41 +55,38 @@ function Sidebar({setAuthenticated, removeCookie}) {
       sx={{
         width: 240,
         flexShrink: 0,
-        '& .MuiDrawer-paper': {
+        "& .MuiDrawer-paper": {
           width: 240,
-          boxSizing: 'border-box',
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between", // Adjust as needed
         },
       }}
       variant="permanent"
       anchor="left"
     >
-      <Box sx={{ display: 'flex', alignItems: 'right' }}>
-        <Box>
-          <LogoutButton onLogout={handleLogout} />
-        </Box>
-      </Box>
-
-      <Toolbar />
-      <Divider />
-
       <List>
         {sideBarItems.map((key) => {
           const isSelected = key.text === title;
           return (
-            < ListItem key={key.text} disablePadding >
-              <ListItemButton
-                onClick={clicked}
-
-                sx={isSelected ? selectedStyle : null} >
+            <ListItem key={key.text} disablePadding>
+              <ListItemButton onClick={clicked} sx={isSelected ? selectedStyle : null}>
                 {key.element}
-                <ListItemText primary={key.text} sx={{ml: '10px'}} />
+                <ListItemText primary={key.text} sx={{ ml: "10px" }} />
               </ListItemButton>
             </ListItem>
           );
         })}
-      </List >
-    </Drawer >
-  )
+      </List>
+
+      <Box sx={{ display: "flex", justifyContent: "center", p: 1}}>
+        <Box>
+          <LogoutButton onLogout={handleLogout} />
+        </Box>
+      </Box>
+    </Drawer>
+  );
 }
 
 export default Sidebar;

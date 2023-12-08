@@ -9,7 +9,9 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
 function createData(rank, name, output) {
-  return { rank, name, output };
+  // If output is a floating point, limit it to 7 decimal places
+  const formattedOutput = typeof output === 'number' ? output.toFixed(7) : output;
+  return { rank, name, output: formattedOutput };
 }
 
 const Leaderboard = (ck) => {
@@ -22,6 +24,8 @@ const Leaderboard = (ck) => {
   const token = ck["token"];
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    
     // Pretty sure I want to change data (aka rows) if either the title or users gets changed,
     const updateData = async () => {
       try {
@@ -63,34 +67,21 @@ const Leaderboard = (ck) => {
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        height: "100vh",
-        overflow: "auto",
-      }}
-    >
-      <Paper
-        elevation={3}
-        sx={{
-          p: 3,
-          mb: 3,
-          width: "80%",
-          maxWidth: "800px",
-          textAlign: "center",
-        }}
-      >
-        <Typography variant="h4" gutterBottom>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', overflow: 'auto' }}>
+      <Paper elevation={3} sx={{ p: 3, mb: 3, width: '80%', maxWidth: '800px', textAlign: 'center' }}>
+        <Typography variant="h4" gutterBottom sx={{mb: 0.25}}>
           Leaderboard
         </Typography>
-        <Typography variant="body1" color="textSecondary" gutterBottom>
+        <Typography variant="body1" color="textSecondary" gutterBottom sx={{mb: 4}}>
           See who's making a positive impact on the environment!
         </Typography>
-        <Box sx={{ display: "flex" }}>
-          <UserTypeSelector changeUsers={changeUsers} />
-          <TimeRangeSelector changeTime={changeTime} />
+        <Box sx={{display: "flex"}}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <UserTypeSelector 
+              changeUsers={changeUsers} 
+            />
+            <TimeRangeSelector changeTime={changeTime} />
+          </Box>
         </Box>
       </Paper>
       <Paper

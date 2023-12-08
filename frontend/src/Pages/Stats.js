@@ -21,6 +21,8 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 // This should be nicer, idk what the plan is for the design though
 
 const Stats = ({ ck, setAuthenticated, removeCookie }) => {
+  window.scrollTo(0, 0);
+
   const [name, setName] = useState(""); // These need to be updated
   const [savedCO2, setSavedCO2] = useState(0);
   const [traveledMiles, setTraveledMiles] = useState(0);
@@ -81,11 +83,48 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
     <Box sx={{ display: "flex" }}>
       <Box sx={{ ml: '10px', flexGrow: 1, p: 3 }}>
         <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
+          <Typography variant="h3" gutterBottom>
+            {name}'s Stats!
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={4}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Avatar sx={{ width: 100, height: 100, bgcolor: '#349dd0', mb: 2 }}>
+                  <Co2Icon fontSize="large" />
+                </Avatar>
+                <Typography variant="h5" gutterBottom>
+                  Saved CO2: {savedCO2} pounds
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Avatar sx={{ width: 100, height: 100, bgcolor: '#2fc484', mb: 2 }}>
+                  <MovingIcon fontSize="large" />
+                </Avatar>
+                <Typography variant="h5" gutterBottom>
+                  Traveled Miles: {traveledMiles} miles
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Avatar sx={{ width: 100, height: 100, bgcolor: '#FFA500', mb: 2 }}>
+                  {favMode=="walk"? <DirectionsWalkIcon fontSize="large"/> : favMode=="bike"? <DirectionsBikeIcon fontSize="large"/> : favMode=="transit"? <DirectionsBusFilledIcon fontSize="large"/> : <DirectionsCarIcon fontSize="large"/>}
+                </Avatar>
+                <Typography variant="h5" gutterBottom>
+                  Favorite Mode: {favMode}
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+        </Paper>
+        {/* <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
           <Typography variant="h3" gutterBottom>{name}'s Stats!</Typography>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Avatar sx={{ width: 100, height: 100, bgcolor: 'primary.main', mb: 2 }}>
+                <Avatar sx={{ width: 100, height: 100, bgcolor: '#349dd0', mb: 2 }}>
                   <Co2Icon fontSize="large" />
                 </Avatar>
                 <Typography variant="h5" gutterBottom>
@@ -95,7 +134,7 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
             </Grid>
             <Grid item xs={12} md={6}>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Avatar sx={{ width: 100, height: 100, bgcolor: 'secondary.main', mb: 2 }}>
+                <Avatar sx={{ width: 100, height: 100, bgcolor: '#2fc484', mb: 2 }}>
                   <MovingIcon fontSize="large" />
                 </Avatar>
                 <Typography variant="h5" gutterBottom>
@@ -120,7 +159,7 @@ const Stats = ({ ck, setAuthenticated, removeCookie }) => {
           <Typography variant="h5" align="center" gutterBottom sx={{ mt: 2 }}>
             {favMode}
           </Typography>
-        </Paper>
+        </Paper> */}
 
         <Divider sx={{ my: 3 }} />
 

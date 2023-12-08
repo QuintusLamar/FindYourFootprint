@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box"
 
@@ -8,10 +9,10 @@ import Box from "@mui/material/Box"
 const outerTheme = createTheme({
   palette: {
     primary: {
-      main: "#0096FF",
+      main: "#349dd0",
     },
     secondary: {
-      main: "#808080",
+      main: "#FFFFFFF",
     },
   },
 });
@@ -25,44 +26,40 @@ function UserTypeSelector({ changeUsers }) {
   }
 
   return (
-    <Box sx={{display: "flex", justifyContent: "left", mt:"10px", width: "30%"}}>
+    <Box sx={{width: "300px", justifyContent: "center", display: "flex"}}>
       <ThemeProvider theme={outerTheme}>
-        <div className="Rand">
-          <Button
-            sx={{
-              borderRadius: "10px",
-              minWidth: "12px",
-              color: "black",
-              fontSize: 14,
-              fontWeight: 600,
-              margin: "4px",
-              height: "28px",
-            }}
-            variant="contained"
-            onClick={callCallback}
-            value="Friends"
-            color={users === "Friends" ? "primary" : "secondary"}
-          >
-            Friends
-          </Button>
-          <Button
-            sx={{
-              borderRadius: "10px",
-              minWidth: "12px",
-              color: "black",
-              fontSize: 14,
-              fontWeight: 600,
-              margin: "4px",
-              height: "28px",
-            }}
-            variant="contained"
-            onClick={callCallback}
-            value="All Users"
-            color={users==="All Users" ? "primary" : "secondary"}
-          > 
-            All Users 
-          </Button>
-        </div>
+      <ButtonGroup sx={{ width: "100%" }}>
+        <Button
+          sx={{
+            '&:hover': {
+              backgroundColor: 'lightgrey',
+              color: 'black'
+            },
+          }}
+          onClick={callCallback}
+          value="Friends"
+          variant="contained"
+          color={users === "Friends" ? "primary" : "secondary"}
+        >
+          {" "}
+          Friends {" "}
+        </Button>
+        <Button
+          sx={{
+            '&:hover': {
+              backgroundColor: 'lightgrey',
+              color: 'black'
+            },
+          }}
+          onClick={callCallback}
+          value="All Users"
+          variant="contained"
+          color={users === "All Users" ? "primary" : "secondary"}
+        >
+          {" "}
+          All Users{" "}
+        </Button>
+      </ButtonGroup>
       </ThemeProvider>
     </Box>
   );

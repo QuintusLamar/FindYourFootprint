@@ -80,10 +80,10 @@ const NavPage = (ck) => {
   const theme = createTheme();
 
   const [startAddr, setStartAddr] = useState(
-    "600 W Peachtree St NW, Atlanta, GA 30308"
+    "925 Dalney St NW, Atlanta, GA 30332"
   );
   const [endAddr, setEndAddr] = useState(
-    "1 Coca Cola Plz NW, Atlanta, GA 30313"
+    "756 W Peachtree St NW, Atlanta, GA 30308"
   );
   const [selectedMode, setSelectedMode] = useState("drive");
   const [routePoints, setRoutePoints] = useState(null);
@@ -110,6 +110,8 @@ const NavPage = (ck) => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    
     if (selectedMode) {
       const event = { preventDefault: () => {} };
       submitRoute(event);
@@ -441,18 +443,18 @@ const NavPage = (ck) => {
 
       // all the distances are in meters
       let driveDistance =
-        driveRoute.features[0].properties.distance / 1000 / 1.609;
+        parseFloat(driveRoute.features[0].properties.distance / 1000 / 1.609).toFixed(3);
 
       let transitDistance;
       if (transitPoints) {
-        transitDistance =
-          transitRoute.features[0].properties.distance / 1000 / 1.609;
+        parseFloat(transitDistance =
+          transitRoute.features[0].properties.distance / 1000 / 1.609).toFixed(3);
       }
 
       let bikeDistance =
-        bikeRoute.features[0].properties.distance / 1000 / 1.609;
+        parseFloat(bikeRoute.features[0].properties.distance / 1000 / 1.609).toFixed(3);
       let walkDistance =
-        walkRoute.features[0].properties.distance / 1000 / 1.609;
+        parseFloat(walkRoute.features[0].properties.distance / 1000 / 1.609).toFixed(3);
 
       if (transitRoute.features == null) {
         transitDistance = 0;
@@ -541,14 +543,28 @@ const NavPage = (ck) => {
               <SubmitButton
                 variant="contained"
                 onClick={submitRoute}
-                sx={{ width: "1%", mb: 2, p: 1 }}
+                sx={{ 
+                  width: "1%", 
+                  mb: 2, 
+                  p: 1,
+                  color: 'white',
+                  backgroundColor: "#349dd0",
+                  "&:hover": { backgroundColor: "#2fc484" }
+                }}
               >
                 <SearchIcon />
               </SubmitButton>
               <SubmitButton
                 variant="contained"
                 onClick={recordingRoute}
-                sx={{ width: "100%", mb: 2, p: 1 }}
+                sx={{ 
+                  width: "100%", 
+                  mb: 2, 
+                  p: 1,
+                  color: 'white',
+                  backgroundColor: "#349dd0",
+                  "&:hover": { backgroundColor: "#2fc484" }
+                }}
               >
                 Submit Route
               </SubmitButton>
@@ -561,14 +577,14 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "drive" ? "grey" : "white",
+                backgroundColor: selectedMode === "drive" ? "#FF4D4D" : "white",
                 color: selectedMode === "drive" ? "white" : "black",
                 "&:hover": {
-                  backgroundColor: "lightgrey",
-                  color: "black",
+                  backgroundColor: "#FF4D4D",
+                  color: "white",
                 },
                 padding: "10px",
-                borderRadius: "30px",
+                borderRadius: "18px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
@@ -601,7 +617,7 @@ const NavPage = (ck) => {
                 {format_twodec(driveDistance)} miles{" "}
               </Typography>
               <Typography textAlign={"center"}>
-                {format_twodec(driveTime / 60)} minutes
+                {(driveTime / 60).toFixed(2)} minutes
               </Typography>
             </Box>
 
@@ -610,14 +626,14 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "bus" ? "grey" : "white",
+                backgroundColor: selectedMode === "bus" ? "#FFA500" : "white",
                 color: selectedMode === "bus" ? "white" : "black",
                 "&:hover": {
-                  backgroundColor: "lightgrey",
-                  color: "black",
+                  backgroundColor: "#FFA500",
+                  color: "white",
                 },
                 padding: "10px",
-                borderRadius: "30px",
+                borderRadius: "18px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
@@ -651,7 +667,7 @@ const NavPage = (ck) => {
                 {format_twodec(transitDistance)} miles
               </Typography>
               <Typography textAlign={"center"}>
-                {format_twodec(transitTime / 60)} minutes
+                {(transitTime / 60).toFixed(2)} minutes
               </Typography>
             </Box>
 
@@ -660,14 +676,14 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "bicycle" ? "grey" : "white",
+                backgroundColor: selectedMode === "bicycle" ? "#2fc484" : "white",
                 color: selectedMode === "bicycle" ? "white" : "black",
                 "&:hover": {
-                  backgroundColor: "lightgrey",
-                  color: "black",
+                  backgroundColor: "#2fc484",
+                  color: "white",
                 },
                 padding: "10px",
-                borderRadius: "30px",
+                borderRadius: "18px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
@@ -699,7 +715,7 @@ const NavPage = (ck) => {
                 {format_twodec(bikeDistance)} miles
               </Typography>
               <Typography textAlign={"center"}>
-                {format_twodec(bikeTime / 60)} minutes
+                {(bikeTime / 60).toFixed(2)} minutes
               </Typography>
             </Box>
 
@@ -708,14 +724,14 @@ const NavPage = (ck) => {
               flexDirection="column"
               alignItems="center"
               sx={{
-                backgroundColor: selectedMode === "walk" ? "grey" : "white",
+                backgroundColor: selectedMode === "walk" ? "#2fc484" : "white",
                 color: selectedMode === "walk" ? "white" : "black",
                 "&:hover": {
-                  backgroundColor: "lightgrey",
-                  color: "black",
+                  backgroundColor: "#2fc484",
+                  color: "white",
                 },
                 padding: "10px",
-                borderRadius: "30px",
+                borderRadius: "18px",
                 border: "1px solid",
                 cursor: "pointer",
               }}
@@ -740,7 +756,7 @@ const NavPage = (ck) => {
                 {format_twodec(walkDistance)} mile
               </Typography>
               <Typography textAlign={"center"}>
-                {format_twodec(walkTime / 60)} minutes
+                {(walkTime / 60).toFixed(2)} minutes
               </Typography>
             </Box>
           </CarbonInfo>

@@ -16,6 +16,8 @@ function EditProfile({removeCookie, setAuthenticated}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  window.scrollTo(0, 0);
+
   const submitForm = async () => {
     try {
       const updateProfileFormData = {
@@ -52,7 +54,7 @@ function EditProfile({removeCookie, setAuthenticated}) {
       <Sidebar setAuthenticated={setAuthenticated} removeCookie={removeCookie}/>
 
       <Box sx={{ ml: "10px", flexGrow: 1, p: 3 }}>
-        <Typography variant="h3" gutterBottom>
+        <Typography variant="h3" gutterBottom color={'white'}>
           Edit Profile
         </Typography>
         <Paper elevation={3} sx={{ p: 3 }}>
@@ -118,7 +120,16 @@ function EditProfile({removeCookie, setAuthenticated}) {
               />
             </Grid>
           </Grid>
-          <Button variant="contained" onClick={submitForm} sx={{ mt: "2%" }}>
+          <Button 
+            variant="contained" 
+            onClick={submitForm} 
+            sx={{ 
+              mt: '2%', 
+              color: 'white',
+              backgroundColor: "#349dd0",
+              "&:hover": { backgroundColor: "#2fc484" }
+            }}
+          >
             Submit
           </Button>
         </Paper>
